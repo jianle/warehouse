@@ -1,0 +1,81 @@
+#set($title='Supplier')
+#set($layout = "layout.vm")
+
+<form action="#springUrl('/supplier/search')" method="post">
+  <div class="filter-bar-sm" >
+    <div class="filter-content">
+      <select class="form-control">
+        <option>供应商名称缩写</option>
+        <option>供应商名称</option>
+        <option>供应商地址</option>
+        <option>联系人</option>
+      </select>
+    </div>
+    <div class="filter-content">
+      <div class="form-group">
+          <input type="text" class="form-control" placeholder="查询名称、地址、联系人">
+      </div>
+    </div>
+    <div class="filter-content">
+      <div class="form-group">
+        <button type="submit" class="btn btn-default">查询</button>
+      </div>
+    </div>
+
+    <div class="filter-content-right ">
+      <div class="form-group">
+        <button type="button" class="btn btn-default">导入</button>
+      </div>
+    </div>
+
+    <div class="filter-content-right ">
+      <div class="form-group">
+        <button type="button" class="btn btn-default">导出</button>
+      </div>
+    </div>
+
+  </div>
+
+</form>
+
+<hr/>
+
+<div class="panel panel-default">
+  <div class="panel-heading"><a href="#accountModal" id="accountAdd" data-toggle="modal"><i class="glyphicon glyphicon-user"></i>添加</a></div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>供应商名称</th>
+        <th>名称缩写</th>
+        <th>供应商地址</th>
+        <th>联系人</th>
+        <th>联系电话</th>
+        <th>是否有效</th>
+        <th>更新时间</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      #foreach( $baiduAccount in $baiduAccounts )
+      <tr id="${baiduAccount.getId()}">
+        <th>${baiduAccount.getId()}</th>
+        <td>${baiduAccount.getAccount()}</td>
+        <td>${baiduAccount.getPassword()}</td>
+        <td>${baiduAccount.getSource()}</td>
+        <td>${baiduAccount.getSite()}</td>
+        <td>${baiduAccount.getBuName()}</td>
+        <td>${baiduAccount.getCityName()}</td>
+        <td value="${baiduAccount.getIsValid()}">
+          <span class="mini-label #if(${baiduAccount.getIsValid()}) mini-label-primary #else mini-label-default #end">
+            #if(${baiduAccount.getIsValid()}) 有效 #else 无效 #end
+          </span>
+        </td>
+        <td>${baiduAccount.getUpdateDt()}</td>
+        <td><a href="#accountModal" id="accountEdit" onclick="accountEdit(${baiduAccount.getId()},${baiduAccount.getCityId()},${baiduAccount.getBuId()},${baiduAccount.getIsValid()})" data-toggle="modal" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a></td>
+      </tr>
+      #end
+
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,100 @@
+/*filter css*/
+.filter-bar {
+    height: 84px;
+    padding: 0 15px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.filter-bar-sm {
+    height: 53px;
+    padding: 0 15px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+.filter-title {
+    float: left;
+    margin-right: 5px;
+    margin-top: 11px;
+}
+
+.filter-content {
+    float: left;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+.filter-content-right {
+    float: right;
+    margin-right: 20px;
+    margin-top: 10px;
+}
+
+.filter-content-sm {
+    float: left;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+
+.list-header {
+    margin-bottom: 15px;
+    border-bottom: 1px solid silver;
+    padding: 0 5px;
+}
+
+.list-title {
+    float: left;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 5px 0 10px 0;
+}
+
+list-title-md{
+    float: left;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 0 5px 0;
+}
+
+
+
+
+/**
+ *  label panel
+ */
+
+.mini-label {
+    display: inline;
+    padding: 3px 6px;
+    color: white;
+    border-radius: 5px;
+}
+
+.mini-label.mini-label-primary {
+    background-color: #428BCA;
+}
+
+.mini-label.mini-label-default {
+    background-color: #999;
+}   
+
+.mini-label.mini-label-success {
+    background-color: #5cb85c;
+}
+
+.mini-label.mini-label-info {
+    background-color: #5bc0de;
+}
+
+.mini-label.mini-label-warning {
+    background-color: #f0ad4e;
+}
+
+.mini-label.mini-label-danger {
+    background-color: #d9534f;
+}
+
+.mini-label.mini-label-gray-lighter {
+    background-color: #eee;
+}

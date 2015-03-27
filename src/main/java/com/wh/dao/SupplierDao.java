@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import com.wh.model.Supplier;
 
@@ -18,6 +19,7 @@ import com.wh.model.Supplier;
  * 增删查改操作
  */
 
+@Repository
 public class SupplierDao implements BaseDao<Supplier, Long> {
     
     private Logger logger = LoggerFactory.getLogger(SupplierDao.class);
@@ -46,7 +48,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
     @Override
     public Boolean save(Supplier supplier) {
         // 保存Supplier
-        try {//name, shortname, address, contact_name, contact_tel, is_disabled, insert_dt
+        try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
                     + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql, supplier.getName(),

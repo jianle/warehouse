@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wh.model.User;
 
 @Controller
 public class HomeController {
@@ -18,13 +17,13 @@ public class HomeController {
     /*
      * 首页跳转
      */
-    @RequestMapping("index")
+    
+    @RequestMapping("")
     public ModelAndView index(HttpServletRequest request){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/index");
         
-        User user =  (User) request.getSession().getAttribute("user");
-        logger.info("RequestMapping:/index by " + user.getUsername());
+        logger.info("RequestMapping:/ ");
         
         return modelAndView;
     }

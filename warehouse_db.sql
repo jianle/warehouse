@@ -30,7 +30,7 @@ CREATE TABLE `goods` (
 ;
 
 CREATE TABLE supplier(
-  `s_id` bigint(20) not null AUTO_INCREMENT comment '商品自增id',
+  `s_id` bigint(20) not null AUTO_INCREMENT comment '供应商自增id',
   `name` varchar(256) not null default '' comment '供应商名称',
   `shortname` varchar(30) not null default '' comment '供应商名称缩写',  
   `address` varchar(256) not null default '' comment '供应商地址',

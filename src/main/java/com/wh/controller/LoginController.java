@@ -31,7 +31,7 @@ public class LoginController {
     
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
     
-    private static final String DEFAULT_FROM = "redirect:/index";
+    private static final String DEFAULT_FROM = "redirect:/";
     private static final String COOKIE_NAME = "wh_cookie";
     private static final Integer COOKIE_EXPIRE = 7 * 24 * 3600;
     private static final String HMAC_KEY = "warehouse";
@@ -62,7 +62,7 @@ public class LoginController {
             }
 
             if (user != null) {
-                logger.info("Login by cookie: " + user.toString());
+                logger.info("Login by cookie: " + user.getUsername());
                 modelView.setViewName(DEFAULT_FROM);
                 modelView.addObject("user", user);
                 return modelView;
@@ -84,7 +84,7 @@ public class LoginController {
 
         user = userDao.findByUsernameAndPassword(username, password);
         if(user != null) {
-            logger.info("login by password.");
+            logger.info("login by password. " + user.getTruename());
             
             modelView.addObject("user", user);
             Cookie cookie = null;

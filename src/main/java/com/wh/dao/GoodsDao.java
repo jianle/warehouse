@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import com.wh.model.Goods;
 
@@ -19,6 +20,7 @@ import com.wh.model.Goods;
  * 
  */
 
+@Repository
 public class GoodsDao implements BaseDao<Goods, Long> {
     
     private Logger logger = LoggerFactory.getLogger(GoodsDao.class);
