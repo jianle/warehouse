@@ -1,0 +1,5 @@
+#set($title='Index')
+#set($layout = "layout.vm")
+<div>
+	Welcome here
+</div>

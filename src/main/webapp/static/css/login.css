@@ -1,0 +1,17 @@
+
+.container{
+    width:970px;
+    margin:0 auto;
+}
+.loginbox {
+    width:970px;
+    font-size:14px;
+}
+.loginlay {
+    width:400px;
+    height:112px;
+    border:1px solid #afb6c0;
+    margin:125px 235px;
+    padding:30px 60px 230px 25px;
+    background-color:#ffffff;
+}

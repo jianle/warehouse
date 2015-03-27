@@ -1,0 +1,263 @@
+#set($title='account')
+#set( $layout = "layout.vm" )
+<script src="#springUrl('/static/js/account/list.js')"></script>
+<div class="">
+<form id="form1" action="" method="get">
+    <div id="conditions" class="content" >
+    #parse("layout-title.vm")
+    <div class="content" ><!-- style="background:#f8f8f8;" -->
+        <div class="filter-bar" >
+            <div class="filter-title">日期范围</div>
+            <div class="filter-content">
+                <input class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" id="date1" name="date1"></input>
+            </div>
+            <div class="filter-content">--</div>
+            <div class="filter-content">
+                <input class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" id="date2" name="date2"></input>
+            </div>
+            <div class="filter-content">
+                <a href="#" class="easyui-linkbutton" data-options="plain:true" id="sevenDay">最近7天</a> |
+                <a href="#" class="easyui-linkbutton" data-options="plain:true" id="twoWeek">最近14天</a> |
+                <a href="#" class="easyui-linkbutton" data-options="plain:true" id="lastMonth">最近30天</a> |
+                <a href="#" class="easyui-linkbutton" data-options="plain:true" id="thisMonth">本月 </a>
+            </div>
+            <div class="filter-title">来源</div>
+            <div class="filter-content">
+                <select class="easyui-combobox" style="width:70px;" data-options="editable:false,panelHeight:'auto'" name="source1">
+                    <option value="BD">百度</option>
+                </select>
+            </div>    
+            <br/>
+            <br/>
+
+            <div class="filter-title">平台</div>
+            <div class="filter-content">
+                <select class="easyui-combobox" style="width:110px;" data-options="editable:false,panelHeight:'auto'" name="site1">
+                    <option value="all">all</option>
+                    <option value="pc">pc</option>
+                    <option value="touch">touch</option>
+                </select>
+            </div>
+            <div class="filter-title">业务</div>
+            <div class="filter-content">
+                <select class="easyui-combobox" style="width:110px;" data-options="editable:false,panelHeight:'auto'" name="business1">
+                    <option value="all">all</option>
+                    <option value="xf">新房</option>
+                    <option value="esf">二手房</option>
+                    <option value="zf">租房</option>
+                    <option value="sydc">商业地产</option>
+                </select>
+            </div>
+            <div class="filter-title">账户</div>
+            <div class="filter-content">
+                <input class="easyui-textbox" data-options="prompt:'请填写账户信息'" style="width:110px;"  name="account1">
+            </div>
+
+            <div class="filter-title">状态</div>
+            <div class="filter-content">
+                <select class="easyui-combobox" style="width:80px;" data-options="editable:false,panelHeight:'auto'" name="pause1">
+                    <option value="all">all</option>
+                    <option value="start">启用</option>
+                    <option value="pause">暂停</option>
+                </select>
+            </div>
+            <div class="filter-content">
+            <a id="query" href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" >Query</a>
+            </div>
+         </div>
+      </div>
+ </form>
+<script>
+   $().ready(function(){
+
+		$("#query").click(function(){
+
+			//var jsonData = $("#conditions").toJson();			
+			var url = "#springUrl('/account')";
+			$("#form1").attr("action", url);
+			$("#form1").submit();
+		});
+
+	});
+    function doSearch(value){
+        alert('You input: ' + value);
+    }
+    function myformatter(date){
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        var d = date.getDate();
+        return y+'-'+(m<10?('0'+m):m)+'-'+(d<10?('0'+d):d);
+    }
+    function myparser(s){
+        if (!s) return new Date();
+        var ss = (s.split('-'));
+        var y = parseInt(ss[0],10);
+        var m = parseInt(ss[1],10);
+        var d = parseInt(ss[2],10);
+        if (!isNaN(y) && !isNaN(m) && !isNaN(d)){
+            return new Date(y,m-1,d);
+        } else {
+            return new Date();
+        }
+    }
+</script>
+<script>
+    function init(){
+        // var date1 = document.querySelector("#date1"),date2 = document.querySelector("#date2");
+        var btnSevenDay = document.querySelector("#sevenDay");
+        var btnTwoWeek = document.querySelector("#twoWeek");
+        var btnThisMonth = document.querySelector("#thisMonth");
+        var btnLastMonth = document.querySelector("#lastMonth");
+        // console.log(btnSevenDay);
+        function click_btnSevenDay(){
+            var today=new Date();
+            var yesterday_milliseconds=today.getTime()-1000*60*60*24;
+            var severDay_milliseconds= today.getTime()-1000*60*60*24*7;
+            var yesterday=new Date();
+            var severDay=new Date;
+            yesterday.setTime(yesterday_milliseconds);
+            severDay.setTime(severDay_milliseconds);
+            console.log(yesterday.getDate());
+            console.log(severDay.getDate());
+            var date1=severDay.getFullYear()+"-"+(severDay.getMonth()+1)+"-"+severDay.getDate() ;
+            var date2=yesterday.getFullYear()+"-"+(yesterday.getMonth()+1)+"-"+yesterday.getDate() ;
+            console.log(date1);
+            console.log(date2);
+            $('#date1').datebox('setValue',date1);
+            $('#date2').datebox('setValue',date2);
+        }
+        function click_btnTwoWeek(){
+            var today=new Date();
+            var yesterday_milliseconds=today.getTime()-1000*60*60*24;
+            var twoweek_milliseconds= today.getTime()-1000*60*60*24*14;
+            var yesterday=new Date();
+            var twoweek=new Date;
+            yesterday.setTime(yesterday_milliseconds);
+            twoweek.setTime(twoweek_milliseconds);
+            console.log(yesterday.getDate());
+            console.log(twoweek.getDate());
+            var date1=twoweek.getFullYear()+"-"+(twoweek.getMonth()+1)+"-"+twoweek.getDate() ;
+            var date2=yesterday.getFullYear()+"-"+(yesterday.getMonth()+1)+"-"+yesterday.getDate() ;
+            console.log(date1);
+            console.log(date2);
+            $('#date1').datebox('setValue',date1);
+            $('#date2').datebox('setValue',date2);
+        }
+        function click_btnThisMonth(){
+            var today=new Date();
+            var yesterday_milliseconds=today.getTime()-1000*60*60*24;
+            var yesterday=new Date();
+            yesterday.setTime(yesterday_milliseconds);
+            var getCurrentMonthFirst = new Date();
+            getCurrentMonthFirst.setDate(1);
+            console.log(yesterday.getDate());
+            var date1=getCurrentMonthFirst.getFullYear()+"-"+(getCurrentMonthFirst.getMonth()+1)+"-"+getCurrentMonthFirst.getDate() ;
+            var date2=yesterday.getFullYear()+"-"+(yesterday.getMonth()+1)+"-"+yesterday.getDate() ;
+            console.log(date1);
+            console.log(date2);
+            $('#date1').datebox('setValue',date1);
+            $('#date2').datebox('setValue',date2);
+        }
+        function click_btnLastMonth(){
+            var today=new Date();
+            var yesterday_milliseconds=today.getTime()-1000*60*60*24;
+            var lastMonth_milliseconds= today.getTime()-1000*60*60*24*30;
+            var yesterday=new Date();
+            var lastMonth=new Date;
+            yesterday.setTime(yesterday_milliseconds);
+            lastMonth.setTime(lastMonth_milliseconds);
+            console.log(lastMonth.getDate());
+            var date1=lastMonth.getFullYear()+"-"+(lastMonth.getMonth()+1)+"-"+lastMonth.getDate() ;
+            var date2=yesterday.getFullYear()+"-"+(yesterday.getMonth()+1)+"-"+yesterday.getDate() ;
+            console.log(date1);
+            console.log(date2);
+            $('#date1').datebox('setValue',date1);
+            $('#date2').datebox('setValue',date2);
+        }
+        btnSevenDay.addEventListener("click",click_btnSevenDay,false);
+        btnTwoWeek.addEventListener("click",click_btnTwoWeek,false);
+        btnThisMonth.addEventListener("click",click_btnThisMonth,false);
+        btnLastMonth.addEventListener("click",click_btnLastMonth,false);
+    }
+    window.onload = init;
+</script>
+<table class="table">
+    <thead>
+    <tr>
+     <div class="filter-title">筛选条件： </div>
+     <div class="filter-content">
+         <a href="javascript:addRow()" class="easyui-linkbutton" id = "add" data-options="iconCls:'icon-add',plain:true">添加</a>
+     </div>
+    </tr>
+    </thead>
+        <tbody id="flagtbody">
+        <tr style="height:24px;">
+          <th>        
+            <div class="filter-content">
+                    <select style="width:110px;" data-options="editable:false,panelHeight:'auto'" name = "quota">
+                        <option value="vppv">vppv</option>
+                        <option value="vpuv">vpuv</option>
+                        <option value="click">click</option>
+                        <option value="cost">cost</option>
+                        <option value="vppvCost">vppv/cost</option>
+                        <option value="vppvClick">vppv/click</option>
+                        <option value="impression">impression</option>
+                    </select>
+            </div>
+            <div class="filter-content">
+                    <select style="width:60px;" data-options="editable:false,panelHeight:'auto'" name = "operation">
+                        <option value="=">=</option>
+                        <option value="!=">!=</option>
+                        <option value="<">&lt;</option>
+                        <option value="<=">&lt;=</option>
+                        <option value=">">&gt;</option>
+                        <option value=">=">&gt;=</option>
+                        <option value="betweenAnd">[,]</option>
+                    </select>
+            </div>
+            <div class="filter-content">
+                    <input style="width:100px;" name="digit" >
+            </div>          
+            <div class="filter-content">
+                    <a href="javascript:delRow()" class="easyui-linkbutton" id = "del" data-options="iconCls:'icon-remove',plain:true">删除</a>
+            </div>
+          </th>
+        </tr>
+        </tbody>
+        </table>
+        <div class="easyui-layout" style="width:auto;height:450px;">
+            <div data-options="region:'center'" style="width:auto">
+                <div class="easyui-panel" style="padding:5px;">    
+                    <div class="list-button">
+                        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save',align:'right',plain:true">导出</a>
+                        <a href="#springUrl('/account/attribute')" class="easyui-linkbutton" data-options="iconCls:'icon-man',align:'right',plain:true">账户属性</a>
+                        <a href="#springUrl('/operation')" class="easyui-linkbutton" data-options="iconCls:'icon-help',align:'right',plain:true">操作日志</a>
+                    </div>
+                </div>
+                <table id="dg"  class="easyui-datagrid" style="width:100%;height:400px;" checkOnSelect="false" selectOnCheck="false" data-options=" singleSelect:true,data:data" pagination="true" >
+                    <thead>
+                    <tr>                      
+                        <th data-options="field:'source',width:40,align:'center'">来源</th>
+                        <th data-options="field:'site',width:60,align:'center'">平台</th>
+                        <th data-options="field:'buName',width:80,align:'center'">业务</th>
+                        <th data-options="field:'account',width:120,align:'center'">账户</th>
+                        <th data-options="field:'impression',width:60,align:'center'" >展示量</th>
+                        <th data-options="field:'cost',width:60,align:'center'">COST</th>
+                        <th data-options="field:'click',width:60,align:'center'">CLICK</th>
+                        <th data-options="field:'ctr',width:60,align:'center'">CTR</th>
+                        <th data-options="field:'cpc',width:60,align:'center'" >CPC</th>
+                        <th data-options="field:'vppv',width:60,align:'center'">VPPV</th>
+                        <th data-options="field:'vpuv',width:60,align:'center'">VPUV</th>
+                        <th data-options="field:'vppvCost',width:80,align:'center'">VPPV/COST</th>
+                        <th data-options="field:'vppvClick',width:80,align:'center'">VPPV/CLICK</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div><!-- content stop-->
+
+<script>
+   var data = $.parseJSON('${baiduAccountEffects}');
+</script>

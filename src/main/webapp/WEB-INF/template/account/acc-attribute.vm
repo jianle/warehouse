@@ -1,0 +1,215 @@
+#set($title='account')
+#set( $layout = "layout.vm" )
+<link href="#springUrl('/static/css/account/attribute.css')"  rel="stylesheet">
+<script src="#springUrl('/static/js/account/attribute.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<div class="">
+    #parse("layout-title.vm")
+    <form id="accountSearchId" action="#springUrl('/account/attribute/search')" method="post">
+
+    <div class="filter-bar-sm" >
+      <div class="filter-title">来源:</div>
+      <div class="filter-content">
+		 <select class="easyui-combobox" id="source" name="source" panelHeight="auto">
+		   <option #if(${baiduAccount.getSource()}) selected="selected" #end value="">全部</option>
+       #set($items=[1])
+       #foreach ($item in $items)
+       <option #if(${baiduAccount.getSource()}==${sourceMap.get("$item")}) selected="selected" #end>${sourceMap.get("$item")}</option>
+       #end
+		 </select>
+	  </div>
+
+	  <div class="filter-title">站点:</div>
+      <div class="filter-content">
+		 <select class="easyui-combobox" id="site" name="site" panelHeight="auto">
+		   <option #if(${baiduAccount.getSite()}) selected="selected" #end value="">全部</option>
+       <option #if(${baiduAccount.getSite()}=="pc") selected="selected" #end>pc</option>
+       <option #if(${baiduAccount.getSite()}=="touch") selected="selected" #end>touch</option>
+       <option #if(${baiduAccount.getSite()}=="pad") selected="selected" #end>pad</option>
+       <option #if(${baiduAccount.getSite()}=="app") selected="selected" #end>app</option>
+		 </select>
+	  </div>
+
+	  <div class="filter-title">业务频道:</div>
+      <div class="filter-content">
+		 <select class="easyui-combobox" id="bu_id" name="buId" panelHeight="auto">
+		   <option #if(${baiduAccount.getBuId()}) selected="selected" #end value="">全部</option>
+       #set($items=[1,2,3,4])
+       #foreach ($item in $items)
+       <option #if(${baiduAccount.getBuId()}==$item) selected="selected" #end value="$item">${buMap.get("$item")}</option>
+       #end
+		 </select>
+	  </div>
+
+	  <div class="filter-title">城市:</div>
+      <div class="filter-content">
+		 <select class="easyui-combobox" id="city_id" name="cityId">
+		   <option #if(${baiduAccount.getCityId()}) selected="selected" #end value="">全部</option>
+       #foreach( $city in $citys )
+		   <option #if(${baiduAccount.getCityId()}==${city.getCity_id()}) selected="selected" #end value="${city.getCity_id()}">${city.getCity_name_cn()}</option>
+       #end
+		 </select>
+	  </div>
+
+	  <div class="filter-title">是否有效:</div>
+      <div class="filter-content">
+		 <select class="easyui-combobox" id="is_valid" name="isValid" panelHeight="auto">
+		   <option #if(${baiduAccount.getIsValid()}=='null') selected="selected" #end value="">全部</option>
+		   <option #if(${baiduAccount.getIsValid()}=="true") selected="selected" #end value="true">有效</option>
+		   <option #if(${baiduAccount.getIsValid()}=="false") selected="selected" #end value="false">无效</option>
+		 </select>
+	  </div>
+
+	  <div class="filter-title">账户:</div>
+	  <div class="filter-content">
+         <input class="easyui-searchbox" data-options="prompt:'模糊查找',searcher:accountSearch" id="account" name="account"
+         value="#if(${baiduAccount.getAccount()})${baiduAccount.getAccount()}#end" />
+    </div>
+
+    <div class="col-md-1"></div>
+
+	  <div class="filter-content full-right">
+         <a id="clickSearch" class="easyui-linkbutton full-right" >查询 <i class="glyphicon glyphicon-search"></i></a>
+      </div>
+
+    </div>
+
+    </form>
+
+
+    <hr/>
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><a href="#accountModal" id="accountAdd" data-toggle="modal"><i class="glyphicon glyphicon-user"></i>添加</a></div>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>账户</th>
+            <th>密码</th>
+            <th>来源</th>
+            <th>站点</th>
+            <th>业务频道</th>
+            <th>城市</th>
+            <th>是否有效</th>
+            <th>更新人</th>
+            <th>更新时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          #foreach( $baiduAccount in $baiduAccounts )
+          <tr id="${baiduAccount.getId()}">
+            <th>${baiduAccount.getId()}</th>
+            <td>${baiduAccount.getAccount()}</td>
+            <td>${baiduAccount.getPassword()}</td>
+            <td>${baiduAccount.getSource()}</td>
+            <td>${baiduAccount.getSite()}</td>
+            <td>${baiduAccount.getBuName()}</td>
+            <td>${baiduAccount.getCityName()}</td>
+            <td value="${baiduAccount.getIsValid()}">
+              <span class="mini-label #if(${baiduAccount.getIsValid()}) mini-label-primary #else mini-label-default #end">
+                #if(${baiduAccount.getIsValid()}) 有效 #else 无效 #end
+              </span>
+            </td>
+            <td>${baiduAccount.getUpdateUser()}</td>
+            <td>${baiduAccount.getUpdateDt()}</td>
+            <td><a href="#accountModal" id="accountEdit" onclick="accountEdit(${baiduAccount.getId()},${baiduAccount.getCityId()},${baiduAccount.getBuId()},${baiduAccount.getIsValid()})" data-toggle="modal" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a></td>
+          </tr>
+          #end
+
+        </tbody>
+      </table>
+    </div>
+
+</div>
+
+
+<!-- modal -->
+<div class="modal fade" id="accountModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">新增</h4>
+      </div>
+      <!-- 添加账户信息 -->
+      <div class="modal-body" style="padding-right: 35px;">
+
+        <form class="form-horizontal" role="form" id="formAccountAddUpdate" method="post">
+          <input type="hidden" value="" name="id" id="id" />
+          <div class="form-group">
+            <label for="account" class="col-sm-2 control-label" >账户</label>
+            <div class="col-sm-7">
+              <input type="text" class="form-control" name="account" id="account" />
+            </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="password" class="col-sm-2 control-label" >密码</label>
+            <div class="col-sm-4">
+              <input type="password" class="form-control" name="password" id="password" />
+            </div>
+
+            <label for="id" class="col-sm-2 control-label" style="padding-left:1px">来源</label>
+            <div class="col-sm-4">
+              <select class="form-control" name="source" id="source">
+                #foreach ($item in [1..$sourceMap.size()])
+                <option>${sourceMap.get("$item")}</option>
+                #end
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="id" class="col-sm-2 control-label" >站点</label>
+            <div class="col-sm-4">
+              <select class="form-control" name="site" id="site" />
+                <option>pc</option>
+                <option>touch</option>
+                <option>pad</option>
+                <option>app</option>
+              </select>
+            </div>
+            <label for="id" class="col-sm-2 control-label" style="padding-left:1px">业务频道</label>
+            <div class="col-sm-4">
+              <select class="form-control" name="buId" id="bu_id">
+                #foreach ($item in [1..$buMap.size()])
+                <option value="$item">${buMap.get("$item")}</option>
+                #end
+              </select>
+            </div>
+
+          </div>
+
+          <div class="form-group">
+            <label for="id" class="col-sm-2 control-label" >城市</label>
+            <div class="col-sm-4">
+              <select class="form-control" name="cityId" id="city_id">
+                #foreach( $city in $citys )
+                <option value="${city.getCity_id()}">${city.getCity_name_cn()}</option>
+                #end
+              </select>
+            </div>
+            <label for="id" class="col-sm-2 control-label" style="padding-left:1px">是否有效</label>
+            <div class="col-sm-4">
+              <select class="form-control" name="isValid" id="is_valid">
+                <option value="true" >有效</option>
+                <option value="false" >无效</option>
+              </select>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" onclick="accountCommit()">Save</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
