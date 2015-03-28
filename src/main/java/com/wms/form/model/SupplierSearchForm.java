@@ -1,4 +1,4 @@
-package com.wh.form.model;
+package com.wms.form.model;
 
 public class SupplierSearchForm {
     

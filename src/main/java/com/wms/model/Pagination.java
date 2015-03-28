@@ -1,4 +1,4 @@
-package com.wh.model;
+package com.wms.model;
 
 import java.util.List;
 

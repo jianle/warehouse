@@ -1,7 +1,6 @@
-package com.wh.controller;
+package com.wms.controller;
 
 import java.sql.Timestamp;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,16 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wh.dao.SupplierDao;
-import com.wh.form.model.SupplierSearchForm;
-import com.wh.model.Pagination;
-import com.wh.model.Supplier;
+import com.wms.dao.SupplierDao;
+import com.wms.form.model.SupplierSearchForm;
+import com.wms.model.Pagination;
+import com.wms.model.Supplier;
 
 @Controller
 @Component

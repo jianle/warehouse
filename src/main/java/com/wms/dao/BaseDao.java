@@ -1,4 +1,4 @@
-package com.wh.dao;
+package com.wms.dao;
 
 import java.util.List;
 

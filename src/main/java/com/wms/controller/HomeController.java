@@ -1,4 +1,4 @@
-package com.wh.controller;
+package com.wms.controller;
 
 import javax.servlet.http.HttpServletRequest;
 

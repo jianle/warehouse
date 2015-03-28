@@ -1,8 +1,28 @@
 #set($title='Index')
 #set($layout = "layout.vm")
+<script>
+  var calDt = new Date();
+	var hour = calDt.getHours();
+	var content="";
+	if(hour>0 && hour<=8) {
+    content="早上好!"
+  } else if (hour>8 && hour<=12) {
+    content="上午好!"
+  } else if (hour>8 && hour<=12) {
+    content="下午好!"
+  }else {
+    content="晚上好!"
+  }
+  $(document).ready(function(){
+    document.getElementById('contengFlag').innerHTML=content;
+  });
+
+</script>
 <div>
-	Welcome here
-	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+	<div class="page-header">
+        <h1>欢迎使用</h1>
+      </div>
+      <p class="lead">仓储管理系统（WMS）一个实时的计算机软件系统，对信息、资源、行为、存货和分销运作进行更完美地管理</p>
+      <p>点击 <a href="../help">使用帮助</a></p>
 
 </div>

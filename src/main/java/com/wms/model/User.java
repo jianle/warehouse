@@ -1,4 +1,4 @@
-package com.wh.model;
+package com.wms.model;
 
 import java.io.Serializable;
 import java.util.Date;

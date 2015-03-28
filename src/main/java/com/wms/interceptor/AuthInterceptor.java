@@ -1,4 +1,4 @@
-package com.wh.interceptor;
+package com.wms.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.wh.model.User;
+import com.wms.model.User;
 
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {

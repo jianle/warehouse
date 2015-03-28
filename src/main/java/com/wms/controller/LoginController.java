@@ -1,4 +1,4 @@
-package com.wh.controller;
+package com.wms.controller;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wh.dao.UserDao;
-import com.wh.model.User;
+import com.wms.dao.UserDao;
+import com.wms.model.User;
 
 @Controller
 @SessionAttributes("user")

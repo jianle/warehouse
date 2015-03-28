@@ -1,4 +1,4 @@
-package com.wh.dao;
+package com.wms.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,9 +12,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import com.wh.form.model.SupplierSearchForm;
-import com.wh.model.Pagination;
-import com.wh.model.Supplier;
+import com.wms.form.model.SupplierSearchForm;
+import com.wms.model.Pagination;
+import com.wms.model.Supplier;
 
 /*
  * 供应商操作实体
