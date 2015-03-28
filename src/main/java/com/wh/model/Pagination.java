@@ -47,7 +47,6 @@ public class Pagination<T> extends JdbcDaoSupport {
         this.setStartIndex();
         // 计算结束行数
         this.setLastIndex();
-        System.out.println("lastIndex=" + this.lastIndex);
     }
 
     /**
@@ -127,8 +126,6 @@ public class Pagination<T> extends JdbcDaoSupport {
 
     // 计算结束时候的索引
     public void setLastIndex() {
-        System.out.println("totalRows=" + totalRows);
-        System.out.println("numPerPage=" + numPerPage);
         if (totalRows < numPerPage) {
             this.lastIndex = totalRows;
         } else if ((totalRows % numPerPage == 0)

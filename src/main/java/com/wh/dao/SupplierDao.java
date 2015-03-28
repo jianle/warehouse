@@ -84,7 +84,10 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
     
     @SuppressWarnings("deprecation")
     public Pagination<Supplier> findByColumnValue(SupplierSearchForm supplierSearchForm) {
-        // 通过列的名称和类型查找数据
+        /*
+         *  通过列的名称和类型查找数据
+         *  分页操作也在其中处理，代码开始乱了
+         */
         List<Supplier> resultSuppliers;
         int totalRows = 1;
         Pagination<Supplier> supplierPagination;
@@ -159,7 +162,39 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         }
     }
     
+    public Boolean update(Supplier supplier) {
+        // 通过sId来跟新一条记录
+        try {
+            String sql = "UPDATE "+ TABLE_NAME + " SET "
+                    + " name=?, shortname=?, address=?, contact_name=?, contact_tel=?, is_disabled=? "
+                    + " WHERE s_id=? ";
+            jdbcTemplate.update(sql, supplier.getName(),
+                    supplier.getShortname(),
+                    supplier.getAddress(),
+                    supplier.getContactName(),
+                    supplier.getContactTel(),
+                    supplier.getIsDisabled(),
+                    supplier.getsId());
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("update supplier failed ." + e);
+        }
+        
+        return false;
+    }
     
+    public Boolean delete(Long sId) {
+        try {
+            String sql = "DELETE FROM " + TABLE_NAME + " WHERE s_id=? ";
+            jdbcTemplate.update(sql, sId);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("delete supplier failed ." + e);
+        }
+        return false;
+    }
     
     private RowMapper<Supplier> rowMapper = new RowMapper<Supplier>() {
         

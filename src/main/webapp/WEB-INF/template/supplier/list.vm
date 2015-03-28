@@ -1,11 +1,14 @@
 #set($title='Supplier')
 #set($layout = "layout.vm")
 <script src="#springUrl('/static/js/supplier/list.js')"></script>
-
-<form action="#springUrl('/supplier/search')" method="POST">
+<script src="#springUrl('/static/js/supplier/view.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<form id="supplierSearchId" action="#springUrl('/supplier/search')" method="POST">
   <div class="filter-bar-sm" >
     <div class="filter-content">
-      <select class="form-control" name="isDisable">
+      <select class="form-control" id="isDisable1" name="isDisable">
         <option #if(${supplierSearchForm.isDisable}=='A') selected="selected" #end value='A'>是否有效</option>
         <option #if(${supplierSearchForm.isDisable}=='F') selected="selected" #end value='F'>有效</option>
         <option #if(${supplierSearchForm.isDisable}=='T') selected="selected" #end value='T'>无效</option>
@@ -53,7 +56,7 @@
 
 
 <div class="panel panel-default">
-  <div class="panel-heading"><a href="#accountModal" id="accountAdd" data-toggle="modal"><i class="glyphicon glyphicon-user"></i>添加</a></div>
+  <div class="panel-heading"><a href="#supplierModal" id="supplierAdd" data-toggle="modal"><i class="glyphicon glyphicon-user"></i>添加</a></div>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -65,12 +68,12 @@
         <th>联系电话</th>
         <th>是否有效</th>
         <th>创建时间</th>
-        <th>操作</th>
+        <th>修改删除</th>
       </tr>
     </thead>
     <tbody>
       #foreach( $supplier in $pagination.getResultList() )
-      <tr id="${supplier.sId}">
+      <tr id="${supplier.sId}_tr">
         <th>${supplier.sId}</th>
         <td>${supplier.name}</td>
         <td>${supplier.shortname}</td>
@@ -83,7 +86,11 @@
           </span>
         </td>
         <td>${supplier.insertDt}</td>
-        <td><a href="#accountModal" id="accountEdit" onclick="accountEdit(${baiduAccount.getId()},${baiduAccount.getCityId()},${baiduAccount.getBuId()},${baiduAccount.getIsValid()})" data-toggle="modal" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a></td>
+        <td>
+          <a href="#supplierModal" id="supplierEdit" onclick="supplierEdit(${supplier.sId},'$supplier.isDisabled')" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteSupplier(${supplier.sId},'$supplier.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+        </td>
       </tr>
       #end
 
@@ -98,7 +105,7 @@
     #set($previousPage=${pagination.currentPage} - 1)
      <a href="javascript:formPaginationSumbmit($previousPage);">上一页</a>
     #else
-     <a href="#">首页</a>
+     <span style="color:#777">首页</span>
     #end
     </li>
   <li><span>-第<font style="color: #5cb85c">$pagination.currentPage</font>页--总共
@@ -108,7 +115,7 @@
        #set($nextPage=$pagination.currentPage+1)
        <a href="javascript:formPaginationSumbmit($nextPage);">下一页</a>
       #else
-       <a href='#'>最后一页</a>
+      <span style="color:#777">最后一页</span>
       #end
   </li>
 </ul>
@@ -118,3 +125,5 @@
 <input type="hidden" name="column" value="$supplierSearchForm.column" />
 <input type="hidden" name="value" value="$supplierSearchForm.value" />
 </form>
+
+#parse("/supplier/view.vm")
