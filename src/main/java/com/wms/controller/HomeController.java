@@ -1,6 +1,5 @@
 package com.wms.controller;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,11 +18,21 @@ public class HomeController {
      */
     
     @RequestMapping("")
-    public ModelAndView index(HttpServletRequest request){
+    public ModelAndView index(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("/index");
         
-        logger.info("RequestMapping:/ ");
+        logger.info("RequestMapping: / ");
+        
+        return modelAndView;
+    }
+    
+    @RequestMapping("help")
+    public ModelAndView help(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/help");
+        
+        logger.info("RequestMapping: /help ");
         
         return modelAndView;
     }
