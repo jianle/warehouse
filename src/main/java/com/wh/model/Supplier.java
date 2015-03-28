@@ -26,7 +26,7 @@ public class Supplier implements Serializable {
     private String address;
     private String contactName;
     private String contactTel;
-    private Character isDisabled;
+    private String isDisabled;
     
     @Column(updatable=false)
     private Timestamp insertDt;
@@ -67,10 +67,10 @@ public class Supplier implements Serializable {
     public void setContactTel(String contactTel) {
         this.contactTel = contactTel;
     }
-    public Character getIsDisabled() {
+    public String getIsDisabled() {
         return isDisabled;
     }
-    public void setIsDisabled(Character isDisabled) {
+    public void setIsDisabled(String isDisabled) {
         this.isDisabled = isDisabled;
     }
     public Timestamp getInsertDt() {

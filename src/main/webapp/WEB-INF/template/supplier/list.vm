@@ -1,19 +1,30 @@
 #set($title='Supplier')
 #set($layout = "layout.vm")
+<script src="#springUrl('/static/js/supplier/list.js')"></script>
 
-<form action="#springUrl('/supplier/search')" method="post">
+<form action="#springUrl('/supplier/search')" method="POST">
   <div class="filter-bar-sm" >
     <div class="filter-content">
-      <select class="form-control">
-        <option>供应商名称缩写</option>
-        <option>供应商名称</option>
-        <option>供应商地址</option>
-        <option>联系人</option>
+      <select class="form-control" name="isDisable">
+        <option #if(${supplierSearchForm.isDisable}=='A') selected="selected" #end value='A'>是否有效</option>
+        <option #if(${supplierSearchForm.isDisable}=='F') selected="selected" #end value='F'>有效</option>
+        <option #if(${supplierSearchForm.isDisable}=='T') selected="selected" #end value='T'>无效</option>
+      </select>
+    </div>
+    <input type="hidden" name="currentPage" value="1" />
+    <div class="filter-content">
+      <select class="form-control" name="column">
+        <option #if(${supplierSearchForm.column}=="shortname") selected="selected" #end value="shortname">供应商名称缩写</option>
+        <option #if(${supplierSearchForm.column}=="name") selected="selected" #end value="name">供应商名称</option>
+        <option #if(${supplierSearchForm.column}=="address") selected="selected" #end value="address">供应商地址</option>
+        <option #if(${supplierSearchForm.column}=="contact_name") selected="selected" #end value="contact_name">联系人</option>
       </select>
     </div>
     <div class="filter-content">
       <div class="form-group">
-          <input type="text" class="form-control" placeholder="查询名称、地址、联系人">
+          <input type="text" name="value"  class="form-control"
+            #if(${supplierSearchForm.value}) value="${supplierSearchForm.value}" #end
+           placeholder="查询名称、地址、联系人" />
       </div>
     </div>
     <div class="filter-content">
@@ -24,13 +35,13 @@
 
     <div class="filter-content-right ">
       <div class="form-group">
-        <button type="button" class="btn btn-default">导入</button>
+        <button type="button" class="btn btn-default">导出</button>
       </div>
     </div>
 
     <div class="filter-content-right ">
       <div class="form-group">
-        <button type="button" class="btn btn-default">导出</button>
+        <button type="button" class="btn btn-default">导入</button>
       </div>
     </div>
 
@@ -39,6 +50,7 @@
 </form>
 
 <hr/>
+
 
 <div class="panel panel-default">
   <div class="panel-heading"><a href="#accountModal" id="accountAdd" data-toggle="modal"><i class="glyphicon glyphicon-user"></i>添加</a></div>
@@ -52,26 +64,25 @@
         <th>联系人</th>
         <th>联系电话</th>
         <th>是否有效</th>
-        <th>更新时间</th>
+        <th>创建时间</th>
         <th>操作</th>
       </tr>
     </thead>
     <tbody>
-      #foreach( $baiduAccount in $baiduAccounts )
-      <tr id="${baiduAccount.getId()}">
-        <th>${baiduAccount.getId()}</th>
-        <td>${baiduAccount.getAccount()}</td>
-        <td>${baiduAccount.getPassword()}</td>
-        <td>${baiduAccount.getSource()}</td>
-        <td>${baiduAccount.getSite()}</td>
-        <td>${baiduAccount.getBuName()}</td>
-        <td>${baiduAccount.getCityName()}</td>
-        <td value="${baiduAccount.getIsValid()}">
-          <span class="mini-label #if(${baiduAccount.getIsValid()}) mini-label-primary #else mini-label-default #end">
-            #if(${baiduAccount.getIsValid()}) 有效 #else 无效 #end
+      #foreach( $supplier in $pagination.getResultList() )
+      <tr id="${supplier.sId}">
+        <th>${supplier.sId}</th>
+        <td>${supplier.name}</td>
+        <td>${supplier.shortname}</td>
+        <td>${supplier.address}</td>
+        <td>${supplier.contactName}</td>
+        <td>${supplier.contactTel}</td>
+        <td value="${supplier.isDisabled}">
+          <span class="mini-label #if(${supplier.isDisabled}=='F') mini-label-primary #else mini-label-default #end">
+            #if(${supplier.isDisabled}=='F') 有效 #else 无效 #end
           </span>
         </td>
-        <td>${baiduAccount.getUpdateDt()}</td>
+        <td>${supplier.insertDt}</td>
         <td><a href="#accountModal" id="accountEdit" onclick="accountEdit(${baiduAccount.getId()},${baiduAccount.getCityId()},${baiduAccount.getBuId()},${baiduAccount.getIsValid()})" data-toggle="modal" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a></td>
       </tr>
       #end
@@ -79,3 +90,31 @@
     </tbody>
   </table>
 </div>
+<form name="formPagination" action="#springUrl('/supplier/search')" method="POST">
+<nav>
+<ul class="pager">
+  <li>
+    #if($pagination.currentPage >= 2)
+    #set($previousPage=${pagination.currentPage} - 1)
+     <a href="javascript:formPaginationSumbmit($previousPage);">上一页</a>
+    #else
+     <a href="#">首页</a>
+    #end
+    </li>
+  <li><span>-第<font style="color: #5cb85c">$pagination.currentPage</font>页--总共
+    <font style="color: #5bc0de">$pagination.totalPages</font>页-</span></li>
+  <li>
+      #if($pagination.currentPage < $pagination.totalPages)
+       #set($nextPage=$pagination.currentPage+1)
+       <a href="javascript:formPaginationSumbmit($nextPage);">下一页</a>
+      #else
+       <a href='#'>最后一页</a>
+      #end
+  </li>
+</ul>
+</nav>
+<input type="hidden" id="currentPage" name="currentPage" value="" />
+<input type="hidden" name="isDisable" value="$supplierSearchForm.isDisable" />
+<input type="hidden" name="column" value="$supplierSearchForm.column" />
+<input type="hidden" name="value" value="$supplierSearchForm.value" />
+</form>

@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
+import com.wh.form.model.SupplierSearchForm;
+import com.wh.model.Pagination;
 import com.wh.model.Supplier;
 
 /*
@@ -80,6 +82,83 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         }
     }
     
+    @SuppressWarnings("deprecation")
+    public Pagination<Supplier> findByColumnValue(SupplierSearchForm supplierSearchForm) {
+        // 通过列的名称和类型查找数据
+        List<Supplier> resultSuppliers;
+        int totalRows = 1;
+        Pagination<Supplier> supplierPagination;
+        try {
+            String sql = "";
+            String sqlTotal = "";
+            if ( !supplierSearchForm.getIsDisable().equals("A") ) {
+                sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE is_disabled=? ";
+                if (supplierSearchForm.getValue() != null && !"".equals(supplierSearchForm.getValue())) {
+                    
+                    sql = sql + " and " + supplierSearchForm.getColumn() + " like ? ";
+                    sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
+                    totalRows = jdbcTemplate.queryForInt(sqlTotal, supplierSearchForm.getIsDisable(),
+                            "%" + supplierSearchForm.getValue() + "%");
+                    
+                    supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
+                    sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
+                    
+                    resultSuppliers = jdbcTemplate.query(sql, rowMapper, supplierSearchForm.getIsDisable(),
+                            "%" + supplierSearchForm.getValue() + "%");
+                    
+                    supplierPagination.setResultList(resultSuppliers);
+                    logger.info(sql);
+                    return supplierPagination;
+                }
+                
+                sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
+                totalRows = jdbcTemplate.queryForInt(sqlTotal, supplierSearchForm.getIsDisable());
+                
+                supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
+                sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
+                
+                resultSuppliers = jdbcTemplate.query(sql, rowMapper, supplierSearchForm.getIsDisable());
+                supplierPagination.setResultList(resultSuppliers);
+                logger.info(sql);
+                return supplierPagination;
+            }else {
+                if (supplierSearchForm.getValue() != null && !"".equals(supplierSearchForm.getValue())) {
+                    sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE " + supplierSearchForm.getColumn() + " like ? ";
+                    sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
+                    totalRows = jdbcTemplate.queryForInt(sqlTotal,
+                            "%" + supplierSearchForm.getValue() + "%");
+                    
+                    supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
+                    sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
+                    
+                    resultSuppliers = jdbcTemplate.query(sql, rowMapper, 
+                            "%" + supplierSearchForm.getValue() + "%");
+                    supplierPagination.setResultList(resultSuppliers);
+                    logger.info(sql);
+                    return supplierPagination;
+                    
+                }
+                sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME ;
+                sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
+                totalRows = jdbcTemplate.queryForInt(sqlTotal);
+                
+                supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
+                sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
+                
+                resultSuppliers = jdbcTemplate.query(sql, rowMapper);
+                supplierPagination.setResultList(resultSuppliers);
+                logger.info(sql);
+                
+                return supplierPagination;
+            }
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("Supplier findbycolumnvalue failed ." + e);
+            return null;
+        }
+    }
+    
     
     
     private RowMapper<Supplier> rowMapper = new RowMapper<Supplier>() {
@@ -95,11 +174,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             supplier.setAddress(rs.getString("address"));
             supplier.setContactName(rs.getString("contact_name"));
             supplier.setContactTel(rs.getString("contact_tel"));
-            try {
-                supplier.setIsDisabled(rs.getString("is_disabled").toCharArray()[0]);
-            } catch (Exception e) {
-                logger.debug("Supplier is_disabled failed ." + e);
-            }
+            supplier.setIsDisabled(rs.getString("is_disabled"));
             
             supplier.setInsertDt(rs.getTimestamp("insert_dt"));
             supplier.setUpdateTime(rs.getTimestamp("update_time"));
