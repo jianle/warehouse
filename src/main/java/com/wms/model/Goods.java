@@ -32,7 +32,7 @@ public class Goods implements Serializable {
     
     private String gIdSupplier;
     private Integer amount;
-    private Character isDisabled;
+    private String isDisabled;
     
     @Column(updatable=false)
     private Timestamp insertDt;
@@ -92,10 +92,10 @@ public class Goods implements Serializable {
     public void setAmount(Integer amount) {
         this.amount = amount;
     }
-    public Character getIsDisabled() {
+    public String getIsDisabled() {
         return isDisabled;
     }
-    public void setIsDisabled(Character isDisabled) {
+    public void setIsDisabled(String isDisabled) {
         this.isDisabled = isDisabled;
     }
     public Timestamp getInsertDt() {

@@ -1,0 +1,33 @@
+
+#set($title="商品管理")
+<script src="#springUrl('/static/js/bootstrap-suggest.js')"></script>
+
+<div class="row">
+                <div class="col-lg-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="test">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            </ul>
+                        </div>
+                        <!-- /btn-group -->
+                    </div>
+                </div>
+            </div>
+
+<script type="text/javascript">
+    var testBsSuggest = $("#test").bsSuggest({
+        url: "../supplier/getSupplierName?name=",
+        idField: "sId",
+        keyField: "name"
+    }).on('onDataRequestSuccess', function (e, result) {
+    	console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword) {
+    	console.log('onSetSelectValue: ', keyword);
+    }).on('onUnsetSelectValue', function (e) {
+    	console.log("onUnsetSelectValue");
+    });
+</script>

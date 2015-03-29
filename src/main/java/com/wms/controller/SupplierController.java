@@ -1,8 +1,13 @@
 package com.wms.controller;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,6 +109,33 @@ public class SupplierController {
         }
         
         return "false";
+    }
+    
+    @RequestMapping("getSupplierName")
+    @ResponseBody
+    public JSONObject getSupplierName() throws JSONException {
+        
+        List<Supplier> suppliers = supplierDao.findSuggestAll();
+
+        JSONObject jsonObject;
+        
+        JSONArray jsonArray = new JSONArray();
+        Supplier supplier;
+        for (int i = 0; i < suppliers.size(); i++) {
+            jsonObject = new JSONObject();
+            supplier = suppliers.get(i);
+            jsonObject.put("sId", String.valueOf(supplier.getsId()));
+            jsonObject.put("name", supplier.getName() == null ? "" : supplier.getName());
+            jsonObject.put("shortname", supplier.getShortname()==null ? "" : supplier.getShortname());
+            jsonArray.add(jsonObject);
+        }
+        
+        logger.info("GetSupplierSuggest size :" + jsonArray.size());
+        
+        jsonObject = new JSONObject();
+        jsonObject.put("value", jsonArray);
+
+        return jsonObject;
     }
 
 }

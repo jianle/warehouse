@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>#alt($title "") - wh</title>
+    <title>#alt($title "") - WMS</title>
 
     <link href="#springUrl('/static/css/bootstrap.min.css')" rel="stylesheet">
     <link href="#springUrl('/static/css/bootstrap-theme.min.css')" rel="stylesheet">

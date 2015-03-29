@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.poi.ss.formula.ptg.DeletedArea3DPtg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,44 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
         
     }
+    
+    public Boolean update(Goods goods) {
+        // 通过商品Id修改商品信息
+        try {
+            String sql = "UPDATE " + TABLE_NAME + " SET "
+                    + " s_id=?, name=?, length=?, width=?, height=?, weight=?, g_id_supplier=?,"
+                    + " amount=?, is_disabled=? "
+                    + " WHERE g_id=? ";
+            jdbcTemplate.update(sql, goods.getsId(),
+                    goods.getName(),
+                    goods.getLength(),
+                    goods.getWidth(),
+                    goods.getHeight(),
+                    goods.getWeight(),
+                    goods.getgIdSupplier(),
+                    goods.getAmount(),
+                    goods.getIsDisabled(),
+                    goods.getgId()
+                    );
+            return true;
+        } catch (Exception e) {
+            logger.debug("update goods failed ." + e);
+        }
+        return false;
+    }
+    
+    public Boolean delete(Long gId) {
+        // 通过产品Id删除
+        try {
+            String sql = "DELETE FROM " + TABLE_NAME + " WHERE g_id=? ";
+            jdbcTemplate.update(sql, gId);
+            return true;
+        } catch (Exception e) {
+            logger.debug("delete goods failed ." + e);
+        }
+        return false;
+        
+    }
 
     @Override
     public List<Goods> findAll() {
@@ -102,11 +141,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             goods.setWeight(rs.getInt("weight"));
             goods.setgIdSupplier(rs.getString("g_id_supplier"));
             goods.setAmount(rs.getInt("amount"));
-            try {
-                goods.setIsDisabled(rs.getString("is_disabled").toCharArray()[0]);
-            } catch (Exception e) {
-                logger.info("Goods is_disable error ." + e);
-            }
+            goods.setIsDisabled(rs.getString("is_disabled"));
             
             goods.setInsertDt(rs.getTimestamp("insert_dt"));
             goods.setUpdateTime(rs.getTimestamp("update_time"));

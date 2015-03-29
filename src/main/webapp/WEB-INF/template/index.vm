@@ -1,4 +1,4 @@
-#set($title='Index')
+#set($title='首页')
 #set($layout = "layout.vm")
 <script>
   var calDt = new Date();
@@ -14,7 +14,7 @@
     content="晚上好!"
   }
   $(document).ready(function(){
-    document.getElementById('contengFlag').innerHTML=content;
+    //document.getElementById('contengFlag').innerHTML=content;
   });
 
 </script>

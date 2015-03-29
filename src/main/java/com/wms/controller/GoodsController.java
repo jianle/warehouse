@@ -26,5 +26,7 @@ public class GoodsController {
         logger.info("RequestMapping:/goods .");
         return modelView;
     }
+    
+    
 
 }

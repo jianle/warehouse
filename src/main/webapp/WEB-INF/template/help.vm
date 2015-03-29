@@ -1,5 +1,5 @@
 #set( $layout ="layout.vm")
-
+#set($title="帮助")
 <div>
   <h4>使用帮助</h4>
   <hr style="margin-top:0px" />

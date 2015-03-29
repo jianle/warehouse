@@ -1,4 +1,4 @@
-#set($title='Supplier')
+#set($title='供应商管理')
 #set($layout = "layout.vm")
 <script src="#springUrl('/static/js/supplier/list.js')"></script>
 <script src="#springUrl('/static/js/supplier/view.js')"></script>

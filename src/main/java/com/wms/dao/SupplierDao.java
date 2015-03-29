@@ -68,12 +68,24 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         }
         return null;
     }
+    
+    public List<Supplier> findSuggestAll() {
+        // 通过Id获取Supplier
+        try {
+            String sql = "SELECT s_id, name, shortname FROM " + TABLE_NAME ;
+            return jdbcTemplate.query(sql, rowMapperSuggest);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("Supplier get id failed ." + e);
+            return null;
+        }
+    }
 
     @Override
     public List<Supplier> findAll() {
         // 查找所有
         try {
-            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " LIMIT 10000 ";
+            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME;
             return jdbcTemplate.query(sql, rowMapper);
         } catch (Exception e) {
             // TODO: handle exception
@@ -81,6 +93,8 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             return null;
         }
     }
+    
+    
     
     @SuppressWarnings("deprecation")
     public Pagination<Supplier> findByColumnValue(SupplierSearchForm supplierSearchForm) {
@@ -217,5 +231,19 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             return supplier;
         }
     };
-
+    
+    private RowMapper<Supplier> rowMapperSuggest = new RowMapper<Supplier>() {
+        
+        @Override
+        public Supplier mapRow(ResultSet rs, int rowNum) throws SQLException {
+            // TODO Auto-generated method stub
+            
+            Supplier supplier = new Supplier();
+            supplier.setsId(rs.getLong("s_id"));
+            supplier.setName(rs.getString("name"));
+            supplier.setShortname(rs.getString("shortname"));
+            return supplier;
+        }
+    };
+    
 }

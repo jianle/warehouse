@@ -5,7 +5,6 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -19,7 +18,7 @@ public class Supplier implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    @Id @GeneratedValue
+    @Id
     private Long sId;
     private String name;
     private String shortname;
@@ -47,6 +46,9 @@ public class Supplier implements Serializable {
         return shortname;
     }
     public void setShortname(String shortname) {
+        if (shortname == null) {
+            this.shortname = "";
+        }
         this.shortname = shortname;
     }
     public String getAddress() {
