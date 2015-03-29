@@ -4,16 +4,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.poi.ss.formula.ptg.DeletedArea3DPtg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.wms.model.Goods;
+import com.wms.model.Pagination;
+import com.wms.model.Supplier;
 
 /*
  * 商品操作实体
@@ -112,12 +114,56 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         return false;
         
     }
+    
+    @SuppressWarnings("deprecation")
+    public Pagination<Goods> findByNameAndIsDisabled(String name, String is_disabled, int currentPage) {
+        // 通过商品名称、是否有效搜索并分页
+        List<Goods> goods;
+        
+        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
+        String isWhere = "";
+        
+        if (name != null && !"".equals(name) ) {
+            isWhere = isWhere + " WHERE name like '%" + name + "%' ";
+        }
+        
+        if (is_disabled != null && ! "A".equals(is_disabled)) {
+            if (isWhere.isEmpty()) {
+                isWhere = " WHERE is_disabled='" + is_disabled + "' ";
+            }else {
+                isWhere = isWhere + " AND is_disabled='" + is_disabled + "' ";
+            }
+        }
+        
+        sqlBuf.append(isWhere);
+        
+        try {
+            //定义并执行SQL
+            String sqlTotal = sqlBuf.toString().replace(SELECT_FIELDS, "COUNT(1)");
+            int totalRows = jdbcTemplate.queryForInt(sqlTotal);
+            
+            Pagination<Goods> goodsPagination = new Pagination<Goods>(totalRows, currentPage);
+            String sql = goodsPagination.getMySQLPageSQL(sqlBuf.toString(),currentPage);
+            
+            logger.info(sql);
+            
+            goods = jdbcTemplate.query(sql, rowMapper);
+            
+            goodsPagination.setResultList(goods);
+            
+            return goodsPagination;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("Goods findByNameAndIsDisabled ." + e);
+            return null;
+        }
+    }
 
     @Override
     public List<Goods> findAll() {
         // 查询左右对象限定一定条数
         try {
-            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + "LIMIT 10000";
+            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME ;
             return jdbcTemplate.query(sql, rowMapper);
         } catch (Exception e) {
             logger.debug("Goods findAll failed ." + e);
