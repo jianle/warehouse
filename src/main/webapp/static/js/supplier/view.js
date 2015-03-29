@@ -113,14 +113,14 @@ $(document).ready(function(){
         },  
         
         submitHandler : function(form) {  
-        	accountAddUpdate();
+        	supplierAddUpdate();
         }  
 	});
 	
 	$('#formSupplierAddUpdate input').keypress(function(e) {  
         if (e.which == 13) {  
             if ($('#formSupplierAddUpdate').validate().form()) {  
-            	accountAddUpdate();
+            	supplierAddUpdate();
             }  
             return false;  
         }  
@@ -128,7 +128,7 @@ $(document).ready(function(){
 });
 
 
-function accountAddUpdate(){
+function supplierAddUpdate(){
 	$("#formSupplierAddUpdate").validate();
 	console.log(contextPath);
 	var title = $('#supplierModal .modal-title').html().trim() ;
