@@ -2,7 +2,11 @@ package com.wms.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,7 @@ import org.springframework.stereotype.Repository;
 import com.wms.form.model.SupplierSearchForm;
 import com.wms.model.Pagination;
 import com.wms.model.Supplier;
+
 
 /*
  * 供应商操作实体
@@ -92,6 +97,42 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             logger.debug("Supplier findAll failed ." + e);
             return null;
         }
+    }
+    
+    // 通过传入List 返回Map<id, name>
+    public Map<Long, String> findBySIdList(Set<Long> sIdsSet){
+        String sql = "SELECT s_id, name FROM " + TABLE_NAME;
+        StringBuffer whereIs = new StringBuffer("");
+        Map<Long, String> maps = new HashMap<Long, String>();
+        List<Long> sIds = new ArrayList<Long>(sIdsSet);
+        logger.info(sIds.toString());
+        
+        if (sIds == null || sIds.size() == 0) {
+            return null;
+        }else {
+            for (int i = 0; i < sIds.size(); i++) {
+                if (i==0) {
+                    whereIs.append(" WHERE s_id in( ").append(sIds.get(i));
+                }else {
+                    whereIs.append(", ").append(sIds.get(i));
+                }
+            }
+        }
+        whereIs.append(")");
+        
+        try {
+            List<Map<String, Object>> resultList = jdbcTemplate.queryForList(sql + whereIs.toString());
+            for (int i = 0; i < resultList.size(); i++) {
+                Map<String, Object> tmpMap = resultList.get(i);
+                maps.put(Long.valueOf(tmpMap.get("s_id").toString()), String.valueOf(tmpMap.get("name")));
+            }
+            return maps;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findBySIdList suppliers fialed ." + e);
+        }
+        
+        return null;
     }
     
     

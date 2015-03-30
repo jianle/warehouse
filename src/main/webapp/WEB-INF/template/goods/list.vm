@@ -2,6 +2,95 @@
 #set($title="商品管理")
 <script src="#springUrl('/static/js/bootstrap-suggest.js')"></script>
 
+<form id="supplierSearchId" action="#springUrl('/goods/search')" method="POST">
+  <div class="filter-bar-sm" >
+    <div class="filter-content">
+      <select class="form-control" id="isDisable1" name="isDisabled">
+        <option #if(${isDisabled}=='A') selected="selected" #end value='A'>是否有效</option>
+        <option #if(${isDisabled}=='F') selected="selected" #end value='F'>有效</option>
+        <option #if(${isDisabled}=='T') selected="selected" #end value='T'>无效</option>
+      </select>
+    </div>
+    <input type="hidden" name="currentPage" value="1" />
+    <div class="filter-content">
+      <div class="form-group">
+          <input type="text" name="name"  class="form-control"
+            #if($name) value="$name" #end
+           placeholder="商品名称" />
+      </div>
+    </div>
+    <div class="filter-content">
+      <div class="form-group">
+        <button type="submit" class="btn btn-default">查询</button>
+      </div>
+    </div>
+
+    <div class="filter-content-right ">
+      <div class="form-group">
+        <button type="button" class="btn btn-default">导出</button>
+      </div>
+    </div>
+
+    <div class="filter-content-right ">
+      <div class="form-group">
+        <button type="button" class="btn btn-default">导入</button>
+      </div>
+    </div>
+
+  </div>
+</form>
+
+<hr/>
+
+<div class="panel panel-default">
+  <div class="panel-heading"><a href="#supplierModal" id="supplierAdd" data-toggle="modal"><i class="glyphicon glyphicon-folder-close"></i>添加</a></div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>商品名称</th>
+        <th>供应商名称</th>
+        <th>长度(mm)</th>
+        <th>宽度(mm)</th>
+        <th>高(mm)</th>
+        <th>重(g)</th>
+        <th>供应商编号</th>
+        <th>商品的数量</th>
+        <th>是否有效</th>
+        <th>创建时间</th>
+        <th>修改删除</th>
+      </tr>
+    </thead>
+    <tbody>
+      #foreach( $supplier in $pagination.getResultList() )
+      <tr id="${supplier.sId}_tr">
+        <th>${supplier.sId}</th>
+        <td>${supplier.name}</td>
+        <td>${supplier.shortname}</td>
+        <td>${supplier.address}</td>
+        <td>${supplier.contactName}</td>
+        <td>${supplier.contactName}</td>
+        <td>${supplier.contactName}</td>
+        <td>${supplier.contactName}</td>
+        <td>${supplier.contactTel}</td>
+        <td value="${supplier.isDisabled}">
+          <span class="mini-label #if(${supplier.isDisabled}=='F') mini-label-primary #else mini-label-default #end">
+            #if(${supplier.isDisabled}=='F') 有效 #else 无效 #end
+          </span>
+        </td>
+        <td>${supplier.insertDt}</td>
+        <td>
+          <a href="#supplierModal" id="supplierEdit" onclick="supplierEdit(${supplier.sId},'$supplier.isDisabled')" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteSupplier(${supplier.sId},'$supplier.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+        </td>
+      </tr>
+      #end
+    </tbody>
+  </table>
+</div>
+
+<br/>
 <div class="row">
                 <div class="col-lg-3">
                     <div class="input-group">

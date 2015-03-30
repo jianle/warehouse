@@ -9,13 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.wms.model.Goods;
 import com.wms.model.Pagination;
-import com.wms.model.Supplier;
 
 /*
  * 商品操作实体
@@ -124,7 +122,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         String isWhere = "";
         
         if (name != null && !"".equals(name) ) {
-            isWhere = isWhere + " WHERE name like '%" + name + "%' ";
+            isWhere = " WHERE name like '%" + name + "%' ";
         }
         
         if (is_disabled != null && ! "A".equals(is_disabled)) {

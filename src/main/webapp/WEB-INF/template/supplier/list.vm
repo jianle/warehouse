@@ -57,18 +57,18 @@
 
 <div class="panel panel-default">
   <div class="panel-heading"><a href="#supplierModal" id="supplierAdd" data-toggle="modal"><i class="glyphicon glyphicon-user"></i>添加</a></div>
-  <table class="table table-striped">
-    <thead>
+  <table class="table table-striped" style="vertical-align: middle!important;">
+    <thead style="table-layout: fixed;">
       <tr>
         <th>ID</th>
-        <th>供应商名称</th>
-        <th>名称缩写</th>
-        <th>供应商地址</th>
-        <th>联系人</th>
-        <th>联系电话</th>
-        <th>是否有效</th>
-        <th>创建时间</th>
-        <th>修改删除</th>
+        <th style="width:200px;">供应商名称</th>
+        <th style="width:75px;">名称缩写</th>
+        <th style="width:350px;">供应商地址</th>
+        <th style="width:80px;">联系人</th>
+        <th style="width:75px;">联系电话</th>
+        <th style="width:50px;">状态</th>
+        <th style="width:160px;">创建时间</th>
+        <th style="width:75px;">修改删除</th>
       </tr>
     </thead>
     <tbody>
