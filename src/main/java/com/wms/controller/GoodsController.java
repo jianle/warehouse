@@ -37,12 +37,32 @@ public class GoodsController {
     public ModelAndView list() {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
-        logger.info("RequestMapping:/goods .");
+        String name="";
+        String isDisabled = "A";
+        int currentPage = 1;
+        // 获取分页数据
+        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage);
+        List<Goods> goods = paginationGoods.getResultList();
+        logger.info(goods.toString());
+        Set<Long> sIds = new HashSet<Long>();
+        if (goods!=null) {
+            for (int i = 0; i < goods.size(); i++) {
+                sIds.add(goods.get(i).getsId());
+            }
+        }
+        // 获取sid对应的name
+        Map<Long, String> supplierMap = supplierDao.findBySIdList(sIds);    
+
+        modelView.addObject("paginationGoods", paginationGoods);
+        modelView.addObject("sName", name);
+        modelView.addObject("isDisabled", isDisabled);
+        modelView.addObject("currentPage", currentPage);
+        modelView.addObject("supplierMap", supplierMap);
         return modelView;
     }
     
     @RequestMapping("search")
-    public ModelAndView search(@ModelAttribute String name,
+    public ModelAndView search(@RequestParam(value="sName") String name,
             @RequestParam(value="currentPage") int currentPage,
             @RequestParam(value="isDisabled") String isDisabled) {
         ModelAndView modelView = new ModelAndView();
@@ -61,7 +81,7 @@ public class GoodsController {
         Map<Long, String> supplierMap = supplierDao.findBySIdList(sIds);    
         
         modelView.addObject("paginationGoods", paginationGoods);
-        modelView.addObject("name", name);
+        modelView.addObject("sName", name);
         modelView.addObject("isDisabled", isDisabled);
         modelView.addObject("currentPage", currentPage);
         modelView.addObject("supplierMap", supplierMap);
