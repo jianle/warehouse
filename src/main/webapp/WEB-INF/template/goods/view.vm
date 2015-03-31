@@ -24,7 +24,7 @@
             <label for="sName" class="col-sm-2 control-label" style="padding-left:4px" >供应商名称</label>
             <div class="col-lg-9">
                <div class="input-group">
-                   <input type="text" class="form-control" id="sName">
+                   <input type="text" class="form-control" id="sName" value="">
                    <div class="input-group-btn">
                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                            <span class="caret"></span>

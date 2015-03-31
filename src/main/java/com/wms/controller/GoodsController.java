@@ -1,5 +1,6 @@
 package com.wms.controller;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,8 @@ public class GoodsController {
     @RequestMapping("save")
     @ResponseBody
     public String save(@ModelAttribute Goods goods) {
+        goods.setInsertDt(new Timestamp(System.currentTimeMillis()));
+        goods.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         if (goodsDao.save(goods)) {
             return "true";
         }
@@ -94,7 +97,8 @@ public class GoodsController {
     
     @RequestMapping("delete")
     @ResponseBody
-    public String delete(@ModelAttribute Long gId) {
+    public String delete(@ModelAttribute("gId") Long gId) {
+        logger.info("delete goods by Id:" + gId);
         if (goodsDao.delete(gId)) {
             return "true";
         }

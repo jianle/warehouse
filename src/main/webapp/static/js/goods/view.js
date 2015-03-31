@@ -11,49 +11,58 @@ $(document).ready(function() {
 		if(flagTitle=="编辑"){
 			$('#goodsModal .modal-title').html("新增");
 			$('.modal-body #name').removeAttr("readonly");
+			//$('.modal-body #gId').val(Id);
+			//$('.modal-body #sId').val(sId);
+			//$('.modal-body #name').attr('readonly','readonly');
 			$('.modal-body #name').val("");
-			$('.modal-body #shortname').val("");
-			$('.modal-body #address').val("");
-			$('.modal-body #contactName').val("");
-			$('.modal-body #contactTel').val("");
-			$('.modal-body #isDisabled').val("F");
+			$('.modal-body #sName').val("");
+			$('.modal-body #length').val(0);
+			$('.modal-body #width').val(0);
+			$('.modal-body #height').val(0);
+			$('.modal-body #weight').val(0);
+			$('.modal-body #gIdSupplier').val("");
+			$('.modal-body #amount').val(0);
 		}
 		flagTitle="新增";
 	});
 });
 
 
-function goodsEdit(Id,isDisabled){
+function goodsEdit(Id, isDisabled, sId){
 	var trId = Id+"_tr";
 	flagTitle="编辑";
 	$('.form-group').removeClass('has-error');
 	$('.form-group span').remove();
 	//初始化goodsModal Modal --by goodsEdit
 	$('#goodsModal .modal-title').html("编辑");
-	$('.modal-body #sId').val(Id);
+	$('.modal-body #gId').val(Id);
+	$('.modal-body #sId').val(sId);
 	//$('.modal-body #name').attr('readonly','readonly');
 	$('.modal-body #name').val( $("#"+trId+" td")[0].innerHTML );
-	$('.modal-body #shortname').val( $("#"+trId+" td")[1].innerHTML );
-	$('.modal-body #address').val( $("#"+trId+" td")[2].innerHTML );
-	$('.modal-body #contactName').val( $("#"+trId+" td")[3].innerHTML );
-	$('.modal-body #contactTel').val($("#"+trId+" td")[4].innerHTML);
+	$('.modal-body #sName').val( $("#"+trId+" td")[1].innerHTML );
+	$('.modal-body #length').val( $("#"+trId+" td")[2].innerHTML );
+	$('.modal-body #width').val( $("#"+trId+" td")[3].innerHTML );
+	$('.modal-body #height').val($("#"+trId+" td")[4].innerHTML);
+	$('.modal-body #weight').val($("#"+trId+" td")[5].innerHTML);
+	$('.modal-body #gIdSupplier').val($("#"+trId+" td")[6].innerHTML);
+	$('.modal-body #amount').val($("#"+trId+" td")[7].innerHTML);
 	$('.modal-body #isDisabled').val(isDisabled);
 }
 
-function deleteGoods(sId,content){
+function deleteGoods(gId,content){
 	$.messager.confirm('提示', '确认是否删除<br/> <code>商品名称</code>：' + content, function(){
 		// 异步执行删除
 		$.ajax({
 			cache: true,
 			type:"POST",
 			url :contextPath + '/goods/delete',
-			data: {sId:sId},
+			data: {gId:gId},
 			async:true,
 			dataType: 'text',
 			success: function(result) {
 				if(result){
 					$.messager.popup("删除成功.");
-					$("#"+sId+"_tr").remove()
+					$("#"+gId+"_tr").remove()
 				}else{
 					$.messager.alert("提示", "删除失败");
 				}
@@ -75,28 +84,16 @@ $(document).ready(function(){
 			name :{
 				required: true,
 			},
-			address : {
+			sName : {
 			    required: true,
-			},
-			contactName : {
-				required: true,
-			},
-			contactTel : {
-				required: true,
 			}
 		},
 		messages: {
 			name :{
-				required: "请输入供应商名称",
+				required: "请输入商品名称",
 			},
-			address : {
-			    required: "请输入地址",
-			},
-			contactName : {
-				required: "请输入联系人",
-			},
-			contactTel : {
-				required: "请输入联系电话",
+			sName : {
+			    required: "请输入供应商名称",
 			}
 		},
 		highlight : function(element) {  
@@ -190,7 +187,6 @@ function goodsCommit(){
 	$("#formGoodsAddUpdate").validate();
     $('#formGoodsAddUpdate').submit();
 }
-
 
 
 
