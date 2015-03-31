@@ -42,16 +42,8 @@ public class GoodsController {
         int currentPage = 1;
         // 获取分页数据
         Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage);
-        List<Goods> goods = paginationGoods.getResultList();
-        logger.info(goods.toString());
-        Set<Long> sIds = new HashSet<Long>();
-        if (goods!=null) {
-            for (int i = 0; i < goods.size(); i++) {
-                sIds.add(goods.get(i).getsId());
-            }
-        }
         // 获取sid对应的name
-        Map<Long, String> supplierMap = supplierDao.findBySIdList(sIds);    
+        Map<Long, String> supplierMap = getSupplierMap(paginationGoods.getResultList());   
 
         modelView.addObject("paginationGoods", paginationGoods);
         modelView.addObject("sName", name);
@@ -70,15 +62,8 @@ public class GoodsController {
         
         // 获取分页数据
         Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage);
-        List<Goods> goods = paginationGoods.getResultList();
-        Set<Long> sIds = new HashSet<Long>();
-        if (goods!=null) {
-            for (int i = 0; i < goods.size(); i++) {
-                sIds.add(goods.get(i).getsId());
-            }
-        }
         // 获取sid对应的name
-        Map<Long, String> supplierMap = supplierDao.findBySIdList(sIds);    
+        Map<Long, String> supplierMap = getSupplierMap(paginationGoods.getResultList());
         
         modelView.addObject("paginationGoods", paginationGoods);
         modelView.addObject("sName", name);
@@ -114,6 +99,22 @@ public class GoodsController {
             return "true";
         }
         return "false";
+    }
+    
+    private Map<Long, String> getSupplierMap(List<Goods> goods) {
+        try {
+            Set<Long> sIds = new HashSet<Long>();
+            if (goods!=null) {
+                for (int i = 0; i < goods.size(); i++) {
+                    sIds.add(goods.get(i).getsId());
+                }
+            }
+            return supplierDao.findBySIdList(sIds);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("getSupplierMap failed." + e);
+            return null;
+        }
     }
 
 }

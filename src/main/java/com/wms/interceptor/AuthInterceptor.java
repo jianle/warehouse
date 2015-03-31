@@ -44,8 +44,14 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     
 
     private String getUrl(HttpServletRequest request) {
+        String url = request.getRequestURI();
+        int index = url.indexOf("?");
+        if (index>0) {
+            url = url.substring(0, index);
+        }
+        System.out.println("request url:" + url.substring(request.getContextPath().length()));
 
-        StringBuilder sb = new StringBuilder(request.getRequestURL());
+        StringBuilder sb = new StringBuilder(url.substring(request.getContextPath().length()));
         String queryString = request.getQueryString();
         if (queryString != null) {
             sb.append("?").append(queryString);

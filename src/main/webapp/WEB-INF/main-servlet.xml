@@ -55,5 +55,7 @@
             <bean class="com.wms.interceptor.AuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
+    
+    <bean id="exceptionResolver" class="com.wms.interceptor.ExceptionHandler"/>
 
 </beans>

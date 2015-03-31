@@ -105,7 +105,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         StringBuffer whereIs = new StringBuffer("");
         Map<Long, String> maps = new HashMap<Long, String>();
         List<Long> sIds = new ArrayList<Long>(sIdsSet);
-        logger.info(sIds.toString());
+        logger.info("findBySIdList:" + sIds.toString());
         
         if (sIds == null || sIds.size() == 0) {
             return null;

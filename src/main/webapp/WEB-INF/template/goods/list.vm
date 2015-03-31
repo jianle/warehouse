@@ -1,11 +1,13 @@
 
 #set($title="商品管理")
+<script src="#springUrl('/static/js/goods/list.js')"></script>
+<script src="#springUrl('/static/js/goods/view.js')"></script>
 <script src="#springUrl('/static/js/bootstrap-suggest.js')"></script>
 
 <form id="goodsSearchId" action="#springUrl('/goods/search')" method="POST">
   <div class="filter-bar-sm" >
     <div class="filter-content">
-      <select class="form-control" id="isDisable1" name="isDisabled">
+      <select class="form-control" id="isDisabled1" name="isDisabled">
         <option #if(${isDisabled}=='A') selected="selected" #end value='A'>是否有效</option>
         <option #if(${isDisabled}=='F') selected="selected" #end value='F'>有效</option>
         <option #if(${isDisabled}=='T') selected="selected" #end value='T'>无效</option>
@@ -48,17 +50,17 @@
     <thead>
       <tr>
         <th>ID</th>
-        <th>商品名称</th>
-        <th>供应商名称</th>
-        <th>长(mm)</th>
-        <th>宽(mm)</th>
-        <th>高(mm)</th>
-        <th>重(g)</th>
-        <th>供应商编号</th>
-        <th>数量</th>
-        <th>状态</th>
-        <th>创建时间</th>
-        <th>修改删除</th>
+        <th style="width:150px;">商品名称</th>
+        <th style="width:250px;">供应商名称</th>
+        <th style="width:70px;">长(mm)</th>
+        <th style="width:70px;">宽(mm)</th>
+        <th style="width:70px;">高(mm)</th>
+        <th style="width:80px;">重(g)</th>
+        <th style="width:90px;">供应商编号</th>
+        <th style="width:50px;">数量</th>
+        <th style="width:50px;">状态</th>
+        <th style="width:160px;">创建时间</th>
+        <th style="width:75px;">修改删除</th>
       </tr>
     </thead>
     <tbody>
@@ -82,7 +84,7 @@
         <td>
           <a href="#goodsModal" id="goodsEdit" onclick="goodsEdit(${goods.sId},'$goods.isDisabled')" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:deletegoods(${goods.sId},'$goods.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+          <a href="javascript:deleteGoods(${goods.sId},'$goods.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
         </td>
       </tr>
       #end
@@ -90,28 +92,23 @@
   </table>
 </div>
 
+#parse("/goods/view.vm")
+
 <br/>
-<div class="row">
-                <div class="col-lg-3">
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="test">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            </ul>
-                        </div>
-                        <!-- /btn-group -->
-                    </div>
-                </div>
-            </div>
+
 
 <script type="text/javascript">
-    var testBsSuggest = $("#test").bsSuggest({
+    var sNameSuggest = $("#sName").bsSuggest({
         url: "../supplier/getSupplierName?name=",
         idField: "sId",
-        keyField: "name"
+        keyField: "name",
+        listAlign: "auto",
+        listStyle: {
+        "padding-top":0, "max-height": "375px", "max-width": "800px",
+        "overflow": "auto","min-width": "300px", "width": "auto",
+        "left": "-393px", "right": "auto", "padding-right": "10px",
+        "transition": "0.5s", "-webkit-transition": "0.5s", "-moz-transition": "0.5s", "-o-transition": "0.5s"
+        }, //列表的样式控制
     }).on('onDataRequestSuccess', function (e, result) {
     	console.log('onDataRequestSuccess: ', result);
     }).on('onSetSelectValue', function (e, keyword) {
@@ -119,4 +116,5 @@
     }).on('onUnsetSelectValue', function (e) {
     	console.log("onUnsetSelectValue");
     });
+
 </script>

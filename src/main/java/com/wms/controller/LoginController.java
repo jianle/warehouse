@@ -31,7 +31,7 @@ public class LoginController {
     
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
     
-    private static final String DEFAULT_FROM = "redirect:/";
+    private static final String DEFAULT_FROM = "/";
     private static final String COOKIE_NAME = "wh_cookie";
     private static final Integer COOKIE_EXPIRE = 7 * 24 * 3600;
     private static final String HMAC_KEY = "warehouse";
@@ -48,7 +48,8 @@ public class LoginController {
             HttpServletRequest request,
             Model model, HttpServletResponse response) throws Exception {
         
-        logger.info("RequestMapping :/login .");
+        from = "redirect:" + from;
+        logger.info("RequestMapping :/login. from:" + from);
         
         ModelAndView modelView = new ModelAndView();
         User user = null ;
@@ -63,7 +64,7 @@ public class LoginController {
 
             if (user != null) {
                 logger.info("Login by cookie: " + user.getUsername());
-                modelView.setViewName(DEFAULT_FROM);
+                modelView.setViewName(from);
                 modelView.addObject("user", user);
                 return modelView;
             }
@@ -98,7 +99,7 @@ public class LoginController {
             }
             cookie.setMaxAge(COOKIE_EXPIRE);
             response.addCookie(cookie);
-            modelView.setViewName(DEFAULT_FROM);
+            modelView.setViewName(from);
             return modelView;
         }
         
