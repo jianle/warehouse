@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,32 +79,46 @@ public class GoodsController {
     
     @RequestMapping("save")
     @ResponseBody
-    public String save(@ModelAttribute Goods goods) {
+    public JSONObject save(@ModelAttribute Goods goods) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
         goods.setInsertDt(new Timestamp(System.currentTimeMillis()));
         goods.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        
         if (goodsDao.save(goods)) {
-            return "true";
+            logger.info("save goods success return true");
+            result = true;
         }
-        return "false";
+        logger.info("goods save " + result);
+        jsonTuple.put("value", result);
+        return jsonTuple;
     }
     
     @RequestMapping("update")
     @ResponseBody
-    public String update(@ModelAttribute Goods goods) {
+    public JSONObject update(@ModelAttribute Goods goods) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
+        
         if (goodsDao.update(goods)) {
-            return "true";
+            result = true;
         }
-        return "false";
+        jsonTuple.put("value", result);
+        return jsonTuple;
     }
     
     @RequestMapping("delete")
     @ResponseBody
-    public String delete(@ModelAttribute("gId") Long gId) {
+    public JSONObject delete(@ModelAttribute("gId") Long gId) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
+        
         logger.info("delete goods by Id:" + gId);
         if (goodsDao.delete(gId)) {
-            return "true";
+            result = true;
         }
-        return "false";
+        jsonTuple.put("value", result);
+        return jsonTuple;
     }
     
     private Map<Long, String> getSupplierMap(List<Goods> goods) {

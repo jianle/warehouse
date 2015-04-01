@@ -58,9 +58,9 @@ function deleteGoods(gId,content){
 			url :contextPath + '/goods/delete',
 			data: {gId:gId},
 			async:true,
-			dataType: 'text',
+			dataType: 'json',
 			success: function(result) {
-				if(result){
+				if(result.value){
 					$.messager.popup("删除成功.");
 					$("#"+gId+"_tr").remove()
 				}else{
@@ -84,7 +84,7 @@ $(document).ready(function(){
 			name :{
 				required: true,
 			},
-			sName : {
+			sId : {
 			    required: true,
 			}
 		},
@@ -92,7 +92,7 @@ $(document).ready(function(){
 			name :{
 				required: "请输入商品名称",
 			},
-			sName : {
+			sId : {
 			    required: "请输入供应商名称",
 			}
 		},
@@ -137,9 +137,10 @@ function goodsAddUpdate(){
 			url :contextPath + '/goods/save',
 			data: $("#formGoodsAddUpdate").serialize(),
 			async:true,
-			dataType: 'text',
+			dataType: 'json',
 			success: function(result) {
-				if(result){
+				console.log(result);
+				if(result.value){
 					$.messager.confirm('提示', '添加成功，刷新页面查看', function(r){
 						console.log('ok');
 						window.location.reload();
@@ -162,9 +163,9 @@ function goodsAddUpdate(){
 			url :contextPath + '/goods/update',
 			data: $("#formGoodsAddUpdate").serialize(),
 			async:true,
-			dataType: 'text',
+			dataType: 'json',
 			success: function(result) {
-				if(result){
+				if(result.value){
 					$.messager.confirm('提示', '修改成功，刷新页面查看', function(r){
 						console.log('ok');
 						window.location.reload();

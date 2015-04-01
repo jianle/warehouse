@@ -71,7 +71,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         } catch (Exception e) {
             logger.debug("Goods save failed ." + e);
             return false;
-        }
+        } 
         
     }
     
