@@ -26,7 +26,7 @@ CREATE TABLE `goods` (
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`g_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '商品信息表'
+) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 comment '商品信息表'
 ;
 
 CREATE TABLE supplier(
@@ -41,6 +41,23 @@ CREATE TABLE supplier(
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`s_id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '供应商信息表';
+
+CREATE TABLE `purchase` (
+  `p_id` bigint(20) NOT NULL AUTO_INCREMENT comment '采购自增id',
+  `g_id` bigint(20) NOT NULL default 0 comment '商品id',
+  `g_name` varchar(256) not null default '' comment '商品名称',
+  `retail_prices` double(8,2) not null default 0.0 comment '零售价格',
+  `unit_price` double(8,2) not null default 0.0 comment '单价',
+  `net_amount` double(8,2) not null default 0.0 comment '净额',
+  `amount` int(8) not null default 0 comment '商品的数量',
+  `atm_amount` double(8,2) not null default 0.0 comment '金额',
+  ``  '条码',
+  `remarks` varchar(1000) not null default '' comment '备注',
+  `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
+  `update_time` timestamp null on update current_timestamp comment '最近一次更新',
+  PRIMARY KEY (`g_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '采购单'
+;
 
 
 
