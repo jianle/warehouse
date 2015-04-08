@@ -97,6 +97,33 @@
     </tbody>
   </table>
 </div>
+<form name="formPagination" action="#springUrl('/goods/search')" method="POST">
+<nav>
+<ul class="pager">
+  <li>
+    #if($paginationGoods.currentPage >= 2)
+    #set($previousPage=${paginationGoods.currentPage} - 1)
+     <a href="javascript:formPaginationSumbmit($previousPage);">上一页</a>
+    #else
+     <span style="color:#777">首页</span>
+    #end
+    </li>
+  <li><span>-第<font style="color: #5cb85c">$paginationGoods.currentPage</font>页--总共
+    <font style="color: #5bc0de">$paginationGoods.totalPages</font>页-</span></li>
+  <li>
+      #if($paginationGoods.currentPage < $paginationGoods.totalPages)
+       #set($nextPage=$paginationGoods.currentPage+1)
+       <a href="javascript:formPaginationSumbmit($nextPage);">下一页</a>
+      #else
+      <span style="color:#777">最后一页</span>
+      #end
+  </li>
+</ul>
+</nav>
+<input type="hidden" id="currentPage" name="currentPage" value="" />
+<input type="hidden" name="isDisable" value="$isDisabled" />
+<input type="hidden" name="sName" value="$sName" />
+</form>
 
 #parse("/goods/view.vm")
 

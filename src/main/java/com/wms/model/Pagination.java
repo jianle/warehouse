@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 public class Pagination<T> extends JdbcDaoSupport {
 
-    public static final int NUMBERS_PER_PAGE = 20;
+    public static final int NUMBERS_PER_PAGE = 10;
     // 一页显示的记录数
     private int numPerPage;
     // 记录总数

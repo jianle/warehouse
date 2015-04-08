@@ -147,7 +147,7 @@ function goodsAddUpdate(){
 				if(result.value){
 					$.messager.confirm('提示', '添加成功，是否刷新页面查看', function(r){
 						console.log('ok');
-						window.location.reload();
+						window.location.href=contextPath + '/goods';
 					});
 				}else{
 					$.messager.alert("提示", "添加失败，请确保供应商是点击选择的");
@@ -172,7 +172,7 @@ function goodsAddUpdate(){
 				if(result.value){
 					$.messager.confirm('提示', '修改成功，是否刷新页面查看', function(r){
 						console.log('ok');
-						window.location.reload();
+						window.location.href=contextPath + '/goods';
 					});
 				}else{
 					$.messager.alert("提示", "修改失败");
