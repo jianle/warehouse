@@ -21,6 +21,8 @@ $(document).ready(function() {
 			$('.modal-body #height').val(0);
 			$('.modal-body #weight').val(0);
 			$('.modal-body #gIdSupplier').val("");
+			$('.modal-body #scode').val("");
+			$('.modal-body #boxes').val(0);
 			$('.modal-body #amount').val(0);
 		}
 		flagTitle="新增";
@@ -45,7 +47,9 @@ function goodsEdit(Id, isDisabled, sId){
 	$('.modal-body #height').val($("#"+trId+" td")[4].innerHTML);
 	$('.modal-body #weight').val($("#"+trId+" td")[5].innerHTML);
 	$('.modal-body #gIdSupplier').val($("#"+trId+" td")[6].innerHTML);
-	$('.modal-body #amount').val($("#"+trId+" td")[7].innerHTML);
+	$('.modal-body #scode').val($("#"+trId+" td")[7].innerHTML);
+	$('.modal-body #boxes').val($("#"+trId+" td")[8].innerHTML);
+	$('.modal-body #amount').val($("#"+trId+" td")[9].innerHTML);
 	$('.modal-body #isDisabled').val(isDisabled);
 }
 

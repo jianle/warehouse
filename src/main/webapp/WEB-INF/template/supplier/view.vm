@@ -48,6 +48,13 @@
           </div>
 
           <div class="form-group">
+            <label for="mbcode" class="col-sm-2 control-label" style="padding-left:1px">月结编号</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" name="mbcode" id="mbcode" />
+            </div>
+          </div>
+
+          <div class="form-group">
             <label for="isDisabled" class="col-sm-2 control-label" style="padding-left:1px">是否有效</label>
             <div class="col-sm-4">
               <select class="form-control" name="isDisabled" id="isDisabled">

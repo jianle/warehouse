@@ -26,6 +26,7 @@ public class Supplier implements Serializable {
     private String contactName;
     private String contactTel;
     private String isDisabled;
+    private String mbcode;
     
     @Column(updatable=false)
     private Timestamp insertDt;
@@ -75,6 +76,12 @@ public class Supplier implements Serializable {
     public void setIsDisabled(String isDisabled) {
         this.isDisabled = isDisabled;
     }
+    public String getMbcode() {
+        return mbcode;
+    }
+    public void setMbcode(String mbcode) {
+        this.mbcode = mbcode;
+    }
     public Timestamp getInsertDt() {
         return insertDt;
     }
@@ -87,14 +94,13 @@ public class Supplier implements Serializable {
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
-    
     @Override
     public String toString() {
         return "Supplier [sId=" + sId + ", name=" + name + ", shortname="
                 + shortname + ", address=" + address + ", contactName="
                 + contactName + ", contactTel=" + contactTel + ", isDisabled="
-                + isDisabled + ", insertDt=" + insertDt + ", updateTime="
-                + updateTime + "]";
+                + isDisabled + ", mbcode=" + mbcode + ", insertDt=" + insertDt
+                + ", updateTime=" + updateTime + "]";
     }
     
 }

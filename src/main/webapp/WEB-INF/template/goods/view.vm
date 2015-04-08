@@ -63,11 +63,22 @@
           </div>
 
           <div class="form-group">
-            <label for="amount" class="col-sm-2 control-label" >数量</label>
+            <label for="boxes" class="col-sm-2 control-label" >多少盒</label>
             <div class="col-sm-3">
+              <input type="text" class="form-control" name="boxes" id="boxes" />
+            </div>
+            <label for="amount" class="col-sm-2 control-label" >多少个</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" name="amount" id="amount" />
             </div>
-            <label for="gIdSupplier" class="col-sm-2 control-label" >供应商编号</label>
+          </div>
+
+          <div class="form-group">
+            <label for="scode" class="col-sm-2 control-label" >商品条码</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" name="scode" id="scode" />
+            </div>
+            <label for="gIdSupplier" class="col-sm-2 control-label" >供应商产品编号</label>
             <div class="col-sm-4">
               <input type="text" class="form-control" name="gIdSupplier" id="gIdSupplier" />
             </div>

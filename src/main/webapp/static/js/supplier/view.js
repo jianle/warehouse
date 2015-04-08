@@ -16,6 +16,7 @@ $(document).ready(function() {
 			$('.modal-body #address').val("");
 			$('.modal-body #contactName').val("");
 			$('.modal-body #contactTel').val("");
+			$('.modal-body #mbcode').val("");
 			$('.modal-body #isDisabled').val("F");
 		}
 		flagTitle="新增";
@@ -37,6 +38,7 @@ function supplierEdit(Id,isDisabled){
 	$('.modal-body #address').val( $("#"+trId+" td")[2].innerHTML );
 	$('.modal-body #contactName').val( $("#"+trId+" td")[3].innerHTML );
 	$('.modal-body #contactTel').val($("#"+trId+" td")[4].innerHTML);
+	$('.modal-body #mbcode').val($("#"+trId+" td")[5].innerHTML);
 	$('.modal-body #isDisabled').val(isDisabled);
 }
 
@@ -145,7 +147,7 @@ function supplierAddUpdate(){
 				if(result){
 					$.messager.confirm('提示', '添加成功，刷新页面查看', function(r){
 						console.log('ok');
-						window.location.reload();
+						window.location.href=contextPath + '/supplier';
 					});
 				}else{
 					$.messager.alert("提示", "添加失败");
@@ -170,7 +172,7 @@ function supplierAddUpdate(){
 				if(result){
 					$.messager.confirm('提示', '修改成功，刷新页面查看', function(r){
 						console.log('ok');
-						window.location.reload();
+						window.location.href=contextPath + '/supplier';
 					});
 				}else{
 					$.messager.alert("提示", "修改失败");

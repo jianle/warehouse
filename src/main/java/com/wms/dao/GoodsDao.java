@@ -28,7 +28,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     
     private static final String TABLE_NAME    = "goods";
     private static final String INSERT_FIELDS = "s_id, name, length, width, height, weight, g_id_supplier"
-                                            + ", amount, is_disabled, insert_dt";
+                                            + " , scode, boxes, amount, is_disabled, insert_dt";
     private static final String SELECT_FIELDS = "g_id, " + INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -54,7 +54,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         // 传入对象保存
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, goods.getsId(),
                     goods.getName(),
@@ -63,6 +63,8 @@ public class GoodsDao implements BaseDao<Goods, Long> {
                     goods.getHeight(),
                     goods.getWeight(),
                     goods.getgIdSupplier(),
+                    goods.getScode(),
+                    goods.getBoxes(),
                     goods.getAmount(),
                     goods.getIsDisabled(),
                     goods.getInsertDt()
@@ -80,7 +82,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         try {
             String sql = "UPDATE " + TABLE_NAME + " SET "
                     + " s_id=?, name=?, length=?, width=?, height=?, weight=?, g_id_supplier=?,"
-                    + " amount=?, is_disabled=? "
+                    + " scode=?, boxes=?, amount=?, is_disabled=? "
                     + " WHERE g_id=? ";
             jdbcTemplate.update(sql, goods.getsId(),
                     goods.getName(),
@@ -89,6 +91,8 @@ public class GoodsDao implements BaseDao<Goods, Long> {
                     goods.getHeight(),
                     goods.getWeight(),
                     goods.getgIdSupplier(),
+                    goods.getScode(),
+                    goods.getBoxes(),
                     goods.getAmount(),
                     goods.getIsDisabled(),
                     goods.getgId()
@@ -184,6 +188,8 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             
             goods.setWeight(rs.getInt("weight"));
             goods.setgIdSupplier(rs.getString("g_id_supplier"));
+            goods.setScode(rs.getString("scode"));
+            goods.setBoxes(rs.getInt("boxes"));
             goods.setAmount(rs.getInt("amount"));
             goods.setIsDisabled(rs.getString("is_disabled"));
             

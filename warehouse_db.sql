@@ -21,7 +21,9 @@ CREATE TABLE `goods` (
   `height` int(11) not null default 0 comment '高度(单位:mm)',
   `weight` int(11) not null default 0 comment '重量(单位:g)',
   `g_id_supplier` varchar(64) default '' comment '供应商编号',
-  `amount` int(8) not null default 0 comment '商品的数量',
+  `scode` varchar(128) not null default '' comment '商品条码',
+  `boxes`  int(8) not null default 0 comment '一箱多少盒',
+  `amount` int(8) not null default 0 comment '一盒多少个',
   `is_disabled` char(1) not null DEFAULT 'F' comment 'T-不可用 F-有效',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
@@ -37,6 +39,7 @@ CREATE TABLE supplier(
   `contact_name` varchar(64) not null default '' comment '联系人',
   `contact_tel`  varchar(64) not null default '' comment '联系电话',
   `is_disabled` char(1) not null DEFAULT 'F' comment 'T-不可用 F-有效',
+  `mbcode` varchar(128) not null default '' comment '月结编号',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`s_id`)

@@ -32,7 +32,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
     private Logger logger = LoggerFactory.getLogger(SupplierDao.class);
     
     private static final String TABLE_NAME    = "supplier";
-    private static final String INSERT_FIELDS = "name, shortname, address, contact_name, contact_tel, is_disabled, insert_dt";
+    private static final String INSERT_FIELDS = "name, shortname, address, contact_name, contact_tel, is_disabled, mbcode, insert_dt";
     private static final String SELECT_FIELDS = "s_id, " + INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -57,13 +57,14 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         // 保存Supplier
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql, supplier.getName(),
                     supplier.getShortname(),
                     supplier.getAddress(),
                     supplier.getContactName(),
                     supplier.getContactTel(),
                     supplier.getIsDisabled(),
+                    supplier.getMbcode(),
                     supplier.getInsertDt()
                     );
             return true;
@@ -221,7 +222,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         // 通过sId来跟新一条记录
         try {
             String sql = "UPDATE "+ TABLE_NAME + " SET "
-                    + " name=?, shortname=?, address=?, contact_name=?, contact_tel=?, is_disabled=? "
+                    + " name=?, shortname=?, address=?, contact_name=?, contact_tel=?, is_disabled=?, mbcode=? "
                     + " WHERE s_id=? ";
             jdbcTemplate.update(sql, supplier.getName(),
                     supplier.getShortname(),
@@ -229,6 +230,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
                     supplier.getContactName(),
                     supplier.getContactTel(),
                     supplier.getIsDisabled(),
+                    supplier.getMbcode(),
                     supplier.getsId());
             return true;
         } catch (Exception e) {
@@ -265,6 +267,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             supplier.setContactName(rs.getString("contact_name"));
             supplier.setContactTel(rs.getString("contact_tel"));
             supplier.setIsDisabled(rs.getString("is_disabled"));
+            supplier.setMbcode(rs.getString("mbcode"));
             
             supplier.setInsertDt(rs.getTimestamp("insert_dt"));
             supplier.setUpdateTime(rs.getTimestamp("update_time"));

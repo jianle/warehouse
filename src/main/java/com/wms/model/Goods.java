@@ -31,6 +31,8 @@ public class Goods implements Serializable {
     private Integer weight;
     
     private String gIdSupplier;
+    private String scode;
+    private Integer boxes;
     private Integer amount;
     private String isDisabled;
     
@@ -86,6 +88,18 @@ public class Goods implements Serializable {
     public void setgIdSupplier(String gIdSupplier) {
         this.gIdSupplier = gIdSupplier;
     }
+    public String getScode() {
+        return scode;
+    }
+    public void setScode(String scode) {
+        this.scode = scode;
+    }
+    public Integer getBoxes() {
+        return boxes;
+    }
+    public void setBoxes(Integer boxes) {
+        this.boxes = boxes;
+    }
     public Integer getAmount() {
         return amount;
     }
@@ -115,9 +129,8 @@ public class Goods implements Serializable {
         return "Goods [gId=" + gId + ", sId=" + sId + ", name=" + name
                 + ", length=" + length + ", width=" + width + ", height="
                 + height + ", weight=" + weight + ", gIdSupplier="
-                + gIdSupplier + ", amount=" + amount + ", isDisabled="
-                + isDisabled + ", insertDt=" + insertDt + ", updateTime="
-                + updateTime + "]";
+                + gIdSupplier + ", scode=" + scode + ", boxes=" + boxes
+                + ", amount=" + amount + ", isDisabled=" + isDisabled
+                + ", insertDt=" + insertDt + ", updateTime=" + updateTime + "]";
     }
-    
 }
