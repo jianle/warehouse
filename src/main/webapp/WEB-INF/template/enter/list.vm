@@ -41,7 +41,7 @@
     </tbody>
   </table>
 </div>
-<form name="formPagination" action="#springUrl('/goods/search')" method="POST">
+<form name="formPagination" action="#springUrl('/enter/list')" method="POST">
 <nav>
 <ul class="pager">
   <li>

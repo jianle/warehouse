@@ -109,11 +109,11 @@ function enterGoodsAddUpdate(){
 	});
 }
 
-function enterGoodsCommit(){
-	$("#enterGoods").validate();
-    $('#enterGoods').submit();
+//实现翻页提交
+function formPaginationSumbmit(currentPage, type) {
+	$('#currentPage').val(currentPage);
+	document.formPagination.submit();
 }
-
 
 
 
