@@ -51,20 +51,20 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>ID</th>
-        <th style="width:120px;">商品名称</th>
-        <th style="width:160px;">供应商名称</th>
+        <th style="width:50px;">ID</th>
+        <th style="min-width:80px">商品名称</th>
+        <th style="min-width:100px">供应商名称</th>
         <th style="width:65px;">长(mm)</th>
         <th style="width:65px;">宽(mm)</th>
         <th style="width:65px;">高(mm)</th>
         <th style="width:65px;">重(g)</th>
-        <th style="width:120px;">供应商产品编号</th>
+        <th style="width:130px;">供应商产品编号</th>
         <th style="width:75px;">商品条码</th>
         <th style="width:50px;">盒数</th>
-        <th style="width:65px;">个数/盒</th>
+        <th style="width:70px;">个数/盒</th>
         <th style="width:60px;">状态</th>
         <th style="width:90px;">创建时间</th>
-        <th style="width:75px;">修改删除</th>
+        <th style="width:80px;">修改删除</th>
       </tr>
     </thead>
     <tbody>

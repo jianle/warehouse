@@ -12,6 +12,8 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 ;
 
+insert into `user`(username,password,truename,email,role,created) values('admin','admin','管理员','admin@xxx.com',1,current_time());
+
 CREATE TABLE `goods` (
   `g_id` bigint(20) NOT NULL AUTO_INCREMENT comment '商品自增id',
   `s_id` bigint(20) not null default 0 comment '供应商id',

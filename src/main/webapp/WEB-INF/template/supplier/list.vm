@@ -60,16 +60,16 @@
   <table class="table table-striped" style="vertical-align: middle!important;">
     <thead style="table-layout: fixed;">
       <tr>
-        <th>ID</th>
-        <th style="width:160px;">供应商名称</th>
+        <th style="width:50px;">ID</th>
+        <th style="min-width:100px;">供应商名称</th>
         <th style="width:75px;">名称缩写</th>
-        <th style="width:350px;">供应商地址</th>
+        <th style="min-width:150px;">供应商地址</th>
         <th style="width:80px;">联系人</th>
-        <th style="width:75px;">联系电话</th>
-        <th style="width:100px;">月结编号</th>
+        <th style="width:80px;">联系电话</th>
+        <th style="width:110px;">月结编号</th>
         <th style="width:60px;">状态</th>
         <th style="width:90px;">创建时间</th>
-        <th style="width:75px;">修改删除</th>
+        <th style="width:80px;">修改删除</th>
       </tr>
     </thead>
     <tbody>

@@ -1,0 +1,82 @@
+#set($title='商品入库')
+#set($layout = "layout.vm")
+<script src="#springUrl('/static/js/enter/view.js')"></script>
+<script src="#springUrl('/static/js/bootstrap-suggest.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<form class="form-horizontal" id="enterGoods" style="padding-top:30px;">
+  <div class="form-group">
+    <label for="gId" class="control-label" style="padding-left:15px;float:left" >商品编号</label>
+    <div class="col-sm-2">
+      <input type="text" readonly="readonly" class="form-control" name="gId" id="gId" />
+    </div>
+    <label for="name" class="control-label" style="padding-left:15px;float:left" ><font style="color:#d9534f">*</font>
+      请确保商品编号正确
+    </label>
+  </div>
+
+  <div class="row">
+    <label for="gName" class="control-label" style="padding-left:15px;float:left" >商品名称</label>
+    <div class="col-lg-4">
+       <div class="input-group">
+           <input type="text" class="form-control" id="gName" name="gName" value="" />
+           <div class="input-group-btn">
+               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                   <span class="caret"></span>
+               </button>
+               <ul class="dropdown-menu dropdown-menu-right" role="menu">
+               </ul>
+           </div>
+           <!-- /btn-group -->
+       </div>
+   </div>
+  </div>
+  <hr/>
+  <div class="form-group">
+    <label for="chests" class="control-label" style="padding-left:15px;float:left" >共多少箱</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" value="" name="chests" id="chests" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="boxes" class="control-label" style="padding-left:15px;float:left" >共多少盒</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" value="" name="boxes" id="boxes" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="amount" class="control-label" style="padding-left:15px;float:left" >共多少支</label>
+    <div class="col-sm-2">
+      <input type="text" class="form-control" value="" name="amount" id="amount" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="remarks" class="control-label" style="padding-left:15px;float:left" >添加描述</label>
+    <div class="col-sm-6">
+      <input type="text" class="form-control" value="" name="remarks" id="remarks" />
+    </div>
+  </div>
+  <br/>
+  <input type="reset" class="btn btn-default" value="重置" style="padding:6px 25px" />
+  <label style="padding-left:75px"></label>
+  <input type="submit" class="btn btn-success" value="保存" style="padding:6px 30px" />
+
+</form>
+
+<script type="text/javascript">
+    var sNameSuggest = $("#gName").bsSuggest({
+        url: "../goods/getGoodsName?gName=",
+        idField: "gid",
+        keyField: "gname",
+    }).on('onDataRequestSuccess', function (e, result) {
+    	//console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword) {
+    	//console.log('onSetSelectValue: ', keyword);
+      //console.log(keyword.id);
+      $('#gId').val(keyword.id);
+    }).on('onUnsetSelectValue', function (e) {
+    	//console.log("onUnsetSelectValue");
+    });
+
+</script>

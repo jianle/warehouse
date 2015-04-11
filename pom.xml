@@ -180,7 +180,7 @@
 
 
 	<build>
-		<finalName>warehouse</finalName>
+		<finalName>wms</finalName>
 		<plugins>
 
 			<plugin>

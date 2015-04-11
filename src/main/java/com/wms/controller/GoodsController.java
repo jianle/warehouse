@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
@@ -119,6 +121,33 @@ public class GoodsController {
         }
         jsonTuple.put("value", result);
         return jsonTuple;
+    }
+    
+    @RequestMapping("getGoodsName")
+    @ResponseBody
+    public JSONObject getGoodsName() throws JSONException {
+        
+        List<Map<String, Object>> goods = goodsDao.findSuggestAll();
+
+        JSONObject jsonObject;
+        
+        JSONArray jsonArray = new JSONArray();
+        Map<String, Object> goodsTmp;
+        for (int i = 0; i < goods.size(); i++) {
+            jsonObject = new JSONObject();
+            goodsTmp = goods.get(i);
+            jsonObject.put("gId", String.valueOf(goodsTmp.get("gid")));
+            jsonObject.put("gname", String.valueOf(goodsTmp.get("gname")));
+            jsonObject.put("sname", String.valueOf(goodsTmp.get("sname")));
+            jsonArray.add(jsonObject);
+        }
+        
+        logger.info("GetSupplierSuggest size :" + jsonArray.size());
+        
+        jsonObject = new JSONObject();
+        jsonObject.put("value", jsonArray);
+
+        return jsonObject;
     }
     
     private Map<Long, String> getSupplierMap(List<Goods> goods) {

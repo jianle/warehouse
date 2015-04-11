@@ -245,7 +245,7 @@
 					
 				}).on("blur", function () {
 					$dropdownMenu.css("display", "");
-					console.log("blur");
+					//console.log("blur");
 					if ((opts.indexId === -1 && !opts.idField) || opts.multiWord) {
 						return;
 					}

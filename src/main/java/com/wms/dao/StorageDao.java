@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 
 import com.wms.model.Enter;
 import com.wms.model.Storage;
 
+@Repository
 public class StorageDao implements BaseDao<Storage, Long> {
     
     private Logger logger = LoggerFactory.getLogger(StorageDao.class);
@@ -80,12 +82,22 @@ public class StorageDao implements BaseDao<Storage, Long> {
         return false;
     }
     
-    public Boolean updateBoxes(Enter enter){
+    public Boolean updateBoxes(Enter enter, String type){
         try {
             String sql = "UPDATE " + TABLE_NAME + " SET "
                     + " boxes=boxes+? "
                     + " WHERE g_id=? ";
-            return jdbcTemplate.update(sql, enter.getBoxes(), enter.getgId()) > 0;
+            if ("add".equals(type)) {
+                return jdbcTemplate.update(sql, enter.getBoxes(), enter.getgId()) > 0;
+            } 
+            // 判断是否加减
+            sql = "UPDATE " + TABLE_NAME + " SET "
+                    + " boxes=boxes-? "
+                    + " WHERE g_id=? ";
+            if ("del".equals(type)) {
+                return jdbcTemplate.update(sql, enter.getBoxes(), enter.getgId()) > 0;
+            }
+            
         } catch (Exception e) {
             logger.debug("update storage boxes failed." + e);
         }

@@ -3,6 +3,7 @@ package com.wms.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -173,6 +174,20 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
         
     }
+    
+    public List<Map<String, Object>> findSuggestAll() {
+        // 通过Id获取Supplier
+        try {
+            String sql = "SELECT a.g_id as gid, a.name as gname, b.name as sname FROM " + TABLE_NAME 
+                    + " a join supplier b on a.g_id=b.s_id";
+            logger.info(sql);
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            // TODO: handle exception
+            return null;
+        }
+    }
+    
     
     private RowMapper<Goods> rowMapper = new RowMapper<Goods>() {
 
