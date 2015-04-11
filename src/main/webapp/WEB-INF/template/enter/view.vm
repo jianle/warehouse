@@ -5,6 +5,9 @@
 <script>
   var contextPath = '#springUrl('')';
 </script>
+
+<h4><a href="#springUrl('/enter/list')">查看历史入库</a></h4>
+<hr style="margin-top:0px"/>
 <form class="form-horizontal" id="enterGoods" style="padding-top:30px;">
   <div class="form-group">
     <label for="gId" class="control-label" style="padding-left:15px;float:left" >商品编号</label>

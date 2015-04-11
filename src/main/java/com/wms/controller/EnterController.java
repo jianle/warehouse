@@ -12,12 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.EnterDao;
 import com.wms.dao.StorageDao;
 import com.wms.model.Enter;
+import com.wms.model.Pagination;
 import com.wms.model.User;
 
 @Controller
@@ -38,6 +40,22 @@ public class EnterController {
         modelView.setViewName("/enter/view");
         
         logger.info("RequestMapping :/enter/view");
+        
+        return modelView;
+        
+    }
+    
+    @RequestMapping("list")
+    public ModelAndView list(@RequestParam(value="currentPage", defaultValue="1") int currentPage) {
+        ModelAndView modelView = new ModelAndView();
+        modelView.setViewName("/enter/list");
+        
+        logger.info("RequestMapping :/enter/list");
+        // 获取分页数据
+        Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage);
+        
+        modelView.addObject("paginationEnters", paginationEnters);
+        modelView.addObject("currentPage", currentPage);
         
         return modelView;
         

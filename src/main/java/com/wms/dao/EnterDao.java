@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.wms.model.Enter;
+import com.wms.model.Pagination;
 
 @Repository
 public class EnterDao implements BaseDao<Enter, Long> {
@@ -100,6 +101,36 @@ public class EnterDao implements BaseDao<Enter, Long> {
             logger.debug("findAll enter failed." + e);
         }
         return null;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public Pagination<Enter> findByCurrentPage(int currentPage) {
+        //分页显示
+        List<Enter> enters;
+        
+        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
+        sqlBuf.append(" ORDER BY e_id DESC ");
+        
+        try {
+            //定义并执行SQL
+            String sqlTotal = "SELECT count(1) FROM " + TABLE_NAME;
+            int totalRows = jdbcTemplate.queryForInt(sqlTotal);
+            
+            Pagination<Enter> entersPagination = new Pagination<Enter>(totalRows, currentPage);
+            String sql = entersPagination.getMySQLPageSQL(sqlBuf.toString(),currentPage);
+            
+            logger.info(sql);
+            
+            enters = jdbcTemplate.query(sql, rowMapper);
+            
+            entersPagination.setResultList(enters);
+            
+            return entersPagination;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("enter findByCurrentPage failed." + e);
+            return null;
+        }
     }
     
     private RowMapper<Enter> rowMapper =new RowMapper<Enter>(){
