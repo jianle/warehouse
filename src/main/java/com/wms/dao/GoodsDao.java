@@ -119,7 +119,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Goods> findByNameAndIsDisabled(String name, String is_disabled, int currentPage) {
+    public Pagination<Goods> findByNameAndIsDisabled(String name, String is_disabled, int currentPage, int numPerPage) {
         // 通过商品名称、是否有效搜索并分页
         List<Goods> goods;
         
@@ -145,7 +145,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             String sqlTotal = sqlBuf.toString().replace(SELECT_FIELDS, "COUNT(1)");
             int totalRows = jdbcTemplate.queryForInt(sqlTotal);
             
-            Pagination<Goods> goodsPagination = new Pagination<Goods>(totalRows, currentPage);
+            Pagination<Goods> goodsPagination = new Pagination<Goods>(totalRows, currentPage, numPerPage);
             String sql = goodsPagination.getMySQLPageSQL(sqlBuf.toString(),currentPage);
             
             logger.info(sql);
@@ -179,7 +179,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         // 通过Id获取Supplier
         try {
             String sql = "SELECT a.g_id as gid, a.name as gname, b.name as sname FROM " + TABLE_NAME 
-                    + " a join supplier b on a.g_id=b.s_id";
+                    + " a join supplier b on a.s_id=b.s_id";
             logger.info(sql);
             return jdbcTemplate.queryForList(sql);
         } catch (Exception e) {

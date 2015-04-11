@@ -96,7 +96,7 @@ function enterGoodsAddUpdate(){
 			if(result.value){
 				$.messager.confirm('提示', '添加成功，是否刷新页面查看', function(r){
 					console.log('ok');
-					window.location.href=contextPath + '/enter';
+					window.location.href=contextPath + '/enter/list';
 				});
 			}else{
 				$.messager.alert("提示", "添加失败，请确保产品名称是点击选择的");

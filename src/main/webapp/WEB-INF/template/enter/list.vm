@@ -1,9 +1,33 @@
 #set($title='商品入库')
 #set($layout = "layout.vm")
 
+<form id="formPagination" name="formPagination" role="form" action="#springUrl('/enter/list')" method="post">
+  <input type="hidden" id="currentPage" name="currentPage" value="" />
+  <input type="hidden" id="numPerPage"  name="numPerPage"  value="" />
+</form>
+
+<div class="easyui-pagination" style="border:1px solid #000 ; background:white;position:fixed;margin:5px auto;"
+  data-options="
+  total: ${paginationEnters.totalRows},
+  pageSize: ${paginationEnters.numPerPage},
+  pageNumber:${paginationEnters.currentPage},
+  pageList: [10,20,30,50],//可以设置每页记录条数的列表
+  beforePageText: '第 ',//页数文本框前显示的汉字
+  afterPageText: '页    共 {pages} 页',
+  displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+  onSelectPage: function(pageNumber, pageSize){
+    console.log(pageNumber+'....'+pageSize);
+    $('#currentPage').val(pageNumber);
+    $('#numPerPage').val(pageSize);
+    document.getElementById('formPagination').submit();
+  }">
+</div>
+
 
 <div class="panel panel-default">
-  <div class="panel-heading">最新入库</div>
+  <div class="panel-heading" style="padding:20px 15px 20px 25px">
+    <b class="pull-right" style="padding:0px 0px 15px 15px;margin-top:-10px;">最新入库</b>
+  </div>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -41,28 +65,6 @@
     </tbody>
   </table>
 </div>
-<form name="formPagination" action="#springUrl('/enter/list')" method="POST">
-<nav>
-<ul class="pager">
-  <li>
-    #if($paginationEnters.currentPage >= 2)
-    #set($previousPage=${paginationEnters.currentPage} - 1)
-     <a href="javascript:formPaginationSumbmit($previousPage);">上一页</a>
-    #else
-     <span style="color:#777">首页</span>
-    #end
-    </li>
-  <li><span>-第<font style="color: #5cb85c">$paginationEnters.currentPage</font>页--总共
-    <font style="color: #5bc0de">$paginationEnters.totalPages</font>页-</span></li>
-  <li>
-      #if($paginationEnters.currentPage < $paginationEnters.totalPages)
-       #set($nextPage=$paginationEnters.currentPage+1)
-       <a href="javascript:formPaginationSumbmit($nextPage);">下一页</a>
-      #else
-      <span style="color:#777">最后一页</span>
-      #end
-  </li>
-</ul>
-</nav>
-<input type="hidden" id="currentPage" name="currentPage" value="" />
-</form>
+
+<script>
+</script>

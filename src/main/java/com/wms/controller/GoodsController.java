@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -38,15 +39,16 @@ public class GoodsController {
     @Autowired
     private SupplierDao supplierDao;
     
-    @RequestMapping("")
+    @RequestMapping(value={"","search"}, method = RequestMethod.GET)
     public ModelAndView list() {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         String name="";
         String isDisabled = "A";
         int currentPage = 1;
+        int numPerPage = 10;
         // 获取分页数据
-        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage);
+        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage);
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(paginationGoods.getResultList());   
 
@@ -58,15 +60,16 @@ public class GoodsController {
         return modelView;
     }
     
-    @RequestMapping("search")
+    @RequestMapping(value="search", method = RequestMethod.POST)
     public ModelAndView search(@RequestParam(value="sName") String name,
             @RequestParam(value="currentPage") int currentPage,
+            @RequestParam(value="numPerPage") int numPerPage,
             @RequestParam(value="isDisabled") String isDisabled) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         
         // 获取分页数据
-        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage);
+        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage);
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(paginationGoods.getResultList());
         

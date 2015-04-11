@@ -46,13 +46,15 @@ public class EnterController {
     }
     
     @RequestMapping("list")
-    public ModelAndView list(@RequestParam(value="currentPage", defaultValue="1") int currentPage) {
+    public ModelAndView list(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
+            @RequestParam(value="numPerPage", defaultValue="10") int numPerPage
+            ) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/enter/list");
         
         logger.info("RequestMapping :/enter/list");
         // 获取分页数据
-        Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage);
+        Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage, numPerPage);
         
         modelView.addObject("paginationEnters", paginationEnters);
         modelView.addObject("currentPage", currentPage);

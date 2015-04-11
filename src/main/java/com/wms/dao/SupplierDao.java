@@ -147,75 +147,43 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         List<Supplier> resultSuppliers;
         int totalRows = 1;
         Pagination<Supplier> supplierPagination;
-        try {
-            String sql = "";
-            String sqlTotal = "";
-            if ( !supplierSearchForm.getIsDisable().equals("A") ) {
-                sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE is_disabled=? ";
-                if (supplierSearchForm.getValue() != null && !"".equals(supplierSearchForm.getValue())) {
-                    
-                    sql = sql + " and " + supplierSearchForm.getColumn() + " like ? ";
-                    sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
-                    totalRows = jdbcTemplate.queryForInt(sqlTotal, supplierSearchForm.getIsDisable(),
-                            "%" + supplierSearchForm.getValue() + "%");
-                    
-                    supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
-                    sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
-                    
-                    resultSuppliers = jdbcTemplate.query(sql, rowMapper, supplierSearchForm.getIsDisable(),
-                            "%" + supplierSearchForm.getValue() + "%");
-                    
-                    supplierPagination.setResultList(resultSuppliers);
-                    logger.info(sql);
-                    return supplierPagination;
-                }
-                
-                sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
-                totalRows = jdbcTemplate.queryForInt(sqlTotal, supplierSearchForm.getIsDisable());
-                
-                supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
-                sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
-                
-                resultSuppliers = jdbcTemplate.query(sql, rowMapper, supplierSearchForm.getIsDisable());
-                supplierPagination.setResultList(resultSuppliers);
-                logger.info(sql);
-                return supplierPagination;
-            }else {
-                if (supplierSearchForm.getValue() != null && !"".equals(supplierSearchForm.getValue())) {
-                    sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE " + supplierSearchForm.getColumn() + " like ? ";
-                    sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
-                    totalRows = jdbcTemplate.queryForInt(sqlTotal,
-                            "%" + supplierSearchForm.getValue() + "%");
-                    
-                    supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
-                    sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
-                    
-                    resultSuppliers = jdbcTemplate.query(sql, rowMapper, 
-                            "%" + supplierSearchForm.getValue() + "%");
-                    supplierPagination.setResultList(resultSuppliers);
-                    logger.info(sql);
-                    return supplierPagination;
-                    
-                }
-                sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME ;
-                sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
-                totalRows = jdbcTemplate.queryForInt(sqlTotal);
-                
-                supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage());
-                sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
-                
-                resultSuppliers = jdbcTemplate.query(sql, rowMapper);
-                supplierPagination.setResultList(resultSuppliers);
-                logger.info(sql);
-                
-                return supplierPagination;
+        
+        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
+        String isWhere = "";
+        String column = supplierSearchForm.getColumn().trim();
+        //判断是否有效
+        if (! supplierSearchForm.getIsDisable().equals("A")) {
+            isWhere = " WHERE is_disabled='" + supplierSearchForm.getIsDisable().trim() + "'";
+        }
+        if (supplierSearchForm.getValue() != null && !"".equals(supplierSearchForm.getValue())) {
+            String colValue = supplierSearchForm.getValue().trim();
+            if (! isWhere.isEmpty()) {
+                isWhere += " AND " + column + " LIKE '%" + colValue + "%'";
+            } else {
+                isWhere = " WHERE " + column + " LIKE '%" + colValue + "%'";
             }
+        }
+        
+        String sql = sqlBuf.append(isWhere).toString();
+        String sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
+        
+        try {
+            totalRows = jdbcTemplate.queryForInt(sqlTotal);
+            supplierPagination = new Pagination<Supplier>(totalRows, supplierSearchForm.getCurrentPage(), supplierSearchForm.getNumPerPage());
             
+            sql = supplierPagination.getMySQLPageSQL(sql, supplierSearchForm.getCurrentPage());
+            
+            resultSuppliers = jdbcTemplate.query(sql, rowMapper);
+            supplierPagination.setResultList(resultSuppliers);
+            logger.info(sql);
+            return supplierPagination;
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("Supplier findbycolumnvalue failed ." + e);
-            return null;
         }
+        
+        return null;
+        
     }
     
     public Boolean update(Supplier supplier) {

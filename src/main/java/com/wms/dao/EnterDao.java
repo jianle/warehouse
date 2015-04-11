@@ -104,7 +104,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Enter> findByCurrentPage(int currentPage) {
+    public Pagination<Enter> findByCurrentPage(int currentPage,int numPerPage) {
         //分页显示
         List<Enter> enters;
         
@@ -116,7 +116,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
             String sqlTotal = "SELECT count(1) FROM " + TABLE_NAME;
             int totalRows = jdbcTemplate.queryForInt(sqlTotal);
             
-            Pagination<Enter> entersPagination = new Pagination<Enter>(totalRows, currentPage);
+            Pagination<Enter> entersPagination = new Pagination<Enter>(totalRows, currentPage, numPerPage);
             String sql = entersPagination.getMySQLPageSQL(sqlBuf.toString(),currentPage);
             
             logger.info(sql);

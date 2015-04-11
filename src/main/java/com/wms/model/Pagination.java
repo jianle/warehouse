@@ -48,6 +48,25 @@ public class Pagination<T> extends JdbcDaoSupport {
         // 计算结束行数
         this.setLastIndex();
     }
+    
+    public Pagination (int totalRows, int currentPage, int numPerPage) {
+        // 设置每页显示记录数
+        if (numPerPage > 0) {
+            this.setNumPerPage(numPerPage);
+        }else {
+            this.setNumPerPage(NUMBERS_PER_PAGE);
+        }
+        // 设置要显示的页数
+        this.setCurrentPage(currentPage);
+        // 总记录数
+        this.setTotalRows(totalRows);
+        // 计算总页数
+        this.setTotalPages();
+        // 计算起始行数
+        this.setStartIndex();
+        // 计算结束行数
+        this.setLastIndex();
+    }
 
     /**
      * 构造MySQL数据分页SQL
@@ -60,7 +79,7 @@ public class Pagination<T> extends JdbcDaoSupport {
     public String getMySQLPageSQL(String queryString, int currentPage) {
         String result = "";
         if (currentPage > 0) {
-            result = queryString + " limit " + (currentPage - 1) * numPerPage + "," + NUMBERS_PER_PAGE;
+            result = queryString + " limit " + (currentPage - 1) * numPerPage + "," + numPerPage;
         } else {
             result = queryString;
         }

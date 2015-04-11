@@ -16,6 +16,7 @@
       </select>
     </div>
     <input type="hidden" name="currentPage" value="1" />
+    <input type="hidden" name="numPerPage" value="10" />
     <div class="filter-content">
       <div class="form-group">
           <input type="text" name="sName"  class="form-control"
@@ -45,6 +46,23 @@
 </form>
 
 <hr/>
+<div class="easyui-pagination pull-right"
+  style="border:1px solid #000;background:white;position:fixed;margin-top: -35px;"
+  data-options="
+  total: ${paginationGoods.totalRows},
+  pageSize: ${paginationGoods.numPerPage},
+  pageNumber:${paginationGoods.currentPage},
+  pageList: [2,4,5,10,20,30,50],//可以设置每页记录条数的列表
+  beforePageText: '第 ',//页数文本框前显示的汉字
+  afterPageText: '页    共 {pages} 页',
+  displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+  onSelectPage: function(pageNumber, pageSize){
+    console.log(pageNumber+'....'+pageSize);
+    $('#currentPage').val(pageNumber);
+    $('#numPerPage').val(pageSize);
+    document.getElementById('formPagination').submit();
+  }">
+</div>
 
 <div class="panel panel-default">
   <div class="panel-heading"><a href="#goodsModal" id="goodsAdd" data-toggle="modal"><i class="glyphicon glyphicon-folder-close"></i>添加</a></div>
@@ -72,7 +90,11 @@
       <tr id="${goods.gId}_tr">
         <th>${goods.gId}</th>
         <td>${goods.name}</td>
-        <td>$supplierMap.get(${goods.sId})</td>
+        <td>
+          #if($supplierMap.get(${goods.sId}))
+               $supplierMap.get(${goods.sId})
+          #end
+        </td>
         <td>${goods.length}</td>
         <td>${goods.width}</td>
         <td>${goods.height}</td>
@@ -97,38 +119,17 @@
     </tbody>
   </table>
 </div>
-<form name="formPagination" action="#springUrl('/goods/search')" method="POST">
-<nav>
-<ul class="pager">
-  <li>
-    #if($paginationGoods.currentPage >= 2)
-    #set($previousPage=${paginationGoods.currentPage} - 1)
-     <a href="javascript:formPaginationSumbmit($previousPage);">上一页</a>
-    #else
-     <span style="color:#777">首页</span>
-    #end
-    </li>
-  <li><span>-第<font style="color: #5cb85c">$paginationGoods.currentPage</font>页--总共
-    <font style="color: #5bc0de">$paginationGoods.totalPages</font>页-</span></li>
-  <li>
-      #if($paginationGoods.currentPage < $paginationGoods.totalPages)
-       #set($nextPage=$paginationGoods.currentPage+1)
-       <a href="javascript:formPaginationSumbmit($nextPage);">下一页</a>
-      #else
-      <span style="color:#777">最后一页</span>
-      #end
-  </li>
-</ul>
-</nav>
-<input type="hidden" id="currentPage" name="currentPage" value="" />
-<input type="hidden" name="isDisable" value="$isDisabled" />
-<input type="hidden" name="sName" value="$sName" />
+
+<form name="formPagination" id="formPagination" action="#springUrl('/goods/search')" method="POST">
+  <input type="hidden" id="currentPage" name="currentPage" value="" />
+  <input type="hidden" id="numPerPage" name="numPerPage" value="" />
+  <input type="hidden" name="isDisabled" value="$isDisabled" />
+  <input type="hidden" name="sName" value="$sName" />
 </form>
 
 #parse("/goods/view.vm")
 
 <br/>
-
 
 <script type="text/javascript">
     var sNameSuggest = $("#sName").bsSuggest({

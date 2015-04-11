@@ -3,6 +3,7 @@ package com.wms.form.model;
 public class SupplierSearchForm {
     
     private int currentPage;
+    private int numPerPage;
     private String isDisable;
     private String column;
     private String value;
@@ -16,6 +17,22 @@ public class SupplierSearchForm {
         this.isDisable = isDisable;
         this.column = column;
         this.value = value;
+    }
+    
+    public SupplierSearchForm(int numPerPage, int currentPage, String isDisable, String column, String value) {
+        this.numPerPage = numPerPage;
+        this.currentPage = currentPage;
+        this.isDisable = isDisable;
+        this.column = column;
+        this.value = value;
+    }
+
+    public int getNumPerPage() {
+        return numPerPage;
+    }
+
+    public void setNumPerPage(int numPerPage) {
+        this.numPerPage = numPerPage;
     }
 
     public int getCurrentPage() {

@@ -35,11 +35,11 @@ public class SupplierController {
     @Autowired
     private SupplierDao supplierDao;
     
-    @RequestMapping("")
+    @RequestMapping(value={"","search"},method=RequestMethod.GET)
     public ModelAndView list() {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/supplier/list");
-        SupplierSearchForm supplierSearchForm = new SupplierSearchForm(1, "A", "shortname", "");
+        SupplierSearchForm supplierSearchForm = new SupplierSearchForm(10, 1, "A", "shortname", "");
         Pagination<Supplier> pagination = supplierDao.findByColumnValue(supplierSearchForm);
         
         logger.info("RequestMapping:/supplier .");
