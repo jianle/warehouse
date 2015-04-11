@@ -59,7 +59,7 @@
         <th style="width:65px;">高(mm)</th>
         <th style="width:65px;">重(g)</th>
         <th style="width:130px;">供应商产品编号</th>
-        <th style="width:75px;">商品条码</th>
+        <th style="width:80px;">商品条码</th>
         <th style="width:50px;">盒数</th>
         <th style="width:70px;">个数/盒</th>
         <th style="width:60px;">状态</th>

@@ -62,7 +62,7 @@
       <tr>
         <th style="width:50px;">ID</th>
         <th style="min-width:100px;">供应商名称</th>
-        <th style="width:75px;">名称缩写</th>
+        <th style="width:80px;">名称缩写</th>
         <th style="min-width:150px;">供应商地址</th>
         <th style="width:80px;">联系人</th>
         <th style="width:80px;">联系电话</th>
