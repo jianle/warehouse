@@ -69,7 +69,7 @@
 
 <script type="text/javascript">
     var sNameSuggest = $("#gName").bsSuggest({
-        url: "../goods/getGoodsName?gName=",
+        url: contextPath + "/goods/getGoodsName?gName=",
         idField: "gid",
         keyField: "gname",
     }).on('onDataRequestSuccess', function (e, result) {

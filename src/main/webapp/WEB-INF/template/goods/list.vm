@@ -133,7 +133,7 @@
 
 <script type="text/javascript">
     var sNameSuggest = $("#sName").bsSuggest({
-        url: "../supplier/getSupplierName?name=",
+        url: contextPath + "/supplier/getSupplierName?name=",
         idField: "sId",
         keyField: "name",
         listAlign: "auto",
