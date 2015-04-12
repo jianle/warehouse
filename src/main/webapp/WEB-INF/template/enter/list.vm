@@ -1,11 +1,12 @@
 #set($title='商品入库')
 #set($layout = "layout.vm")
+<script src="#springUrl('/static/js/enter/list.js')"></script>
 
 <form id="formPagination" name="formPagination" role="form" action="#springUrl('/enter/list')" method="post">
   <input type="hidden" id="currentPage" name="currentPage" value="" />
   <input type="hidden" id="numPerPage"  name="numPerPage"  value="" />
 </form>
-
+<br/>
 <div class="easyui-pagination" style="border:1px solid #000 ; background:white;position:fixed;margin:5px auto;"
   data-options="
   total: ${paginationEnters.totalRows},
@@ -34,13 +35,15 @@
         <th style="width:50px;">ID</th>
         <th style="min-width:50px">商品ID</th>
         <th style="min-width:100px">商品名称</th>
-        <th style="width:55px;">箱数</th>
-        <th style="width:55px;">盒数</th>
-        <th style="width:70px;">个数/盒</th>
+        <th style="width:60px;">箱数</th>
+        <th style="width:60px;">盒数</th>
+        <th style="width:75px;">个数/盒</th>
         <th style="width:80px;">操作人</th>
         <th style="min-width:80px">备注</th>
-        <th style="width:170px;">创建时间</th>
+        <th style="width:175px;">创建时间</th>
+        <!--
         <th style="width:80px;">修改删除</th>
+        -->
       </tr>
     </thead>
     <tbody>
@@ -55,16 +58,18 @@
         <td>${enter.userName}</td>
         <td>${enter.remarks}</td>
         <td>${enter.insertDt}</td>
+        <!--
         <td>
-          <a href="#goodsModal" id="goodsEdit" onclick="goodsEdit(${enter.gId},'$enter.isDisabled',${enter.sId})" data-toggle="modal"
+          <a href="#Modal" id="enterEdit" onclick="enterEdit(${enter.gId},'$enter.isDisabled',${enter.sId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:deleteGoods(${enter.gId},'$enter.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+          <a href="javascript:deleteEnter(${enter.gId},'$enter.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
         </td>
+        -->
       </tr>
       #end
     </tbody>
   </table>
 </div>
 
-<script>
-</script>
+<!-- Modal -->
+#parse("/enter/modal.vm")

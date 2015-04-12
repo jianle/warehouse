@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.wms.model.Enter;
+import com.wms.model.Pagination;
 import com.wms.model.Storage;
 
 @Repository
@@ -126,6 +127,41 @@ public class StorageDao implements BaseDao<Storage, Long> {
             logger.debug("get storage by gId failed." + e);
         }
         return false;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public Pagination<Storage> findByCurrentPage(String gName, int currentPage,int numPerPage) {
+        //分页显示
+        List<Storage> storages;
+        
+        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
+        String isWhere = "";
+        if (gName != null && !"".equals(gName.trim())) {
+            isWhere = " WHERE g_name LIKE '%" + gName + "%'";
+        }
+        
+        sqlBuf.append(isWhere);
+        
+        try {
+            //定义并执行SQL
+            String sqlTotal = "SELECT count(1) FROM " + TABLE_NAME;
+            int totalRows = jdbcTemplate.queryForInt(sqlTotal);
+            
+            Pagination<Storage> entersPagination = new Pagination<Storage>(totalRows, currentPage, numPerPage);
+            String sql = entersPagination.getMySQLPageSQL(sqlBuf.toString(),currentPage);
+            
+            logger.info(sql);
+            
+            storages = jdbcTemplate.query(sql, rowMapper);
+            
+            entersPagination.setResultList(storages);
+            
+            return entersPagination;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("enter findByCurrentPage failed." + e);
+            return null;
+        }
     }
     
     

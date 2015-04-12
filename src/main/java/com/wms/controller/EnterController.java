@@ -63,6 +63,33 @@ public class EnterController {
         
     }
     
+    @RequestMapping("update")
+    @ResponseBody
+    public JSONObject update(@ModelAttribute Enter enter) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
+        
+        if (enterDao.update(enter)) {
+            result = true;
+        }
+        jsonTuple.put("value", result);
+        return jsonTuple;
+    }
+    
+    @RequestMapping("delete")
+    @ResponseBody
+    public JSONObject delete(@ModelAttribute("eId") Long eId) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
+        
+        logger.info("delete enter by Id:" + eId);
+        if (enterDao.delete(eId)) {
+            result = true;
+        }
+        jsonTuple.put("value", result);
+        return jsonTuple;
+    }
+    
     @RequestMapping("save")
     @ResponseBody
     public JSONObject save(@ModelAttribute Enter enter, HttpServletRequest request) {

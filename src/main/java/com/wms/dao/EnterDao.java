@@ -40,6 +40,17 @@ public class EnterDao implements BaseDao<Enter, Long> {
         }
         return null;
     }
+    
+    public Boolean delete(Long eId){
+        try {
+            String sql = "DELETE FROM " + TABLE_NAME + " WHERE e_id=? ";
+            return jdbcTemplate.update(sql, eId) > 0;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.info("delete enter by eId-" + eId + " failed." + e);
+        }
+        return false;
+    }
 
     @Override
     public Boolean save(Enter object) {

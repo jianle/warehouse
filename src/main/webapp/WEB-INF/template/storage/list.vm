@@ -1,0 +1,94 @@
+#set($title='库存管理')
+#set($layout = "layout.vm")
+<script src="#springUrl('/static/js/storage/list.js')"></script>
+
+<form id="formPagination" name="formPagination" role="form" action="#springUrl('/storage/list')" method="post">
+  <input type="hidden" id="currentPage" name="currentPage" value="" />
+  <input type="hidden" id="numPerPage"  name="numPerPage"  value="" />
+</form>
+
+<form id="storageSearchId" action="#springUrl('/storage/list')" method="POST">
+  <div class="filter-bar-sm" >
+    <input type="hidden" name="currentPage" value="1" />
+    <input type="hidden" name="numPerPage" value="10" />
+    <div class="filter-content">
+      <div class="form-group">
+          <input type="text" name="gName"  class="form-control"
+            #if($gName) value="${gName}" #end
+           placeholder="商品名称" />
+      </div>
+    </div>
+    <div class="filter-content">
+      <div class="form-group">
+        <button type="submit" class="btn btn-default">查询</button>
+      </div>
+    </div>
+
+  </div>
+</form>
+</br>
+
+<div class="easyui-pagination" style="border:1px solid #000 ; background:white;position:fixed;margin:5px auto;"
+  data-options="
+  total: ${pagination.totalRows},
+  pageSize: ${pagination.numPerPage},
+  pageNumber:${pagination.currentPage},
+  pageList: [10,20,30,50],//可以设置每页记录条数的列表
+  beforePageText: '第 ',//页数文本框前显示的汉字
+  afterPageText: '页    共 {pages} 页',
+  displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+  onSelectPage: function(pageNumber, pageSize){
+    console.log(pageNumber+'....'+pageSize);
+    $('#currentPage').val(pageNumber);
+    $('#numPerPage').val(pageSize);
+    document.getElementById('formPagination').submit();
+  }">
+</div>
+
+</br>
+</br>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <b>库存管理</b>
+  </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th style="min-width:50px">商品ID</th>
+        <th style="min-width:100px">商品名称</th>
+        <th style="min-width:50px;">盒数</th>
+        <th style="min-width:80px">备注</th>
+        <th style="width:175px;">最新更新时间</th>
+        <!--
+        <th style="width:80px;">修改删除</th>
+        -->
+      </tr>
+    </thead>
+    <tbody>
+      #foreach( $storage in $pagination.getResultList() )
+      <tr id="${storage.gId}_tr">
+        <th>${storage.gId}</th>
+        <td>${storage.gName}</td>
+        <td>${storage.boxes}</td>
+        <td>${storage.remarks}</td>
+        <td>
+          #if(${storage.updateTime})
+          ${storage.updateTime}
+          #else
+          ${storage.insertDt}
+          #end
+        </td>
+        <!--
+        <td>
+          <a href="#Modal" id="enterEdit" onclick="enterEdit(${enter.gId},'$enter.isDisabled',${enter.sId})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteEnter(${enter.gId},'$enter.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+        </td>
+        -->
+      </tr>
+      #end
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
