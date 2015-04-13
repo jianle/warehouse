@@ -51,6 +51,7 @@ CREATE TABLE supplier(
 CREATE TABLE `enter` (
   `e_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自增id',
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
+  `s_id` bigint(20) NOT NULL default 0 comment '供应商id',
   `g_name` varchar(256) not null default '' comment '商品名称',
   `chests` int(8) not null default 0 comment '共多少箱',
   `boxes` int(8) not null default 0 comment '共多少盒数',
@@ -63,17 +64,25 @@ CREATE TABLE `enter` (
   PRIMARY KEY (`e_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '商品入库表'
 ;
+alter table enter add `s_id` bigint(20) NOT NULL default 0 comment '供应商id' after g_id;
 
 CREATE TABLE `storage` (
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
+  `s_id` bigint(20) NOT NULL default 0 comment '供应商id',
   `g_name` varchar(256) not null default '' comment '商品名称',
+  `chests` int(8) not null default 0 comment '共多少箱',
   `boxes` int(8) not null default 0 comment '共多少盒数',
+  `amount` int(8) not null default 0 comment '共多少个',
   `remarks` varchar(1000) not null default '' comment '备注',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`g_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '库存表'
 ;
+
+alter table storage add `s_id` bigint(20) NOT NULL default 0 comment '供应商id' after g_id;
+alter table storage add `chests` int(8) not null default 0 comment '共多少箱' after g_name;
+alter table storage add `amount` int(8) not null default 0 comment '共多少个' after boxes;
 
 
 CREATE TABLE `purchase` (

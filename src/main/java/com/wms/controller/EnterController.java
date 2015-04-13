@@ -1,6 +1,10 @@
 package com.wms.controller;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.EnterDao;
 import com.wms.dao.StorageDao;
+import com.wms.dao.SupplierDao;
 import com.wms.model.Enter;
 import com.wms.model.Pagination;
 import com.wms.model.User;
@@ -33,6 +38,9 @@ public class EnterController {
     
     @Autowired
     private StorageDao storageDao;
+    
+    @Autowired
+    private SupplierDao supplierDao;
     
     @RequestMapping("")
     public ModelAndView index() {
@@ -55,7 +63,10 @@ public class EnterController {
         logger.info("RequestMapping :/enter/list");
         // 获取分页数据
         Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage, numPerPage);
+        // 获取sid对应的name
+        Map<Long, String> supplierMap = getSupplierMap(paginationEnters.getResultList());
         
+        modelView.addObject("supplierMap", supplierMap);
         modelView.addObject("paginationEnters", paginationEnters);
         modelView.addObject("currentPage", currentPage);
         
@@ -110,6 +121,8 @@ public class EnterController {
         if (storageDao.get(enter.getgId()) != null) {
             if (! storageDao.updateBoxes(enter, "add")) {
                 result = false;
+                jsonTuple.put("value", result);
+                return jsonTuple;
             }
         } else {
             if (! storageDao.save(enter)) {
@@ -119,6 +132,22 @@ public class EnterController {
         
         jsonTuple.put("value", result);
         return jsonTuple;
+    }
+    
+    private Map<Long, String> getSupplierMap(List<Enter> Enter) {
+        try {
+            Set<Long> sIds = new HashSet<Long>();
+            if (Enter!=null) {
+                for (int i = 0; i < Enter.size(); i++) {
+                    sIds.add(Enter.get(i).getsId());
+                }
+            }
+            return supplierDao.findBySIdList(sIds);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("getSupplierMap failed." + e);
+            return null;
+        }
     }
     
 }

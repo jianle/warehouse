@@ -9,6 +9,7 @@
 <h4><a href="#springUrl('/enter/list')">查看历史入库</a></h4>
 <hr style="margin-top:0px"/>
 <form class="form-horizontal" id="enterGoods" style="padding-top:30px;">
+  <input type="hidden" class="form-control" name="sId" id="sId" value="" />
   <div class="form-group">
     <label for="gId" class="control-label" style="padding-left:15px;float:left" >商品编号</label>
     <div class="col-sm-2">
@@ -68,15 +69,29 @@
 </form>
 
 <script type="text/javascript">
+    var data;
+    var boxes=0;
+    var amount=0;
     var sNameSuggest = $("#gName").bsSuggest({
         url: contextPath + "/goods/getGoodsName?gName=",
-        idField: "gid",
+        idField: "gId",
         keyField: "gname",
+        effectiveFields: ["gId", "gname", "sname"],
+        effectiveFieldsAlias:{gId: "商品ID",gname:"商品名称",sname:"供应商名称"}
     }).on('onDataRequestSuccess', function (e, result) {
     	//console.log('onDataRequestSuccess: ', result);
+      data = eval(result.value);
     }).on('onSetSelectValue', function (e, keyword) {
-    	//console.log('onSetSelectValue: ', keyword);
-      //console.log(keyword.id);
+    	// console.log('onSetSelectValue: ', keyword);
+      // console.log(data.length);
+      for(var i=0; i<data.length; i++){
+        if(keyword.id==data[i].gId){
+          console.log(data[i]);
+          $('#sId').val(data[i].sId);
+          boxes=data[i].boxes;
+          amount=data[i].amount;
+        }
+      }
       $('#gId').val(keyword.id);
     }).on('onUnsetSelectValue', function (e) {
     	//console.log("onUnsetSelectValue");

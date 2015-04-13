@@ -140,8 +140,11 @@ public class GoodsController {
             jsonObject = new JSONObject();
             goodsTmp = goods.get(i);
             jsonObject.put("gId", String.valueOf(goodsTmp.get("gid")));
+            jsonObject.put("sId", String.valueOf(goodsTmp.get("sid")));
             jsonObject.put("gname", String.valueOf(goodsTmp.get("gname")));
             jsonObject.put("sname", String.valueOf(goodsTmp.get("sname")));
+            jsonObject.put("boxes", String.valueOf(goodsTmp.get("boxes")));
+            jsonObject.put("amount", String.valueOf(goodsTmp.get("amount")));
             jsonArray.add(jsonObject);
         }
         

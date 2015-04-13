@@ -22,7 +22,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
     private Logger logger = LoggerFactory.getLogger(StorageDao.class);
     
     private static final String TABLE_NAME    = "storage";
-    private static final String INSERT_FIELDS = "g_id, g_name, boxes, remarks, insert_dt";
+    private static final String INSERT_FIELDS = "g_id, s_id, g_name, chests, boxes, amount, remarks, insert_dt";
     private static final String SELECT_FIELDS = INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -47,12 +47,15 @@ public class StorageDao implements BaseDao<Storage, Long> {
         try {
             
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, 
                     object.getgId(),
+                    object.getsId(),
                     object.getgName(),
+                    object.getChests(),
                     object.getBoxes(),
+                    object.getAmount(),
                     object.getRemarks(),
                     object.getInsertDt());
             return true;
@@ -67,12 +70,15 @@ public class StorageDao implements BaseDao<Storage, Long> {
         try {
             
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, 
                     object.getgId(),
+                    object.getsId(),
                     object.getgName(),
+                    object.getChests(),
                     object.getBoxes(),
+                    object.getAmount(),
                     object.getRemarks(),
                     object.getInsertDt());
             return true;
@@ -86,17 +92,24 @@ public class StorageDao implements BaseDao<Storage, Long> {
     public Boolean updateBoxes(Enter enter, String type){
         try {
             String sql = "UPDATE " + TABLE_NAME + " SET "
-                    + " boxes=boxes+? "
+                    + " chests=chests+?, boxes=boxes+?, amount=amount+? "
                     + " WHERE g_id=? ";
             if ("add".equals(type)) {
-                return jdbcTemplate.update(sql, enter.getBoxes(), enter.getgId()) > 0;
+                return jdbcTemplate.update(sql, 
+                        enter.getChests(),
+                        enter.getBoxes(), 
+                        enter.getAmount(),
+                        enter.getgId()) > 0;
             } 
             // 判断是否加减
             sql = "UPDATE " + TABLE_NAME + " SET "
-                    + " boxes=boxes-? "
+                    + " chests=chests-?, boxes=boxes-?, amount=amount-? "
                     + " WHERE g_id=? ";
             if ("del".equals(type)) {
-                return jdbcTemplate.update(sql, enter.getBoxes(), enter.getgId()) > 0;
+                return jdbcTemplate.update(sql, enter.getChests(),
+                        enter.getBoxes(), 
+                        enter.getAmount(),
+                        enter.getgId()) > 0;
             }
             
         } catch (Exception e) {
@@ -173,8 +186,11 @@ public class StorageDao implements BaseDao<Storage, Long> {
             Storage storage = new Storage();
             
             storage.setgId(rs.getLong("g_id"));
+            storage.setsId(rs.getLong("s_id"));
             storage.setgName(rs.getString("g_name"));
+            storage.setChests(rs.getInt("chests"));
             storage.setBoxes(rs.getInt("boxes"));
+            storage.setAmount(rs.getInt("amount"));
             storage.setRemarks(rs.getString("remarks"));
             storage.setInsertDt(rs.getTimestamp("insert_dt"));
             storage.setUpdateTime(rs.getTimestamp("update_time"));

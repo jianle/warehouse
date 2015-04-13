@@ -178,7 +178,8 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     public List<Map<String, Object>> findSuggestAll() {
         // 通过Id获取Supplier
         try {
-            String sql = "SELECT a.g_id as gid, a.name as gname, b.name as sname FROM " + TABLE_NAME 
+            String sql = "SELECT a.g_id as gid, a.s_id as sid, a.name as gname, b.name as sname"
+                    + " , boxes, amount FROM " + TABLE_NAME 
                     + " a join supplier b on a.s_id=b.s_id";
             logger.info(sql);
             return jdbcTemplate.queryForList(sql);

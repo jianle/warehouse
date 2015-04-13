@@ -21,7 +21,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
     private Logger logger = LoggerFactory.getLogger(EnterDao.class);
     
     private static final String TABLE_NAME    = "enter";
-    private static final String INSERT_FIELDS = "g_id, g_name, chests, boxes, amount, user_id, user_name, remarks, insert_dt";
+    private static final String INSERT_FIELDS = "g_id, s_id, g_name, chests, boxes, amount, user_id, user_name, remarks, insert_dt";
     private static final String SELECT_FIELDS = "e_id, " + INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -57,10 +57,11 @@ public class EnterDao implements BaseDao<Enter, Long> {
         try {
             
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             jdbcTemplate.update(sql, 
                     object.getgId(),
+                    object.getsId(),
                     object.getgName(),
                     object.getChests(),
                     object.getBoxes(),
@@ -151,6 +152,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
             
             enter.seteId(rs.getLong("e_id"));
             enter.setgId(rs.getLong("g_id"));
+            enter.setsId(rs.getLong("s_id"));
             enter.setgName(rs.getString("g_name"));
             enter.setChests(rs.getInt("chests"));
             enter.setBoxes(rs.getInt("boxes"));

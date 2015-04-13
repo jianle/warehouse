@@ -14,6 +14,7 @@ public class Enter implements Serializable{
     
     private Long eId;
     private Long gId;
+    private Long sId;
     private String gName;
     private Integer chests;
     private Integer boxes;
@@ -36,6 +37,12 @@ public class Enter implements Serializable{
     }
     public void setgId(Long gId) {
         this.gId = gId;
+    }
+    public Long getsId() {
+        return sId;
+    }
+    public void setsId(Long sId) {
+        this.sId = sId;
     }
     public String getgName() {
         return gName;
@@ -94,10 +101,11 @@ public class Enter implements Serializable{
     
     @Override
     public String toString() {
-        return "Enter [eId=" + eId + ", gId=" + gId + ", gName=" + gName
-                + ", chests=" + chests + ", boxes=" + boxes + ", amount="
-                + amount + ", remarks=" + remarks + ", insertDt=" + insertDt
-                + ", updateTime=" + updateTime + "]";
+        return "Enter [eId=" + eId + ", gId=" + gId + ", sId=" + sId
+                + ", gName=" + gName + ", chests=" + chests + ", boxes="
+                + boxes + ", userId=" + userId + ", userName=" + userName
+                + ", amount=" + amount + ", remarks=" + remarks + ", insertDt="
+                + insertDt + ", updateTime=" + updateTime + "]";
     }
     
 }

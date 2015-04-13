@@ -5,6 +5,7 @@
 <form id="formPagination" name="formPagination" role="form" action="#springUrl('/storage/list')" method="post">
   <input type="hidden" id="currentPage" name="currentPage" value="" />
   <input type="hidden" id="numPerPage"  name="numPerPage"  value="" />
+  <input type="hidden" id="gName"  name="gName"  value="${gName}" />
 </form>
 
 <form id="storageSearchId" action="#springUrl('/storage/list')" method="POST">
@@ -56,7 +57,10 @@
       <tr>
         <th style="min-width:50px">商品ID</th>
         <th style="min-width:100px">商品名称</th>
-        <th style="min-width:50px;">盒数</th>
+        <th style="min-width:120px">供应商名称</th>
+        <th style="width:55px;">箱数</th>
+        <th style="width:55px;">盒数</th>
+        <th style="width:55px;">个数</th>
         <th style="min-width:80px">备注</th>
         <th style="width:175px;">最新更新时间</th>
         <!--
@@ -69,7 +73,14 @@
       <tr id="${storage.gId}_tr">
         <th>${storage.gId}</th>
         <td>${storage.gName}</td>
+        <td>
+          #if($supplierMap.get(${storage.sId}))
+              $supplierMap.get(${storage.sId})
+          #end
+        </td>
+        <td>${storage.chests}</td>
         <td>${storage.boxes}</td>
+        <td>${storage.amount}</td>
         <td>${storage.remarks}</td>
         <td>
           #if(${storage.updateTime})

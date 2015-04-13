@@ -14,8 +14,11 @@ public class Storage implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private Long gId;
+    private Long sId;
     private String gName;
+    private Integer chests;
     private Integer boxes;
+    private Integer amount;
     private String remarks;
     
     @Column(updatable=false)
@@ -27,6 +30,12 @@ public class Storage implements Serializable {
     }
     public void setgId(Long gId) {
         this.gId = gId;
+    }
+    public Long getsId() {
+        return sId;
+    }
+    public void setsId(Long sId) {
+        this.sId = sId;
     }
     public String getgName() {
         return gName;
@@ -58,10 +67,23 @@ public class Storage implements Serializable {
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
+    public Integer getChests() {
+        return chests;
+    }
+    public void setChests(Integer chests) {
+        this.chests = chests;
+    }
+    public Integer getAmount() {
+        return amount;
+    }
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
     
     @Override
     public String toString() {
-        return "Storage [gId=" + gId + ", gName=" + gName + ", boxes=" + boxes
+        return "Storage [gId=" + gId + ", gName=" + gName + ", chests="
+                + chests + ", boxes=" + boxes + ", amount=" + amount
                 + ", remarks=" + remarks + ", insertDt=" + insertDt
                 + ", updateTime=" + updateTime + "]";
     }

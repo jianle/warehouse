@@ -115,6 +115,14 @@ function formPaginationSumbmit(currentPage, type) {
 	document.formPagination.submit();
 }
 
+$(document).ready(function(){
+	$("#chests").bind('blur', function(){
+		var chests = $("#chests").val();
+		console.log($("#chests").val()+"---"+boxes+" ..." + amount);
+		$("#boxes").val(chests*boxes);
+		$("#amount").val(chests*boxes*amount);
+	});
+});
 
 
 
