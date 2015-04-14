@@ -115,10 +115,10 @@ function formPaginationSumbmit(currentPage, type) {
 	document.formPagination.submit();
 }
 
+//当输入箱数的时候自动补全盒数和个数
 $(document).ready(function(){
 	$("#chests").bind('blur', function(){
 		var chests = $("#chests").val();
-		console.log($("#chests").val()+"---"+boxes+" ..." + amount);
 		$("#boxes").val(chests*boxes);
 		$("#amount").val(chests*boxes*amount);
 	});

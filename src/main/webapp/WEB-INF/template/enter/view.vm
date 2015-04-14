@@ -22,7 +22,7 @@
 
   <div class="row">
     <label for="gName" class="control-label" style="padding-left:15px;float:left" >商品名称</label>
-    <div class="col-lg-4">
+    <div class="col-lg-5">
        <div class="input-group">
            <input type="text" class="form-control" id="gName" name="gName" value="" />
            <div class="input-group-btn">
