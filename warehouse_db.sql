@@ -122,7 +122,7 @@ CREATE TABLE `order_detail` (
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
   `g_name` varchar(256) not null default '' comment '商品名称',
   `retail_price` double(10,2) not null default 0.0 comment '零售价',
-  `unit_price ` double(10,2) not null default 0.0 comment '单价',
+  `unit_price` double(10,2) not null default 0.0 comment '单价',
   `amount_net` double(10,2) not null default 0.0 comment '净额',
   `amount`  int(8) not null default 0 comment '数量',
   `amount_amt` double(10,2) not null default 0.0 comment '金额',
