@@ -72,7 +72,7 @@ CREATE TABLE `storage` (
   `g_name` varchar(256) not null default '' comment '商品名称',
   `chests` int(8) not null default 0 comment '共多少箱',
   `boxes` int(8) not null default 0 comment '共多少盒数',
-  `amount` int(8) not null default 0 comment '共多少个',
+  `amount` bigint(20) not null default 0 comment '共多少个',
   `remarks` varchar(1000) not null default '' comment '备注',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
@@ -84,23 +84,55 @@ alter table storage add `s_id` bigint(20) NOT NULL default 0 comment '供应商i
 alter table storage add `chests` int(8) not null default 0 comment '共多少箱' after g_name;
 alter table storage add `amount` int(8) not null default 0 comment '共多少个' after boxes;
 
+CREATE TABLE `orderinfo` (
+  `o_id` bigint(20) NOT NULL AUTO_INCREMENT comment '订单id',
+  `document_code` varchar(20) not null default '' comment '单据编码',
+  `order_code` varchar(20) not null default '' comment '订单编码',
+  `order_type` varchar(128) not null default '' comment '订单类型',
+  `customer_type` varchar(24) not null default '' comment '客户类型',
+  `customer_code` varchar(24) not null default '' comment '客户编码',
+  `customer_name` varchar(64) not null default '' comment '客户姓名',
+  `wh_add` varchar(256) not null default '' comment '出库仓库',
+  `transp_cost_type` varchar(24) not null default '' comment '运费支付类型',
+  `receive_tel` varchar(24) not null default '' comment '收货电话',
+  `receive_add` varchar(256) not null default '' comment '收货地址(货送地址)',
+  `user_id` bigint(20) not null default 0 comment '制单人ID',
+  `user_name` varchar(64) not null default '' comment '制单人',
+  `document_date`date not null default '1990-01-01'comment '制单日期',
+  `sale_date` date not null default '1990-01-01' comment '销售日期',
+  `company` varchar(256) not null default '' comment '公司名称',
+  `amount_total` double(10,2) not null default 0.0 comment '总金额',
+  `mt_mch` varchar(256) not null default '' comment '销售机构',
+  `account_balance` double(10,2) not null default 0.0 comment '账户余额',
+  `retail_price` double(10,2) not null default 0.0 comment '零售价总额',
+  `amount_discount` double(10,2) not null default 0.0 comment '折扣金额',
+  `amount_payable` double(10,2) not null default 0.0 comment '应付金额',
+  `amount_net` double(10,2) not null default 0.0 comment '净额',
+  `status` varchar(24) not null default '' comment '订单状态',
+  `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
+  `update_time` timestamp null on update current_timestamp comment '最近一次更新',
+  PRIMARY KEY (`o_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
+;
 
-CREATE TABLE `purchase` (
-  `p_id` bigint(20) NOT NULL AUTO_INCREMENT comment '采购自增id',
+
+CREATE TABLE `order_detail` (
+  `od_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
+  `o_id` bigint(20) NOT NULL default 0 comment '订单id',
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
   `g_name` varchar(256) not null default '' comment '商品名称',
-  `retail_prices` double(8,2) not null default 0.0 comment '零售价格',
-  `unit_price` double(8,2) not null default 0.0 comment '单价',
-  `net_amount` double(8,2) not null default 0.0 comment '净额',
-  `amount` int(8) not null default 0 comment '商品的数量',
-  `atm_amount` double(8,2) not null default 0.0 comment '金额',
-  ``  '条码',
+  `retail_price` double(10,2) not null default 0.0 comment '零售价',
+  `unit_price ` double(10,2) not null default 0.0 comment '单价',
+  `amount_net` double(10,2) not null default 0.0 comment '净额',
+  `amount`  int(8) not null default 0 comment '数量',
+  `amount_amt` double(10,2) not null default 0.0 comment '金额',
+  `code` varchar(64) not null default '' comment '条码',
   `remarks` varchar(1000) not null default '' comment '备注',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
-  PRIMARY KEY (`g_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '采购单'
+  PRIMARY KEY (`od_id`),
+  index `o_id_index` (`o_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
 ;
-
 
 
