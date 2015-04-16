@@ -156,6 +156,13 @@ public class GoodsController {
         return jsonObject;
     }
     
+    @RequestMapping("getname")
+    @ResponseBody
+    public List<Map<String, Object>> findAllIdAndName(
+            @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
+        return goodsDao.findAllIdAndName(sId);
+    }
+    
     private Map<Long, String> getSupplierMap(List<Goods> goods) {
         try {
             Set<Long> sIds = new HashSet<Long>();

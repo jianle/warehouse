@@ -1,0 +1,4 @@
+#set($title="订单信息")
+
+
+<a href="#springUrl('/order/detail')">订单明细录入</a>

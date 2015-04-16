@@ -90,11 +90,7 @@
       <tr id="${goods.gId}_tr">
         <th>${goods.gId}</th>
         <td>${goods.name}</td>
-        <td>
-          #if($supplierMap.get(${goods.sId}))
-               $supplierMap.get(${goods.sId})
-          #end
-        </td>
+        <td>#if($supplierMap.get(${goods.sId}))$supplierMap.get(${goods.sId})#end</td>
         <td>${goods.length}</td>
         <td>${goods.width}</td>
         <td>${goods.height}</td>

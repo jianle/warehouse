@@ -86,6 +86,18 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             return null;
         }
     }
+    
+    public List<Map<String, Object>> findAllName() {
+        // 通过Id获取Supplier
+        try {
+            String sql = "SELECT s_id sId, name sName FROM " + TABLE_NAME ;
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("Supplier findAllName failed ." + e);
+            return null;
+        }
+    }
 
     @Override
     public List<Supplier> findAll() {

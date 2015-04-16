@@ -189,6 +189,23 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
     }
     
+    public List<Map<String, Object>> findAllIdAndName(Long sId) {
+        // 通过Id获取Supplier
+        try {
+            String sql;
+            if (sId>0) {
+                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE s_id=" + sId;
+            } else {
+                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME ;
+            }
+            logger.info(sql);
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            // TODO: handle exception
+            return null;
+        }
+    }
+    
     
     private RowMapper<Goods> rowMapper = new RowMapper<Goods>() {
 

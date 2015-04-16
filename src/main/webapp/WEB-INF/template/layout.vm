@@ -54,6 +54,9 @@
                 <li #if($title == '库存管理') class='active' #end>
                   <a href="#springUrl('/storage')">库存管理</a>
                 </li>
+                <li #if($title == '订单信息') class='active' #end>
+                  <a href="#springUrl('/order')">订单信息</a>
+                </li>
 
 
                 <li class="dropdown">

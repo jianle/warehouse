@@ -2,6 +2,7 @@ package com.wms.controller;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -136,6 +137,12 @@ public class SupplierController {
         jsonObject.put("value", jsonArray);
 
         return jsonObject;
+    }
+    
+    @RequestMapping("getname")
+    @ResponseBody
+    public List<Map<String, Object>> findAllIdAndName() throws JSONException {
+        return supplierDao.findAllName();
     }
 
 }

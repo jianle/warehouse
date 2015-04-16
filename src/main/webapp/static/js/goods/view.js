@@ -90,7 +90,10 @@ $(document).ready(function(){
 			},
 			sId : {
 			    required: true,
-			}
+			},
+			sName : {
+				required:true,
+			},
 		},
 		messages: {
 			name :{
@@ -98,7 +101,10 @@ $(document).ready(function(){
 			},
 			sId : {
 			    required: "请输入供应商名称",
-			}
+			},
+			sName : {
+			    required: "请选择供应商名称",
+			},
 		},
 		highlight : function(element) {  
             $(element).closest('.form-group').addClass('has-error');  
@@ -110,7 +116,11 @@ $(document).ready(function(){
         },  
 
         errorPlacement : function(error, element) {  
-            element.parent('div').append(error);  
+        	if(element.attr('id')=='sName') {
+        		element.parent('div').parent('div').append(error);
+        	} else {
+        		element.parent('div').append(error);  
+        	} 
         },  
         
         submitHandler : function(form) {  

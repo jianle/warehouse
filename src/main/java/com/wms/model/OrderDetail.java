@@ -3,6 +3,7 @@ package com.wms.model;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -27,6 +28,7 @@ public class OrderDetail implements Serializable {
     private String code;
     private String remarks;
     
+    @Column(updatable=false)
     private Timestamp insertDt;
     private Timestamp updateTime;
     
