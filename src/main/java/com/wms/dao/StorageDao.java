@@ -89,6 +89,27 @@ public class StorageDao implements BaseDao<Storage, Long> {
         return false;
     }
     
+    public Boolean update(Storage object) {
+        try {
+            
+            String sql = "UPDATE " + TABLE_NAME + " SET "
+                    + " s_id=?, g_name=?, amount=?, remarks=? "
+                    + " WHERE g_id=? ";
+            
+            jdbcTemplate.update(sql,
+                    object.getsId(),
+                    object.getgName(),
+                    object.getAmount(),
+                    object.getRemarks(),
+                    object.getgId());
+            return true;
+
+        } catch (Exception e) {
+            logger.debug("save storage failed." + e);
+        }
+        return false;
+    }
+    
     public Boolean updateBoxes(Enter enter, String type){
         try {
             String sql = "UPDATE " + TABLE_NAME + " SET "
@@ -134,13 +155,15 @@ public class StorageDao implements BaseDao<Storage, Long> {
     public Boolean delete(Long gId){
         try {
             String sql = "DELETE FROM " + TABLE_NAME + " WHERE g_id=? ";
-            return jdbcTemplate.update(sql, rowMapper, gId) > 0;
+            return jdbcTemplate.update(sql, gId) > 0;
         } catch (Exception e) {
             // TODO: handle exception
-            logger.debug("get storage by gId failed." + e);
+            logger.debug("delete storage by gId failed." + e);
         }
         return false;
     }
+    
+    
     
     @SuppressWarnings("deprecation")
     public Pagination<Storage> findByCurrentPage(String gName, int currentPage,int numPerPage) {
@@ -188,9 +211,9 @@ public class StorageDao implements BaseDao<Storage, Long> {
             storage.setgId(rs.getLong("g_id"));
             storage.setsId(rs.getLong("s_id"));
             storage.setgName(rs.getString("g_name"));
-            storage.setChests(rs.getInt("chests"));
-            storage.setBoxes(rs.getInt("boxes"));
-            storage.setAmount(rs.getInt("amount"));
+            storage.setChests(rs.getLong("chests"));
+            storage.setBoxes(rs.getLong("boxes"));
+            storage.setAmount(rs.getLong("amount"));
             storage.setRemarks(rs.getString("remarks"));
             storage.setInsertDt(rs.getTimestamp("insert_dt"));
             storage.setUpdateTime(rs.getTimestamp("update_time"));

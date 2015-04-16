@@ -41,7 +41,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     public Goods get(Long id) {
         // 通过Id获取对象
         try {
-            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE id= ?";
+            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE g_id= ?";
             return jdbcTemplate.queryForObject(sql, rowMapper, id);
         } catch (Exception e) {
             logger.debug("Goods get by id failed ." + e);

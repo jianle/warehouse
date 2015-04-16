@@ -1,6 +1,9 @@
 #set($title='库存管理')
 #set($layout = "layout.vm")
 <script src="#springUrl('/static/js/storage/list.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
 
 <form id="formPagination" name="formPagination" role="form" action="#springUrl('/storage/list')" method="post">
   <input type="hidden" id="currentPage" name="currentPage" value="" />
@@ -58,14 +61,10 @@
         <th style="min-width:50px">商品ID</th>
         <th style="min-width:100px">商品名称</th>
         <th style="min-width:120px">供应商名称</th>
-        <th style="width:55px;">箱数</th>
-        <th style="width:55px;">盒数</th>
-        <th style="width:55px;">个数</th>
-        <th style="min-width:80px">备注</th>
+        <th style="width:95px;">总库存个数</th>
+        <th style="min-width:90px">备注</th>
         <th style="width:175px;">最新更新时间</th>
-        <!--
         <th style="width:80px;">修改删除</th>
-        -->
       </tr>
     </thead>
     <tbody>
@@ -73,29 +72,15 @@
       <tr id="${storage.gId}_tr">
         <th>${storage.gId}</th>
         <td>${storage.gName}</td>
-        <td>
-          #if($supplierMap.get(${storage.sId}))
-              $supplierMap.get(${storage.sId})
-          #end
-        </td>
-        <td>${storage.chests}</td>
-        <td>${storage.boxes}</td>
+        <td>#if($supplierMap.get(${storage.sId}))$supplierMap.get(${storage.sId})#end</td>
         <td>${storage.amount}</td>
         <td>${storage.remarks}</td>
+        <td>#if(${storage.updateTime})${storage.updateTime}#else${storage.insertDt}#end</td>
         <td>
-          #if(${storage.updateTime})
-          ${storage.updateTime}
-          #else
-          ${storage.insertDt}
-          #end
-        </td>
-        <!--
-        <td>
-          <a href="#Modal" id="enterEdit" onclick="enterEdit(${enter.gId},'$enter.isDisabled',${enter.sId})" data-toggle="modal"
+          <a href="#Modal" id="edit" onclick="modalEdit(${storage.gId},${storage.sId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:deleteEnter(${enter.gId},'$enter.name')" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+          <a href="javascript:modalDelete(${storage.gId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
         </td>
-        -->
       </tr>
       #end
     </tbody>
@@ -103,3 +88,4 @@
 </div>
 
 <!-- Modal -->
+#parse("/storage/modal.vm")

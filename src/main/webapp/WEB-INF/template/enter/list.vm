@@ -35,9 +35,9 @@
         <th style="width:50px;">ID</th>
         <th style="min-width:50px">商品ID</th>
         <th style="min-width:100px">商品名称</th>
-        <th style="width:60px;">箱数</th>
-        <th style="width:60px;">盒数</th>
-        <th style="width:75px;">个数/盒</th>
+        <th style="width:80px;">总共箱数</th>
+        <th style="width:80px;">总共盒数</th>
+        <th style="width:80px;">总共个数</th>
         <th style="width:80px;">操作人</th>
         <th style="min-width:80px">备注</th>
         <th style="width:175px;">创建时间</th>

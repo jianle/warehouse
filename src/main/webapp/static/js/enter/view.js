@@ -116,6 +116,7 @@ function formPaginationSumbmit(currentPage, type) {
 }
 
 //当输入箱数的时候自动补全盒数和个数
+/*
 $(document).ready(function(){
 	$("#chests").bind('blur', function(){
 		var chests = $("#chests").val();
@@ -123,6 +124,7 @@ $(document).ready(function(){
 		$("#amount").val(chests*boxes*amount);
 	});
 });
+*/
 
 
 

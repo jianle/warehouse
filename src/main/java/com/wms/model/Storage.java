@@ -16,9 +16,9 @@ public class Storage implements Serializable {
     private Long gId;
     private Long sId;
     private String gName;
-    private Integer chests;
-    private Integer boxes;
-    private Integer amount;
+    private Long chests;
+    private Long boxes;
+    private Long amount;
     private String remarks;
     
     @Column(updatable=false)
@@ -43,10 +43,10 @@ public class Storage implements Serializable {
     public void setgName(String gName) {
         this.gName = gName;
     }
-    public Integer getBoxes() {
+    public Long getBoxes() {
         return boxes;
     }
-    public void setBoxes(Integer boxes) {
+    public void setBoxes(Long boxes) {
         this.boxes = boxes;
     }
     public String getRemarks() {
@@ -67,16 +67,16 @@ public class Storage implements Serializable {
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
     }
-    public Integer getChests() {
+    public Long getChests() {
         return chests;
     }
-    public void setChests(Integer chests) {
+    public void setChests(Long chests) {
         this.chests = chests;
     }
-    public Integer getAmount() {
+    public Long getAmount() {
         return amount;
     }
-    public void setAmount(Integer amount) {
+    public void setAmount(Long amount) {
         this.amount = amount;
     }
     

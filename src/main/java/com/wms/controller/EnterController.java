@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.EnterDao;
+import com.wms.dao.GoodsDao;
 import com.wms.dao.StorageDao;
 import com.wms.dao.SupplierDao;
 import com.wms.model.Enter;
+import com.wms.model.Goods;
 import com.wms.model.Pagination;
 import com.wms.model.User;
 
@@ -41,6 +43,9 @@ public class EnterController {
     
     @Autowired
     private SupplierDao supplierDao;
+    
+    @Autowired
+    private GoodsDao goodsDao;
     
     @RequestMapping("")
     public ModelAndView index() {
@@ -116,7 +121,17 @@ public class EnterController {
         
         if (enterDao.save(enter)) {
             result = true;
+        }else {
+            jsonTuple.put("value", false);
+            return jsonTuple;
         }
+        
+        Goods goods = goodsDao.get(enter.getgId());
+        
+        int amount = enter.getChests() * goods.getBoxes() * goods.getAmount()
+                + enter.getBoxes() * goods.getAmount()
+                + enter.getAmount();
+        enter.setAmount(amount);
         
         if (storageDao.get(enter.getgId()) != null) {
             if (! storageDao.updateBoxes(enter, "add")) {
