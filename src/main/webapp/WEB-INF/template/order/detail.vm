@@ -7,24 +7,19 @@
 <script>
   var contextPath = '#springUrl('')';
 </script>
-<form class="form-horizontal" style="padding-top:10px;">
- <div class="row">
-    <label for="gName" class="control-label" style="padding-left:0px;float:left" >订单编号</label>
-    <div class="col-lg-5">
-       <div class="input-group">
-           <input type="text" class="form-control" id="o_id" name="o_id" value="" />
-           <div class="input-group-btn">
-               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                   <span class="caret"></span>
-               </button>
-               <ul class="dropdown-menu dropdown-menu-right" role="menu">
-               </ul>
-           </div>
-           <!-- /btn-group -->
-       </div>
-   </div>
- </form>
- <br/>
+<br/>
+<form>
+ <label>订单编号: </label>
+ <input id="oId" class="easyui-combobox" style="width:200px;" data-options="
+       valueField:'sId',
+       textField:'sName',
+       method:'get',
+       url:contextPath + '/supplier/getname',
+       required:true,
+       onSelect: function(rec){
+            console.log(rec);
+        }" />
+</form>
  <hr/>
   <table id="dg" class="easyui-datagrid" title="订单明细" style="width:auto;height:auto"
 			data-options="
@@ -32,7 +27,7 @@
 				iconCls: 'icon-edit',
 				singleSelect: true,
 				toolbar: '#tb',
-				url: contextPath+'/order/detail/get?o_id='+ $('#o_id').val(),
+				url: contextPath+'/order/detail/get?o_id=',
 				method: 'get',
 				onClickRow: onClickRow
 			">
@@ -74,6 +69,8 @@
 						}">供应商名称</th>
 				<th data-options="field:'gId',width:140,
 						formatter:function(value,row){
+
+              console.log('value:'+value +'gname:'+row.gName);
 							return row.gName;
 						},
 						editor:{
@@ -92,7 +89,7 @@
         <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox'}">数量</th>
         <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2}}">金额</th>
 				<th data-options="field:'code',width:80,editor:'textbox'">条码</th>
-        <th data-options="field:'remarks',width:240,editor:'textbox'">备注</th>
+        <th data-options="field:'remarks',width:200,editor:'textbox'">备注</th>
 				<th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">Status</th>
 			</tr>
 		</thead>

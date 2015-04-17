@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.wms.dao.EnterDao;
 import com.wms.dao.GoodsDao;
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.StorageDao;
@@ -60,7 +59,7 @@ public class OrderController {
     
     @RequestMapping("detail/get")
     @ResponseBody
-    public JSONArray getDetail(@RequestParam(value="o_id", defaultValue="1") Long oId){
+    public JSONArray getDetail(@RequestParam(value="o_id", defaultValue="0") Long oId){
         
         JSONArray result = new JSONArray();
         result = JSONArray.fromObject(orderDetailDao.findByOId(oId));
