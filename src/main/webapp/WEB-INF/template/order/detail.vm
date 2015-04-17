@@ -40,12 +40,6 @@
 			<tr>
         <th data-options="field:'sId',width:240,
 						formatter:function(value,row){
-              console.log(row);
-              var sId = row.sId;
-              if(sId==undefined){
-                sId='';
-              }
-              console.log('sId:'+sId);
 							return row.sName;
 						},
 
@@ -53,7 +47,22 @@
 							type:'combobox',
 							options:{
                 onChange:function(newValue, oldValue){
-                  console.log('fucking');
+                  if(newValue==undefined) {
+                    newValue='';
+                  }
+                  console.log('newValue:'+newValue+' oldValue:'+oldValue);
+                  var comboboxData;
+                  var url = contextPath + '/goods/getNameJson?sId=' + newValue;
+                  var ed = $('#dg' ).datagrid( 'getEditor',{index:currentIndex,field: 'gId' });
+                  $.ajax({
+                       url:url,
+                       dataType : 'json',
+                       type : 'POST',
+                       success: function (data){
+                            comboboxData = eval(data.value);
+                            $(ed.target).combobox( 'loadData' , comboboxData);
+                       }
+                    });
                 },
 								valueField:'sId',
 								textField:'sName',
@@ -99,9 +108,13 @@
 
 	<script type="text/javascript">
 		var editIndex = undefined;
+    var currentIndex=0;
 		function endEditing(){
+
 			if (editIndex == undefined){return true}
 			if ($('#dg').datagrid('validateRow', editIndex)){
+
+        console.log('editIndex:'+editIndex);
 				var ed = $('#dg').datagrid('getEditor', {index:editIndex,field:'gId'});
 				var gName = $(ed.target).combobox('getText');
 				$('#dg').datagrid('getRows')[editIndex]['gName'] = gName;
@@ -133,6 +146,8 @@
         });
      }
 		function onClickRow(index){
+      currentIndex=index;
+      console.log('currentIndex1:'+currentIndex);
 			if (editIndex != index){
 				if (endEditing()){
 					$('#dg').datagrid('selectRow', index)
@@ -147,6 +162,8 @@
 			if (endEditing()){
 				$('#dg').datagrid('appendRow',{status:'P'});
 				editIndex = $('#dg').datagrid('getRows').length-1;
+        currentIndex=editIndex;
+        console.log('currentIndex2:'+currentIndex);
 				$('#dg').datagrid('selectRow', editIndex)
 						.datagrid('beginEdit', editIndex);
 			}
