@@ -2,3 +2,110 @@
 
 
 <a href="#springUrl('/order/detail')">订单明细录入</a>
+
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/color.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/css/order/view.css')">
+<script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
+<script type="text/javascript" src="#springUrl('/static/js/order/view.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+    <table id="dg" title="订单列表" class="easyui-datagrid" style="width:auto;height:auto"
+            toolbar="#toolbar" pagination="true"
+            fitColumns="true" singleSelect="true">
+        <thead>
+            <tr>
+              <th field="firstname" width="50px">First Name</th>
+              <th field="lastname" width="50px">Last Name</th>
+              <th field="phone" width="50px">Phone</th>
+              <th field="email" width="50px">Email</th>
+            </tr>
+        </thead>
+    </table>
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">新增</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">编辑</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroy()">删除</a>
+    </div>
+
+    <div id="dlg" class="easyui-dialog" style="width:880px;height:400px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">订单信息</div>
+            <form id="fm" method="post" novalidate>
+                <div class="fitem">
+                    <label>单据编号:</label>
+                    <input name="firstname" class="easyui-textbox">
+                    <label style="padding-left:20px;">制单人:</label>
+                    <input name="firstname" class="easyui-textbox">
+                    <label style="padding-left:20px;">制单日期:</label>
+                    <input name="firstname" class="easyui-textbox">
+                </div>
+                <div class="fitem">
+                    <label>订单编号:</label>
+                    <input name="lastname" class="easyui-textbox" >
+                    <label style="padding-left:20px;">销售日期:</label>
+                    <input name="firstname" class="easyui-textbox">
+                    <label style="padding-left:20px;">账户余额:</label>
+                    <input name="firstname" class="easyui-textbox">
+                </div>
+                <div class="fitem">
+                    <label>客户类型:</label>
+                    <input name="phone" class="easyui-textbox">
+                    <label style="padding-left:20px;">公司名称:</label>
+                    <input style="width:450px" name="firstname" class="easyui-textbox">
+                </div>
+                <div class="fitem">
+                    <label>客户编码:</label>
+                    <input name="email" class="easyui-textbox" validType="email">
+                    <label style="padding-left:20px;">客户姓名:</label>
+                    <input name="firstname" class="easyui-textbox">
+                    <label style="padding-left:20px;width:90px">零售价总额:</label>
+                    <input style="width:170px" name="firstname" class="easyui-textbox">
+                </div>
+                <div class="fitem">
+                    <label>出库地址:</label>
+                    <input name="email" class="easyui-textbox" validType="email">
+                    <label style="padding-left:20px;">订单类型:</label>
+                    <input name="firstname" class="easyui-textbox">
+                    <label style="padding-left:20px;">折扣金额:</label>
+                    <input name="firstname" class="easyui-textbox">
+                </div>
+                <div class="fitem">
+                    <label>运费支付类型:</label>
+                    <input name="email" class="easyui-textbox" validType="email">
+                    <label style="padding-left:20px;">总金额:</label>
+                    <input name="firstname" class="easyui-textbox">
+                    <label style="padding-left:20px;">应付金额:</label>
+                    <input name="firstname" class="easyui-textbox">
+                </div>
+                <div class="fitem">
+                    <label>收货电话:</label>
+                    <input name="email" class="easyui-textbox" validType="email">
+                    <label style="padding-left:20px;">销售机构:</label>
+                    <input name="firstname" class="easyui-textbox">
+                    <label style="padding-left:20px;">总净额:</label>
+                    <input name="firstname" class="easyui-textbox">
+                </div>
+                <div class="fitem">
+                    <label>送货地址:</label>
+                    <input style="width:450px" name="email" class="easyui-textbox" validType="email">
+                </div>
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+      </div>
+
+
+
+<script type="text/javascript">
+    function add(){
+            $('#dlg').dialog('open').dialog('setTitle','新增订单');
+            $('#fm').form('clear');
+            //url = 'save_user.php';
+    }
+</script>
