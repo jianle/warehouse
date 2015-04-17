@@ -108,7 +108,7 @@ CREATE TABLE `orderinfo` (
   `amount_discount` double(10,2) not null default 0.0 comment '折扣金额',
   `amount_payable` double(10,2) not null default 0.0 comment '应付金额',
   `amount_net` double(10,2) not null default 0.0 comment '净额',
-  `status` varchar(24) not null default '' comment '订单状态',
+  `status` smallint(3) not null default 0 comment '订单状态',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`o_id`)
