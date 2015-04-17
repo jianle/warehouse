@@ -41,6 +41,11 @@
         <th data-options="field:'sId',width:240,
 						formatter:function(value,row){
               console.log(row);
+              var sId = row.sId;
+              if(sId==undefined){
+                sId='';
+              }
+              synchCombobox(sId);
 							return row.sName;
 						},
 						editor:{
@@ -73,7 +78,7 @@
         <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox'}">数量</th>
         <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2}}">金额</th>
 				<th data-options="field:'code',width:80,editor:'textbox'">条码</th>
-        <th data-options="field:'remarks',width:270,editor:'textbox'">备注</th>
+        <th data-options="field:'remarks',width:240,editor:'textbox'">备注</th>
 				<th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">Status</th>
 			</tr>
 		</thead>
@@ -107,6 +112,21 @@
 				return false;
 			}
 		}
+
+    function synchCombobox(sId){
+      var comboboxData;
+      var url = contextPath + '/goods/getname?sId=' + sId;
+      var ed = $('#dg' ).datagrid( 'getEditor',{index:editIndex,field: 'gId' });
+      $.ajax({
+           url:url,
+           dataType : 'json',
+           type : 'POST',
+           success: function (data){
+                comboboxData = data;
+                $(ed.target).combobox( 'loadData' , comboboxData);
+           }
+        });
+     }
 		function onClickRow(index){
 			if (editIndex != index){
 				if (endEditing()){
