@@ -45,18 +45,23 @@
               if(sId==undefined){
                 sId='';
               }
-              synchCombobox(sId);
+              console.log('sId:'+sId);
 							return row.sName;
 						},
+
 						editor:{
 							type:'combobox',
 							options:{
+                onChange:function(newValue, oldValue){
+                  console.log('fucking');
+                },
 								valueField:'sId',
 								textField:'sName',
 								method:'get',
 								url:contextPath + '/supplier/getname',
 								required:true
-							}
+							},
+
 						}">供应商名称</th>
 				<th data-options="field:'gId',width:140,
 						formatter:function(value,row){
@@ -88,8 +93,8 @@
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" onclick="append()">添加</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">删除</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="accept()">保存</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a>
-		<a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a>
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-undo',plain:true" onclick="reject()">撤销</a> -->
+		<!-- <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true" onclick="getChanges()">GetChanges</a> -->
 	</div>
 
 	<script type="text/javascript">
