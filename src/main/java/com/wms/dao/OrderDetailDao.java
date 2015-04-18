@@ -122,6 +122,17 @@ public class OrderDetailDao implements BaseDao<OrderDetail, Long> {
         return null;
     }
     
+    public Boolean delete(Long odId){
+        try {
+            String sql = "DELETE FROM " + TABLE_NAME + " WHERE od_id=? ";
+            return jdbcTemplate.update(sql, odId) > 0;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.info("delete by odId-" + odId + " failed." + e);
+        }
+        return false;
+    }
+    
     private RowMapper<OrderDetail> rowMapper = new RowMapper<OrderDetail>() {
 
         @Override

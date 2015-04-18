@@ -14,11 +14,11 @@
 </script>
 
     <table id="dg" title="订单列表" class="easyui-datagrid" style="width:auto;height:auto"
-            toolbar="#toolbar" pagination="true"
-            singleSelect="true">
+           data-options=" singleSelect:true,data:data"
+           toolbar="#toolbar" pagination="true">
         <thead>
             <tr>
-              <th field="oId"             width="30px">ID</th>
+              <th field="oId" formatter="jumpDetail" width="30px">ID</th>
               <th field="documentCode"    width="70px">单据编码</th>
               <th field="orderCode"       width="70px">订单编码</th>
               <th field="orderType"       width="70px">订单类型</th>
@@ -41,7 +41,7 @@
               <th field="amountPayable"   width="58px">应付金额</th>
               <th field="amountNet"       width="50px">净额</th>
               <th field="status"          width="70px">订单状态</th>
-              <th field="updateTime"      width="80px">最新更新</th>
+              <th field="updateTime"      width="130px">最新更新</th>
             </tr>
         </thead>
     </table>
@@ -55,13 +55,14 @@
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">订单信息</div>
             <form id="fm" method="post" novalidate>
+                <input name="oId" type="hidden" />
                 <div class="fitem">
                     <label>单据编号:</label>
                     <input name="documentCode" class="easyui-textbox">
                     <label style="padding-left:20px;">制单人:</label>
                     <input name="userName" class="easyui-textbox" value="$session.getAttribute('user').truename" />
                     <label style="padding-left:20px;">制单日期:</label>
-                    <input name="documentDate" id="documentDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="required" />
+                    <input name="documentDate" id="documentDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox"/>
                 </div>
                 <div class="fitem">
                     <label>订单编号:</label>
@@ -116,12 +117,39 @@
             </form>
       </div>
       <div id="dlg-buttons">
-          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveUser()" style="width:90px">Save</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
           <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
       </div>
 
-
+      <form name="formPagination" id="formPagination" action="#springUrl('/order/list')" method="POST">
+        <input type="hidden" id="currentPage" name="currentPage" value="" />
+        <input type="hidden" id="numPerPage" name="numPerPage" value="" />
+      </form>
 
 <script type="text/javascript">
+    var data=$.parseJSON('${ordersJson}');
+    $(function() {
+       $('#dg').datagrid('getPager')
+         .pagination({
+            total: ${paginations.totalRows},
+            pageSize: ${paginations.numPerPage},
+            pageNumber:${paginations.currentPage},
+            pageSize: 15, //每页显示的记录条数，默认为10
+            pageList: [10, 15, 20, 25], //可以设置每页记录条数的列表
+            beforePageText: '第 ',//页数文本框前显示的汉字
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+            onSelectPage: function(pageNumber, pageSize) {
+              console.log('pageNumber:'+pageNumber+' pageSize:'+pageSize);
+              $('#currentPage').val(pageNumber);
+              $('#numPerPage').val(pageSize);
+              document.getElementById('formPagination').submit();//每次更换页面时触发更改
+            }
+       });
+    });
+
+    function jumpDetail(val,row,index){
+      return '<a href="'+contextPath+'/order/detail/'+row.oId+'" target="_blank">'+row.oId+'</a>';
+    }
 
 </script>

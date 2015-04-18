@@ -20,11 +20,74 @@ function myparser(s){
 
 // 定义默认当前日期
 var curDate = new Date();
-
+var url;
 function add(){
     $('#dlg').dialog('open').dialog('setTitle','新增订单');
     //$('#fm').form('clear');
     $('#documentDate').datebox('setValue', myformatter(curDate));
     $('#saleDate').datebox('setValue', myformatter(curDate));
-    //url = 'save_user.php';
+    url = contextPath + '/order/save';
+}
+
+function save(){
+	$('#fm').form('submit',{
+		url: url,
+		onSubmit: function(){
+            return $(this).form('validate');
+        },
+        dataType:'json',
+        success: function(data){
+        	var result = eval('('+data+')');
+            if (result){
+            	$('#dlg').dialog('close');       // close the dialog
+                $('#dg').datagrid('reload');     // reload the user data
+                $.messager.confirm('提示', '添加成功，是否刷新页面查看', function(r){
+					console.log('ok');
+					window.location.href=contextPath + '/order';
+                });
+            } else {
+            	$.messager.show({
+                    title: '提示信息',
+                    msg: '操作失败'
+                });
+            }
+        }
+	});
+         
+}
+
+function edit(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row){
+    	console.log(row);
+        $('#dlg').dialog('open').dialog('setTitle','修改订单');
+        $('#fm').form('clear');
+        $('#fm').form('load',row);
+        url = contextPath + '/order/update';
+    }
+}
+
+function destroy(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row){
+        $.messager.confirm('提示','确认是否要删除?',function(r){
+            if (r){
+                $.post(contextPath+'/order/delete',{oId:row.oId},function(data){
+                	var result = eval('('+data+')');
+                    if (result){
+                    	$.messager.show({    // show error message
+                            title: '提示',
+                            msg: '删除成功，请刷新查看！'
+                        });
+                        //$('#dg').datagrid('reload');    // reload the user data
+                    } else {
+                        $.messager.show({    // show error message
+                            title: '提示',
+                            msg: '删除失败'
+                        });
+                    }
+                },'json');
+            }
+        });
+    }
 }
