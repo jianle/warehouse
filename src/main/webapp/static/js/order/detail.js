@@ -97,6 +97,7 @@ function append() {
 				success : function(result) {
 					if (result) {
 						$.messager.show({
+							timeout:350,
 							title : '提示信息',
 							msg : '操作成功'
 						});
@@ -139,6 +140,7 @@ function removeit() {
 			success : function(result) {
 				if (result) {
 					$.messager.show({
+						timeout:350,
 						title : '提示信息',
 						msg : '操作成功'
 					});
@@ -165,7 +167,7 @@ function accept() {
 	if (endEditing()) {
 		var row = $('#dg').datagrid('getSelected');
 		row.oId = $('#oId').val();
-
+		row.status='保存';
 		console.log(JSON.stringify(row));
 		$.ajax({
 			cache : true,
@@ -177,6 +179,7 @@ function accept() {
 			success : function(result) {
 				if (result) {
 					$.messager.show({
+						timeout:350,
 						title : '提示信息',
 						msg : '操作成功'
 					});

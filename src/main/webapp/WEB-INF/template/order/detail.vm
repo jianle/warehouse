@@ -73,7 +73,7 @@
 							},
 
 						}">供应商名称</th>
-				<th data-options="field:'gId',width:140,
+				<th data-options="field:'gId',width:150,
 						formatter:function(value,row){
 							return row.gName;
 						},
@@ -92,8 +92,8 @@
         <th data-options="field:'amountNet',width:80,align:'right',editor:{type:'numberbox',options:{precision:2},required:true}">净额</th>
         <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox',required:true}">数量</th>
         <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2},required:true}">金额</th>
-				<th data-options="field:'code',width:80,editor:'textbox'">条码</th>
-        <th data-options="field:'remarks',width:200,editor:'textbox'">备注</th>
+				<th data-options="field:'code',width:92,editor:'textbox'">条码</th>
+        <th data-options="field:'remarks',width:220,editor:'textbox'">备注</th>
 				<th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">操作</th>
 			</tr>
 		</thead>
