@@ -3,6 +3,7 @@ package com.wms.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -156,6 +157,17 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
             logger.debug("update status faield." + e);
         }
         return null;
+    }
+    
+    public List<Map<String, Object>> findAlloId(){
+        try {
+            String sql = "SELECT o_id oId FROM " + TABLE_NAME;
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("find all oId failed." + e);
+            return null;
+        }
     }
     
     @SuppressWarnings("deprecation")

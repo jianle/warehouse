@@ -3,23 +3,30 @@
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
 <script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
-
+<script type="text/javascript" src="#springUrl('/static/js/order/detail.js')"></script>
+<script src="#springUrl('/static/js/bootstrap-suggest.js')"></script>
 <script>
   var contextPath = '#springUrl('')';
 </script>
 <br/>
-<form>
- <label>订单编号: </label>
- <input id="oId" class="easyui-combobox" style="width:200px;" data-options="
-       valueField:'sId',
-       textField:'sName',
-       method:'get',
-       url:contextPath + '/supplier/getname',
-       required:true,
-       onSelect: function(rec){
-            console.log(rec);
-        }" />
-</form>
+<form class="form-horizontal" id="formoId" action="#springUrl('/order/detail/')" style="padding-top:10px;">
+ <div class="row">
+    <label for="oId" class="control-label" style="padding-left:0px;float:left" >订单编号</label>
+    <div class="col-lg-2">
+       <div class="input-group">
+           <input type="text" class="form-control" id="oId" name="oId" value="${curoId}" />
+           <div class="input-group-btn">
+               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                   <span class="caret"></span>
+               </button>
+               <ul class="dropdown-menu dropdown-menu-right" role="menu">
+               </ul>
+           </div>
+           <!-- /btn-group -->
+       </div>
+   </div>
+ </form>
+ <br/>
  <hr/>
   <table id="dg" class="easyui-datagrid" title="订单明细" style="width:auto;height:auto"
 			data-options="
@@ -27,7 +34,7 @@
 				iconCls: 'icon-edit',
 				singleSelect: true,
 				toolbar: '#tb',
-				url: contextPath+'/order/detail/get?o_id=',
+				url: contextPath+'/order/detail/get?o_id='+${curoId},
 				method: 'get',
 				onClickRow: onClickRow
 			">
@@ -185,4 +192,5 @@
 			var rows = $('#dg').datagrid('getChanges');
 			alert(rows.length+' rows are changed!');
 		}
+
 	</script>

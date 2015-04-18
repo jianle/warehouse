@@ -14,7 +14,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -124,15 +126,42 @@ public class OrderController {
     }
     
     
-    @RequestMapping("detail")
-    public ModelAndView detail() {
+    @RequestMapping(value = "detail/{oId}", method = RequestMethod.GET)
+    public ModelAndView detail(@PathVariable(value="oId") Long oId) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/order/detail");
-        
         logger.info("RequestMapping :/order/detail");
         
-        return modelView;
+        JSONArray orderDetails = JSONArray.fromObject(orderDetailDao.findByOId(oId));
+        modelView.addObject("orderDetails", orderDetails);
+        modelView.addObject("curoId", oId);
         
+        return modelView;
+    }
+    
+    @RequestMapping(value = "detail", method = RequestMethod.GET)
+    public ModelAndView detailView(@RequestParam(value="oId", defaultValue="1") Long oId) {
+        ModelAndView modelView = new ModelAndView();
+        modelView.setViewName("/order/detail");
+        logger.info("RequestMapping :/order/detail");
+        
+        JSONArray orderDetails = JSONArray.fromObject(orderDetailDao.findByOId(oId));
+        modelView.addObject("orderDetails", orderDetails);
+        modelView.addObject("curoId", oId);
+        
+        return modelView;
+    }
+    
+    @RequestMapping("detail/getAlloId")
+    @ResponseBody
+    public JSONObject getAlloId(){
+        
+        JSONArray result = new JSONArray();
+        result = JSONArray.fromObject(orderinfoDao.findAlloId());
+        logger.info(result.toString());
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("value", result);
+        return jsonObject;
     }
     
     @RequestMapping("detail/get")

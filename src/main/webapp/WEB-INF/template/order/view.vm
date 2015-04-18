@@ -1,7 +1,7 @@
 #set($title="订单信息")
 
 
-<a href="#springUrl('/order/detail')">订单明细录入</a>
+<label>订单信息详情</label>
 
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
@@ -18,7 +18,7 @@
            toolbar="#toolbar" pagination="true">
         <thead>
             <tr>
-              <th field="oId" formatter="jumpDetail" width="30px">ID</th>
+              <th field="oId" formatter="jumpDetail" width="40px">ID</th>
               <th field="documentCode"    width="70px">单据编码</th>
               <th field="orderCode"       width="70px">订单编码</th>
               <th field="orderType"       width="70px">订单类型</th>
@@ -60,7 +60,7 @@
                     <label>单据编号:</label>
                     <input name="documentCode" class="easyui-textbox">
                     <label style="padding-left:20px;">制单人:</label>
-                    <input name="userName" class="easyui-textbox" value="$session.getAttribute('user').truename" />
+                    <input name="userName" id="userName" class="easyui-textbox" value="$session.getAttribute('user').truename" />
                     <label style="padding-left:20px;">制单日期:</label>
                     <input name="documentDate" id="documentDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox"/>
                 </div>
@@ -127,6 +127,7 @@
       </form>
 
 <script type="text/javascript">
+    var curuserName='$session.getAttribute('user').truename';
     var data=$.parseJSON('${ordersJson}');
     $(function() {
        $('#dg').datagrid('getPager')
@@ -149,7 +150,7 @@
     });
 
     function jumpDetail(val,row,index){
-      return '<a href="'+contextPath+'/order/detail/'+row.oId+'" target="_blank">'+row.oId+'</a>';
+      return '<a href="'+contextPath+'/order/detail?oId='+row.oId+'" target="_blank">'+row.oId+'</a>';
     }
 
 </script>

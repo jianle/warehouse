@@ -23,9 +23,10 @@ var curDate = new Date();
 var url;
 function add(){
     $('#dlg').dialog('open').dialog('setTitle','新增订单');
-    //$('#fm').form('clear');
+    $('#fm').form('clear');
     $('#documentDate').datebox('setValue', myformatter(curDate));
     $('#saleDate').datebox('setValue', myformatter(curDate));
+    $('#userName').textbox('setValue', curuserName);
     url = contextPath + '/order/save';
 }
 
@@ -41,7 +42,7 @@ function save(){
             if (result){
             	$('#dlg').dialog('close');       // close the dialog
                 $('#dg').datagrid('reload');     // reload the user data
-                $.messager.confirm('提示', '添加成功，是否刷新页面查看', function(r){
+                $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
 					console.log('ok');
 					window.location.href=contextPath + '/order';
                 });
