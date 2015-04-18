@@ -3,6 +3,7 @@ package com.wms.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +76,7 @@ public class OrderDetailDao implements BaseDao<OrderDetail, Long> {
         try {
             
             String sql = "UPDATE " + TABLE_NAME 
-                    + "SET o_id=?, g_id=?, g_name=?, retail_price=?, unit_price=?, amount_net=?, amount=?"
+                    + " SET o_id=?, g_id=?, g_name=?, retail_price=?, unit_price=?, amount_net=?, amount=?"
                     + ", amount_amt=?, code=?, remarks=?"
                     + " WHERE od_id=?";
             int flag = jdbcTemplate.update(sql,
@@ -111,10 +112,17 @@ public class OrderDetailDao implements BaseDao<OrderDetail, Long> {
         return null;
     }
     
-    public List<OrderDetail> findByOId(Long oId){
+    public List<Map<String, Object>> findByOId(Long oId){
         try {
-            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE o_id=? ";
-            return jdbcTemplate.query(sql, rowMapper, oId);
+            String sql = "SELECT a.od_id odId, a.o_id oId, a.g_id gId, b.s_id sId, c.name sName, a.g_name gName, retail_price retailPrice"
+                    + ", unit_price unitPrice, amount_net amountNet, a.amount amount"
+                    + ", amount_amt amountAmt, a.code, a.remarks" 
+                    + " FROM " + TABLE_NAME + " a"
+                    + " JOIN goods b on (a.g_id=b.g_id)"
+                    + " JOIN supplier c on (b.s_id=c.s_id)"
+                    + " WHERE a.o_id=? ";
+            logger.info(sql);
+            return jdbcTemplate.queryForList(sql, oId);
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("findByOId failed." + e);
@@ -150,8 +158,8 @@ public class OrderDetailDao implements BaseDao<OrderDetail, Long> {
             orderDetail.setAmountAmt(rs.getDouble("amount_amt"));
             orderDetail.setCode(rs.getString("code"));
             orderDetail.setRemarks(rs.getString("remarks"));
-            orderDetail.setInsertDt(rs.getTimestamp("insert_dt"));
-            orderDetail.setUpdateTime(rs.getTimestamp("update_time"));
+            orderDetail.setInsertDt(rs.getString("insert_dt"));
+            orderDetail.setUpdateTime(rs.getString("update_time"));
             
             return orderDetail;
         }

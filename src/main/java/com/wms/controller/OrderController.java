@@ -176,15 +176,27 @@ public class OrderController {
     
     @RequestMapping("detail/save")
     @ResponseBody
-    public JSONObject saveDetail(@ModelAttribute OrderDetail orderDetail) {
+    public String saveDetail(@ModelAttribute OrderDetail orderDetail) {
+        orderDetail.setInsertDt(String.valueOf(new Timestamp(System.currentTimeMillis())));
+        orderDetail.setUpdateTime(String.valueOf(new Timestamp(System.currentTimeMillis())));
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
+        logger.info(orderDetail.toString());
         
-        if (orderDetailDao.save(orderDetail)) {
-            result = true;
+        if (orderDetail.getOdId() != null) {
+            logger.info("记录存在，更新");
+            if (orderDetailDao.update(orderDetail)) {
+                result = true;
+            }
+        }else {
+            logger.info("记录不存在，添加");
+            if (orderDetailDao.save(orderDetail)) {
+                result = true;
+            }
         }
+        
         jsonTuple.put("value", result);
-        return jsonTuple;
+        return String.valueOf(result);
     }
     
     @RequestMapping("detail/update")
@@ -203,7 +215,7 @@ public class OrderController {
     
     @RequestMapping("detail/delete")
     @ResponseBody
-    public JSONObject deleteDetail(@ModelAttribute("odId") Long odId) {
+    public String deleteDetail(@ModelAttribute("odId") Long odId) {
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
         
@@ -212,7 +224,7 @@ public class OrderController {
             result = true;
         }
         jsonTuple.put("value", result);
-        return jsonTuple;
+        return String.valueOf(result);
     }
 
 }

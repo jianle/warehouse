@@ -29,8 +29,8 @@ public class OrderDetail implements Serializable {
     private String remarks;
     
     @Column(updatable=false)
-    private Timestamp insertDt;
-    private Timestamp updateTime;
+    private String insertDt;
+    private String updateTime;
     
     public Long getOdId() {
         return odId;
@@ -57,30 +57,45 @@ public class OrderDetail implements Serializable {
         this.gName = gName;
     }
     public Double getRetailPrice() {
+        if (retailPrice==null) {
+            retailPrice = (double) 0;
+        }
         return retailPrice;
     }
     public void setRetailPrice(Double retailPrice) {
         this.retailPrice = retailPrice;
     }
     public Double getUnitPrice() {
+        if (unitPrice==null) {
+            unitPrice = (double) 0;
+        }
         return unitPrice;
     }
     public void setUnitPrice(Double unitPrice) {
         this.unitPrice = unitPrice;
     }
     public Double getAmountNet() {
+        if (amountNet==null) {
+            amountNet = (double) 0;
+        }
         return amountNet;
     }
     public void setAmountNet(Double amountNet) {
         this.amountNet = amountNet;
     }
     public Integer getAmount() {
+        if (amount==null) {
+            amount = 0;
+        }
         return amount;
     }
     public void setAmount(Integer amount) {
         this.amount = amount;
     }
     public Double getAmountAmt() {
+        if (amountAmt==null) {
+            amountAmt = (double) 0;
+        }
         return amountAmt;
     }
     public void setAmountAmt(Double amountAmt) {
@@ -98,21 +113,21 @@ public class OrderDetail implements Serializable {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
-    public Timestamp getInsertDt() {
+    public String getInsertDt() {
         return insertDt;
     }
-    public void setInsertDt(Timestamp insertDt) {
+    public void setInsertDt(String insertDt) {
         if (insertDt == null) {
-            insertDt = new Timestamp(System.currentTimeMillis());
+            insertDt = String.valueOf(new Timestamp(System.currentTimeMillis()));
         }
         this.insertDt = insertDt;
     }
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         if (updateTime == null) {
-            updateTime = new Timestamp(System.currentTimeMillis());
+            updateTime = String.valueOf(new Timestamp(System.currentTimeMillis()));
         }
         this.updateTime = updateTime;
     }

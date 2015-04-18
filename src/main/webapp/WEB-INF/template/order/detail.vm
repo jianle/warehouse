@@ -52,7 +52,6 @@
                   if(newValue==undefined) {
                     newValue='';
                   }
-                  console.log('newValue:'+newValue+' oldValue:'+oldValue);
                   var comboboxData;
                   var url = contextPath + '/goods/getNameJson?sId=' + newValue;
                   var ed = $('#dg' ).datagrid( 'getEditor',{index:currentIndex,field: 'gId' });
@@ -76,8 +75,6 @@
 						}">供应商名称</th>
 				<th data-options="field:'gId',width:140,
 						formatter:function(value,row){
-
-              console.log('value:'+value +'gname:'+row.gName);
 							return row.gName;
 						},
 						editor:{
@@ -90,14 +87,14 @@
 								required:true
 							}
 						}">产品名称</th>
-				<th data-options="field:'retailPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2}}">零售价</th>
-				<th data-options="field:'unitPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2}}">单价</th>
-        <th data-options="field:'amountNet',width:80,align:'right',editor:{type:'numberbox',options:{precision:2}}">净额</th>
-        <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox'}">数量</th>
-        <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2}}">金额</th>
+				<th data-options="field:'retailPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2},required:true}">零售价</th>
+				<th data-options="field:'unitPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2},required:true}">单价</th>
+        <th data-options="field:'amountNet',width:80,align:'right',editor:{type:'numberbox',options:{precision:2},required:true}">净额</th>
+        <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox',required:true}">数量</th>
+        <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2},required:true}">金额</th>
 				<th data-options="field:'code',width:80,editor:'textbox'">条码</th>
         <th data-options="field:'remarks',width:200,editor:'textbox'">备注</th>
-				<th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">Status</th>
+				<th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">操作</th>
 			</tr>
 		</thead>
 	</table>
@@ -111,86 +108,5 @@
 	</div>
 
 	<script type="text/javascript">
-		var editIndex = undefined;
-    var currentIndex=0;
-		function endEditing(){
-
-			if (editIndex == undefined){return true}
-			if ($('#dg').datagrid('validateRow', editIndex)){
-
-        console.log('editIndex:'+editIndex);
-				var ed = $('#dg').datagrid('getEditor', {index:editIndex,field:'gId'});
-				var gName = $(ed.target).combobox('getText');
-				$('#dg').datagrid('getRows')[editIndex]['gName'] = gName;
-
-        var ed2 = $('#dg').datagrid('getEditor', {index:editIndex,field:'sId'});
-				var sName = $(ed2.target).combobox('getText');
-				$('#dg').datagrid('getRows')[editIndex]['sName'] = sName;
-
-				$('#dg').datagrid('endEdit', editIndex);
-				editIndex = undefined;
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-    function synchCombobox(sId){
-      var comboboxData;
-      var url = contextPath + '/goods/getname?sId=' + sId;
-      var ed = $('#dg' ).datagrid( 'getEditor',{index:editIndex,field: 'gId' });
-      $.ajax({
-           url:url,
-           dataType : 'json',
-           type : 'POST',
-           success: function (data){
-                comboboxData = data;
-                $(ed.target).combobox( 'loadData' , comboboxData);
-           }
-        });
-     }
-		function onClickRow(index){
-      currentIndex=index;
-      console.log('currentIndex1:'+currentIndex);
-			if (editIndex != index){
-				if (endEditing()){
-					$('#dg').datagrid('selectRow', index)
-							.datagrid('beginEdit', index);
-					editIndex = index;
-				} else {
-					$('#dg').datagrid('selectRow', editIndex);
-				}
-			}
-		}
-		function append(){
-			if (endEditing()){
-				$('#dg').datagrid('appendRow',{status:'P'});
-				editIndex = $('#dg').datagrid('getRows').length-1;
-        currentIndex=editIndex;
-        console.log('currentIndex2:'+currentIndex);
-				$('#dg').datagrid('selectRow', editIndex)
-						.datagrid('beginEdit', editIndex);
-			}
-		}
-		function removeit(){
-			if (editIndex == undefined){return}
-			$('#dg').datagrid('cancelEdit', editIndex)
-					.datagrid('deleteRow', editIndex);
-			editIndex = undefined;
-		}
-		function accept(){
-			if (endEditing()){
-        console.log('save');
-				$('#dg').datagrid('acceptChanges');
-			}
-		}
-		function reject(){
-			$('#dg').datagrid('rejectChanges');
-			editIndex = undefined;
-		}
-		function getChanges(){
-			var rows = $('#dg').datagrid('getChanges');
-			alert(rows.length+' rows are changed!');
-		}
 
 	</script>
