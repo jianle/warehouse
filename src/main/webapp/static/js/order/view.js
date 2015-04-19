@@ -92,3 +92,28 @@ function destroy(){
         });
     }
 }
+
+var statusType= new Array();
+var cssType= new Array();
+statusType[0]="新&nbsp;&nbsp;&nbsp增";
+cssType[0]="mini-label-primary";
+
+statusType[1]="已配货";
+cssType[1]="mini-label-warning";
+
+statusType[2]="已验货";
+cssType[2]="mini-label-info";
+
+statusType[3]="已出库";
+cssType[3]="mini-label-danger";
+
+statusType[4]="已完成";
+cssType[4]="mini-label-success";
+
+function formatterStatus(val,row,index){
+	return '<font color="red" class="mini-label '+ cssType[val] +'">' + statusType[val] + '</font>';
+}
+
+
+
+

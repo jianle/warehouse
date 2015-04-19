@@ -40,7 +40,7 @@
               <th field="amountDiscount"  width="58px">折扣金额</th>
               <th field="amountPayable"   width="58px">应付金额</th>
               <th field="amountNet"       width="50px">净额</th>
-              <th field="status"          width="70px">订单状态</th>
+              <th field="status" formatter="formatterStatus" align="center" width="60px">订单状态</th>
               <th field="updateTime"      width="130px">最新更新</th>
             </tr>
         </thead>

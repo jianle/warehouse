@@ -32,6 +32,7 @@ CREATE TABLE `goods` (
   PRIMARY KEY (`g_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 comment '商品信息表'
 ;
+alter table goods add index `g_id_index` `g_id`;
 
 CREATE TABLE supplier(
   `s_id` bigint(20) not null AUTO_INCREMENT comment '供应商自增id',
