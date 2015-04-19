@@ -28,16 +28,7 @@
  </form>
  <br/>
  <hr/>
-  <table id="dg" class="easyui-datagrid" title="订单明细" style="width:auto;height:auto"
-			data-options="
-                rownumbers:true,
-				iconCls: 'icon-edit',
-				singleSelect: true,
-				toolbar: '#tb',
-				url: contextPath+'/order/detail/get?o_id='+${curoId},
-				method: 'get',
-				onClickRow: onClickRow
-			">
+  <table id="dg" title="订单明细" style="width:auto;height:auto">
 		<thead>
 			<tr>
               <th data-options="field:'sId',width:240,
@@ -49,17 +40,19 @@
 							type:'combobox',
 							options:{
 				                onChange:function(newValue, oldValue){
-                          console.log('newValue:'+newValue + ' oldValue:'+oldValue);
+                                console.log('newValue:'+newValue + ' oldValue:'+oldValue);
 				                  if(newValue==undefined) {
 				                    newValue='';
 				                  }
 				                  var comboboxData;
 				                  var url = contextPath + '/goods/getNameJson?sId=' + newValue;
-				                  var ed = $('#dg' ).datagrid( 'getEditor',{index:currentIndex,field: 'gId' });
+				                  var ed = $('#dg').datagrid('getEditor',{index:currentIndex,field: 'gId' });
 				                  $.ajax({
+				                       cache:true,
                                        url:url,
                                        dataType : 'json',
                                        type : 'POST',
+                                       async:true,
                                        success: function (data){
                                             comboboxData = eval(data.value);
                                             $(ed.target).combobox( 'loadData' , comboboxData);
@@ -86,14 +79,14 @@
 								required:true
 							}
 						}">产品名称</th>
-        <th data-options="field:'retailPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">零售价</th>
-        <th data-options="field:'unitPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">单价</th>
-        <th data-options="field:'amountNet',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">净额</th>
-        <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox',options:{required:true}}">数量</th>
-        <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2,required:true}}">金额</th>
-        <th data-options="field:'code',width:92,editor:'textbox'">条码</th>
-        <th data-options="field:'remarks',width:220,editor:'textbox'">备注</th>
-        <th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">操作</th>
+            <th data-options="field:'retailPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">零售价</th>
+            <th data-options="field:'unitPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">单价</th>
+            <th data-options="field:'amountNet',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">净额</th>
+            <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox',options:{required:true}}">数量</th>
+            <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2,required:true}}">金额</th>
+            <th data-options="field:'code',width:92,editor:'textbox'">条码</th>
+            <th data-options="field:'remarks',width:220,editor:'textbox'">备注</th>
+            <th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">操作</th>
 			</tr>
 		</thead>
 	</table>
@@ -107,6 +100,16 @@
 	</div>
 
 <script type="text/javascript">
+  $('#dg').datagrid({
+      rownumbers:true,
+      iconCls: 'icon-edit',
+      singleSelect: true,
+      toolbar: '#tb',
+      url: contextPath+'/order/detail/get?o_id='+${curoId},
+      method: 'get',
+      onClickRow: onClickRow
+  });
+  
   $(document).ready(function() {
 		var sNameSuggest = $("#oId").bsSuggest({
 			url : contextPath + '/order/detail/getAlloId?oId=',

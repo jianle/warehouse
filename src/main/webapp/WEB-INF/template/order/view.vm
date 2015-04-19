@@ -133,9 +133,8 @@
        $('#dg').datagrid('getPager')
          .pagination({
             total: ${paginations.totalRows},
-            pageSize: ${paginations.numPerPage},
+            pageSize: ${paginations.numPerPage},//每页显示的记录条数，默认为15
             pageNumber:${paginations.currentPage},
-            pageSize: 15, //每页显示的记录条数，默认为10
             pageList: [10, 15, 20, 25], //可以设置每页记录条数的列表
             beforePageText: '第 ',//页数文本框前显示的汉字
             afterPageText: '页    共 {pages} 页',

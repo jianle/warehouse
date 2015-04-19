@@ -144,11 +144,7 @@ public class OrderController {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/order/detail");
         logger.info("RequestMapping :/order/detail");
-        
-        JSONArray orderDetails = JSONArray.fromObject(orderDetailDao.findByOId(oId));
-        modelView.addObject("orderDetails", orderDetails);
         modelView.addObject("curoId", oId);
-        
         return modelView;
     }
     
@@ -170,7 +166,7 @@ public class OrderController {
         
         JSONArray result = new JSONArray();
         result = JSONArray.fromObject(orderDetailDao.findByOId(oId));
-        logger.info(result.toString());
+        logger.info("RequestMapping:order/detail/get?oId=" + oId);
         return result;
     }
     
