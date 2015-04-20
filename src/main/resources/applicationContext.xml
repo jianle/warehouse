@@ -23,7 +23,11 @@
 	<context:annotation-config />
 	
 	<!-- 使用 annotation 自动注册bean,并检查@Controller, @Service, @Repository注解已被注入 -->
-	<context:component-scan base-package="com.wms" />
+	<context:component-scan base-package="com.wms.job" />
+	<context:component-scan base-package="com.wms.task" />
+    <context:component-scan base-package="com.wms.form.model" />
+    <context:component-scan base-package="com.wms.model" />
+
 	
       <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -43,4 +47,35 @@
       
       <context:property-placeholder location="classpath:application.properties"/>
       
+      
+      <!-- quartz -->
+      <bean id="grabInfoTask" class="com.wms.task.GrabInfoTask" />
+      
+      <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	    <property name="targetObject" ref="grabInfoTask"/>
+	    <property name="targetMethod" value="sayHello"/>
+	  </bean>
+	  
+      <bean name="quartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="com.wms.job.QuartzJob" />
+        <property name="jobDataAsMap">
+          <map>
+            <entry key="grabInfoTask" value-ref="grabInfoTask" />
+          </map>
+        </property>
+      </bean>
+      
+      
+      <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="quartzJob" />
+        <property name="cronExpression" value="* */1 * * * ?" />
+      </bean>
+      
+      <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="cronTrigger" />
+            </list>
+        </property>
+      </bean>
 </beans>
