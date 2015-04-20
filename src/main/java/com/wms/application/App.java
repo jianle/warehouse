@@ -9,7 +9,7 @@ public class App {
     public static void main(String[] args) throws InterruptedException {
         ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         
-        Thread.sleep(30000);
+        //Thread.sleep(30000);
         context.close();
     }
 
