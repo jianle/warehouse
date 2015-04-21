@@ -22,7 +22,7 @@ public class GrabInfoTask {
     private OrderinfoDao orderinfoDao;
     
     public void execute() {
-        System.out.println(orderinfoDao.get((long) 1).toString());
+        //System.out.println(orderinfoDao.get((long) 1).toString());
         System.out.println("-------- Quartz running the job. --------");
     }
 

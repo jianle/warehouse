@@ -32,7 +32,7 @@ CREATE TABLE `goods` (
   PRIMARY KEY (`g_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 comment '商品信息表'
 ;
-alter table goods add index `g_id_index` `g_id`;
+alter table goods add index `g_id_index` (`g_id`);
 
 CREATE TABLE supplier(
   `s_id` bigint(20) not null AUTO_INCREMENT comment '供应商自增id',
@@ -109,7 +109,7 @@ CREATE TABLE `orderinfo` (
   `amount_discount` double(10,2) not null default 0.0 comment '折扣金额',
   `amount_payable` double(10,2) not null default 0.0 comment '应付金额',
   `amount_net` double(10,2) not null default 0.0 comment '净额',
-  `status` smallint(3) not null default 0 comment '订单状态',
+  `status` smallint(3) not null default 0 comment '订单状态 0-新增、1-已配货、2-已验货、3-已出库、4-已完成、',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`o_id`)
