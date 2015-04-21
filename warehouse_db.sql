@@ -133,7 +133,7 @@ CREATE TABLE `order_detail` (
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`od_id`),
   index `o_id_index` (`o_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表明细'
 ;
 
 

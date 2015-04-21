@@ -1,0 +1,115 @@
+#set($title="配送出库")
+
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/css/delivery/view.css')">
+<script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
+<script type="text/javascript" src="#springUrl('/static/js/delivery/view.js')"></script>
+<script src="#springUrl('/static/js/bootstrap-suggest.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<div>
+<form class="form-horizontal" id="formoId" action="#springUrl('/order/detail/')" style="padding-top:10px;">
+ <div class="row">
+    <label for="oId" class="control-label" style="padding-left:15px;float:left" >订单编号</label>
+    <div class="col-lg-2">
+       <div class="input-group">
+           <input type="text" class="form-control" id="oId" name="oId" value="${oId}" />
+           <div class="input-group-btn">
+               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                   <span class="caret"></span>
+               </button>
+               <ul class="dropdown-menu dropdown-menu-right" role="menu">
+               </ul>
+           </div>
+       </div>
+   </div>
+ </form>
+</div>
+ <hr/>
+    <table id="dg" title="订单出库" style="width:auto;height:auto">
+        <thead>
+            <tr>
+              <th field="expressId"       width="130px">快递单号</th>
+              <th field="expressName"     width="300px">快递公司</th>
+              <th field="weight"          width="60px">重(g)</th>
+              <th field="length"          width="60px">长(mm)</th>
+              <th field="wide"            width="60px">宽(mm)</th>
+              <th field="high"            width="60px">高(mm)</th>
+              <th field="remarks"         width="210px">备注</th>
+              <th field="status" align="center" width="60px">状态信息</th>
+              <th field="updateTime"      width="150px">最新更新</th>
+            </tr>
+        </thead>
+    </table>
+    <div id="toolbar">
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">新增</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">编辑</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroy()">删除</a>
+    </div>
+    
+    <div id="dlg" class="easyui-dialog" style="width:500px;height:320px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">快递单</div>
+            <form id="fm" method="post" novalidate>
+                <input name="oId" type="hidden" />
+                <div class="fitem">
+                    <label>快递单号:</label>
+                    <input name="expressId" class="easyui-textbox" required="true" />
+                </div>
+                <div class="fitem">
+                    <label>快递公司:</label>
+                    <input style="width:300px" name="expressName" id="expressName" class="easyui-textbox" required="true"/>
+                </div>
+                <div class="fitem">
+                    <label>重(g):</label>
+                    <input name="weight" id="weight" style="width:105px" class="easyui-textbox" />
+                    <label style="padding-left:20px;">长(mm):</label>
+                    <input name="length" id="length" style="width:108px" class="easyui-numberbox"/>
+                </div>
+                <div class="fitem">
+                    <label>宽(mm):</label>
+                    <input name="wide" id="wide" style="width:105px" class="easyui-textbox" />
+                    <label style="padding-left:20px;">高(mm):</label>
+                    <input name="high" id="high" style="width:108px" class="easyui-numberbox" />
+                </div>
+                <div class="fitem">
+                    <label>备注信息:</label>
+                    <input style="width:300px" name="remarks" class="easyui-textbox" />
+                </div>
+                
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+      </div>
+    
+<script type="text/javascript">    
+  $('#dg').datagrid({
+      rownumbers:true,
+      singleSelect: true,
+      toolbar: '#toolbar',
+      method: 'get',
+      url: contextPath+'/order/detail/get?o_id=',
+  });  
+  
+  $(document).ready(function() {
+        var sNameSuggest = $("#oId").bsSuggest({
+            url : contextPath + '/order/detail/getAlloId?oId=',
+            idField : "oId",
+            keyField : "oId",
+            listAlign : "auto"
+        }).on('onDataRequestSuccess', function(e, result) {
+            // console.log('onDataRequestSuccess: ', result);
+        }).on('onSetSelectValue', function(e, keyword) {
+            // console.log('onSetSelectValue: ', keyword);
+            console.log(keyword.id);
+            $('.modal-body #oId').val(keyword.id);
+            document.getElementById("formoId").submit();
+        }).on('onUnsetSelectValue', function(e) {
+            // console.log("onUnsetSelectValue");
+        });
+    });
+</script>    
