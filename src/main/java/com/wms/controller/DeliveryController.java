@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.DeliveryDao;
+import com.wms.dao.OrderinfoDao;
 import com.wms.model.Delivery;
 
 @Controller
@@ -29,16 +30,24 @@ public class DeliveryController {
     @Autowired
     private DeliveryDao deliveryDao;
     
+    @Autowired
+    private OrderinfoDao orderinfoDao;
+    
     @RequestMapping("")
     public ModelAndView view(@RequestParam(value="oId",defaultValue="0") Long oId) {
         ModelAndView modelView = new ModelAndView("/delivery/view");
-        logger.info("RequestMapping:/delivery/vie ");
+        logger.info("RequestMapping:/delivery/view");
+        
+        if (oId == 0) {
+            oId = orderinfoDao.getMiniId();
+        }
         
         modelView.addObject("oId", oId);
         return modelView;
     }
     
     @RequestMapping("getByoId")
+    @ResponseBody
     public JSONArray getDeliverysByoId(@RequestParam(value="oId",defaultValue="0") Long oId) {
         JSONArray jsonArray = new JSONArray();
         try {

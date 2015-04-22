@@ -10,12 +10,12 @@
   var contextPath = '#springUrl('')';
 </script>
 <div>
-<form class="form-horizontal" id="formoId" action="#springUrl('/order/detail/')" style="padding-top:10px;">
+<form class="form-horizontal" id="formoId" style="padding-top:10px;">
  <div class="row">
     <label for="oId" class="control-label" style="padding-left:15px;float:left" >订单编号</label>
     <div class="col-lg-2">
        <div class="input-group">
-           <input type="text" class="form-control" id="curoId" name="curoId" />
+           <input type="text" class="form-control" id="curoId" value="${oId}" name="curoId" />
            <div class="input-group-btn">
                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                    <span class="caret"></span>
@@ -93,8 +93,9 @@
       toolbar: '#toolbar',
       method: 'get',
       url: contextPath+'/delivery/getByoId',
+      queryParams:{oId:${oId}},
   });  
-  
+    
   $(document).ready(function() {
         var sNameSuggest = $("#curoId").bsSuggest({
             url : contextPath + '/order/detail/getAlloId?oId=',
@@ -104,11 +105,8 @@
         }).on('onDataRequestSuccess', function(e, result) {
             // console.log('onDataRequestSuccess: ', result);
         }).on('onSetSelectValue', function(e, keyword) {
-            // console.log('onSetSelectValue: ', keyword);
-            console.log(keyword.id);
             $('#curoId').val(keyword.id);
-            $('#oId').val(keyword.id);
-            //document.getElementById("formoId").submit();
+            $('#dg').datagrid('reload', {oId:keyword.id});
         }).on('onUnsetSelectValue', function(e) {
             // console.log("onUnsetSelectValue");
         });

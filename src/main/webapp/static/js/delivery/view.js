@@ -4,6 +4,7 @@ var url;
 function add(){
     $('#dlg').dialog('open').dialog('setTitle','新增');
     $('#fm').form('clear');
+    $('#oId').val($('#curoId').val());
     $('#expressName').textbox('setValue', '中通快递');
     $('#weight').textbox('setValue', '0');
     $('#length').textbox('setValue', '0');
@@ -25,6 +26,10 @@ function edit(){
 
 
 function save(){
+	var oIdflag = $('#oId').val();
+	if(oIdflag) {
+		
+	}
 	$('#fm').form('submit',{
 		url: url,
 		onSubmit: function(){
@@ -35,10 +40,10 @@ function save(){
         	var result = eval('('+data+')');
             if (result){
             	$('#dlg').dialog('close');       // close the dialog
-                $('#dg').datagrid('reload');     // reload the user data
-                $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
-					console.log('ok');
-					window.location.href=contextPath + '/delivery';
+                $('#dg').datagrid('reload', {oId:$('#oId').val()});     // reload the user data
+                $.messager.show({
+                    title: '提示信息',
+                    msg: '操作成功'
                 });
             } else {
             	$.messager.show({
@@ -47,6 +52,31 @@ function save(){
                 });
             }
         }
-	});
-         
+	});   
 }
+
+function destroy(){
+    var row = $('#dg').datagrid('getSelected');
+    if (row){
+        $.messager.confirm('提示','确认是否要删除?',function(r){
+            if (r){
+                $.post(contextPath+'/delivery/delete',{dId:row.dId},function(data){
+                	var result = eval('('+data+')');
+                    if (result){
+                    	$.messager.show({    // show error message
+                            title: '提示',
+                            msg: '删除成功！'
+                        });
+                        $('#dg').datagrid('reload', {oId:$('#oId').val()});    // reload the user data
+                    } else {
+                        $.messager.show({    // show error message
+                            title: '提示',
+                            msg: '删除失败'
+                        });
+                    }
+                },'json');
+            }
+        });
+    }
+}
+

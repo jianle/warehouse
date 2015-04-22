@@ -43,6 +43,18 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
         }
         return null;
     }
+    
+    @SuppressWarnings("deprecation")
+    public Long getMiniId(){
+        try {
+            String sql = "SELECT min(o_id) oId FROM " + TABLE_NAME;
+            return jdbcTemplate.queryForLong(sql);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("get MiniId faield." + e);
+            return (long) 0;
+        }
+    }
 
     @Override
     public Boolean save(Orderinfo object) {
