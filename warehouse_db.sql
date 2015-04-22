@@ -136,4 +136,20 @@ CREATE TABLE `order_detail` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表明细'
 ;
 
+CREATE TABLE `delivery` (
+  `d_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
+  `o_id` bigint(20) NOT NULL default 0 comment '订单id',
+  `express_id` varchar(64) not null default '' comment '快递单号',
+  `express_name` varchar(256) not null default '' comment '快递名称(公司)',
+  `weight` int(10) not null default 0 comment '重(g)',
+  `length` int(10) not null default 0 comment '长(mm)',
+  `wide`   int(10) not null default 0 comment '宽(mm)',
+  `high`   int(10) not null default 0 comment '高(mm)',
+  `remarks` varchar(1000) not null default '' comment '备注',
+  `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
+  `update_time` timestamp null on update current_timestamp comment '最近一次更新',
+  PRIMARY KEY (`d_id`),
+  index `o_id_index` (`o_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单出库'
+;
 
