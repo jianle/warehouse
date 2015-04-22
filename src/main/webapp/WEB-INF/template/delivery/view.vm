@@ -12,10 +12,10 @@
 <div>
 <form class="form-horizontal" id="formoId" style="padding-top:10px;">
  <div class="row">
-    <label for="oId" class="control-label" style="padding-left:15px;float:left" >订单编号</label>
+    <label for="oId" class="control-label" action="#springUrl('/delivery')" style="padding-left:15px;float:left" >订单编号</label>
     <div class="col-lg-2">
        <div class="input-group">
-           <input type="text" class="form-control" id="curoId" value="${oId}" name="curoId" />
+           <input type="text" class="form-control" id="curoId" value="${oId}" name="oId" />
            <div class="input-group-btn">
                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                    <span class="caret"></span>
@@ -54,6 +54,7 @@
         <div class="ftitle">快递单</div>
             <form id="fm" method="post" novalidate>
                 <input name="oId" id="oId" value="${oId}" type="hidden" />
+                <input name="dId" id="dId" type="hidden" />
                 <div class="fitem">
                     <label>快递单号:</label>
                     <input name="expressId" class="easyui-textbox" required="true" />
@@ -64,15 +65,15 @@
                 </div>
                 <div class="fitem">
                     <label>重(g):</label>
-                    <input name="weight" id="weight" style="width:105px" class="easyui-textbox" />
+                    <input name="weight" id="weight" style="width:105px" class="easyui-textbox" required="true"/>
                     <label style="padding-left:20px;">长(mm):</label>
-                    <input name="length" id="length" style="width:108px" class="easyui-numberbox"/>
+                    <input name="length" id="length" style="width:108px" class="easyui-numberbox" required="true"/>
                 </div>
                 <div class="fitem">
                     <label>宽(mm):</label>
-                    <input name="wide" id="wide" style="width:105px" class="easyui-textbox" />
+                    <input name="wide" id="wide" style="width:105px" class="easyui-textbox" required="true"/>
                     <label style="padding-left:20px;">高(mm):</label>
-                    <input name="high" id="high" style="width:108px" class="easyui-numberbox" />
+                    <input name="high" id="high" style="width:108px" class="easyui-numberbox" required="true" />
                 </div>
                 <div class="fitem">
                     <label>备注信息:</label>

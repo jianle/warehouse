@@ -20,6 +20,7 @@ function edit(){
         $('#dlg').dialog('open').dialog('setTitle','修改');
         $('#fm').form('clear');
         $('#fm').form('load',row);
+        $('#dId').val(row.dId);
         url = contextPath + '/delivery/update';
     }
 }
@@ -40,7 +41,7 @@ function save(){
         	var result = eval('('+data+')');
             if (result){
             	$('#dlg').dialog('close');       // close the dialog
-                $('#dg').datagrid('reload', {oId:$('#oId').val()});     // reload the user data
+                $('#dg').datagrid('reload', {oId:$('#curoId').val()});     // reload the user data
                 $.messager.show({
                     title: '提示信息',
                     msg: '操作成功'
@@ -67,7 +68,7 @@ function destroy(){
                             title: '提示',
                             msg: '删除成功！'
                         });
-                        $('#dg').datagrid('reload', {oId:$('#oId').val()});    // reload the user data
+                        $('#dg').datagrid('reload', {oId:$('#curoId').val()});    // reload the user data
                     } else {
                         $.messager.show({    // show error message
                             title: '提示',
