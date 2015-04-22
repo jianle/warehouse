@@ -95,6 +95,13 @@ public class Delivery {
         this.updateTime = updateTime;
     }
     
-    
+    @Override
+    public String toString() {
+        return "Delivery [dId=" + dId + ", oId=" + oId + ", expressId="
+                + expressId + ", expressName=" + expressName + ", weight="
+                + weight + ", length=" + length + ", wide=" + wide + ", high="
+                + high + ", remarks=" + remarks + ", status=" + status
+                + ", insertDt=" + insertDt + ", updateTime=" + updateTime + "]";
+    }
     
 }

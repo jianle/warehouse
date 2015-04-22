@@ -9,7 +9,7 @@ function add(){
     $('#length').textbox('setValue', '0');
     $('#wide').textbox('setValue', '0');
     $('#high').textbox('setValue', '0');
-    url = contextPath + '/order/save';
+    url = contextPath + '/delivery/save';
 }
 
 function edit(){
@@ -19,6 +19,34 @@ function edit(){
         $('#dlg').dialog('open').dialog('setTitle','修改');
         $('#fm').form('clear');
         $('#fm').form('load',row);
-        url = contextPath + '/order/update';
+        url = contextPath + '/delivery/update';
     }
+}
+
+
+function save(){
+	$('#fm').form('submit',{
+		url: url,
+		onSubmit: function(){
+            return $(this).form('validate');
+        },
+        dataType:'json',
+        success: function(data){
+        	var result = eval('('+data+')');
+            if (result){
+            	$('#dlg').dialog('close');       // close the dialog
+                $('#dg').datagrid('reload');     // reload the user data
+                $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
+					console.log('ok');
+					window.location.href=contextPath + '/delivery';
+                });
+            } else {
+            	$.messager.show({
+                    title: '提示信息',
+                    msg: '操作失败'
+                });
+            }
+        }
+	});
+         
 }

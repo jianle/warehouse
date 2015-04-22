@@ -84,6 +84,17 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
         return null;
     }
     
+    public Boolean delete(Long dId){
+        try {
+            String sql = "DELETE FROM " + TABLE_NAME + " WHERE d_id=? ";
+            return jdbcTemplate.update(sql, dId) > 0;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.info("delete by dId-" + dId + " failed." + e);
+        }
+        return false;
+    }
+    
     public Boolean update(Delivery object) {
         
         try {

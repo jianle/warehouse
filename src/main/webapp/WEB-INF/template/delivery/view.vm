@@ -15,7 +15,7 @@
     <label for="oId" class="control-label" style="padding-left:15px;float:left" >订单编号</label>
     <div class="col-lg-2">
        <div class="input-group">
-           <input type="text" class="form-control" id="oId" name="oId" value="${oId}" />
+           <input type="text" class="form-control" id="curoId" name="curoId" />
            <div class="input-group-btn">
                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                    <span class="caret"></span>
@@ -53,7 +53,7 @@
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">快递单</div>
             <form id="fm" method="post" novalidate>
-                <input name="oId" type="hidden" />
+                <input name="oId" id="oId" value="${oId}" type="hidden" />
                 <div class="fitem">
                     <label>快递单号:</label>
                     <input name="expressId" class="easyui-textbox" required="true" />
@@ -92,11 +92,11 @@
       singleSelect: true,
       toolbar: '#toolbar',
       method: 'get',
-      url: contextPath+'/order/detail/get?o_id=',
+      url: contextPath+'/delivery/getByoId',
   });  
   
   $(document).ready(function() {
-        var sNameSuggest = $("#oId").bsSuggest({
+        var sNameSuggest = $("#curoId").bsSuggest({
             url : contextPath + '/order/detail/getAlloId?oId=',
             idField : "oId",
             keyField : "oId",
@@ -106,8 +106,9 @@
         }).on('onSetSelectValue', function(e, keyword) {
             // console.log('onSetSelectValue: ', keyword);
             console.log(keyword.id);
-            $('.modal-body #oId').val(keyword.id);
-            document.getElementById("formoId").submit();
+            $('#curoId').val(keyword.id);
+            $('#oId').val(keyword.id);
+            //document.getElementById("formoId").submit();
         }).on('onUnsetSelectValue', function(e) {
             // console.log("onUnsetSelectValue");
         });
