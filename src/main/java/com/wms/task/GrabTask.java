@@ -10,9 +10,9 @@ import com.wms.dao.OrderinfoDao;
 
 @Component
 @Scope("prototype")
-public class GrabInfoTask {
+public class GrabTask {
     
-    private Logger logger = LoggerFactory.getLogger(GrabInfoTask.class);
+    private Logger logger = LoggerFactory.getLogger(GrabTask.class);
     
     public void sayHello() {
         logger.info("Hello !!!");
@@ -25,5 +25,8 @@ public class GrabInfoTask {
         //System.out.println(orderinfoDao.get((long) 1).toString());
         System.out.println("-------- Quartz running the job. --------");
     }
+    
+    
+    
 
 }

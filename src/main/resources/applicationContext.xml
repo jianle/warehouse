@@ -50,7 +50,7 @@
       
       
       <!-- quartz -->
-      <bean id="grabInfoTask" class="com.wms.task.GrabInfoTask" />
+      <bean id="grabInfoTask" class="com.wms.task.GrabTask" />
       
       <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 	    <property name="targetObject" ref="grabInfoTask"/>

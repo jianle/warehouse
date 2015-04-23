@@ -6,15 +6,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import com.wms.task.GrabInfoTask;
+import com.wms.task.GrabTask;
 
 public class QuartzJob extends QuartzJobBean {
     
     private Logger logger = LoggerFactory.getLogger(QuartzJob.class);
     
-    private GrabInfoTask grabInfoTask;
+    private GrabTask grabInfoTask;
     
-    public void setGrabInfoTask(GrabInfoTask grabInfoTask) {
+    public void setGrabInfoTask(GrabTask grabInfoTask) {
         this.grabInfoTask = grabInfoTask;
     }
 
