@@ -52,7 +52,10 @@ public class QuartzJob extends QuartzJobBean {
             return;
         }
         List<Map<String, Object>> list = deliveryDao.getAllContent();
-        System.out.println(list.toString());
+        if (list == null) {
+            logger.debug("Not find content.");
+            return ;
+        }
         for (int i = 0; i < list.size(); i++) {
             pool.execute(new GrabTask(deliveryDetailDao, String.valueOf(list.get(i).get("content"))));
         }

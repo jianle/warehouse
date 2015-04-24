@@ -81,3 +81,6 @@ function destroy(){
     }
 }
 
+function jumpDetail(val,row,index){
+    return '<a href="'+contextPath+'/delivery/detail?content='+row.expressId+'" target="_blank">'+row.expressId+'</a>';
+  }

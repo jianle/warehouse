@@ -105,7 +105,7 @@ public class DeliveryDetailDao implements BaseDao<DeliveryDetail, Long>{
     
     public List<DeliveryDetail> findByContent(String content){
         try {
-            String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where content=? ";
+            String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where content=? order by accept_time DESC ";
             return jdbcTemplate.query(sql, rowMapper, content);
         } catch (Exception e) {
             // TODO: handle exception
@@ -136,7 +136,7 @@ public class DeliveryDetailDao implements BaseDao<DeliveryDetail, Long>{
             deliveryDetail.setDdId(rs.getLong("dd_id"));
             deliveryDetail.setContent(rs.getString("content"));
             deliveryDetail.setAcceptAddress(rs.getString("accept_address"));
-            deliveryDetail.setAcceptTime(String.valueOf(rs.getTimestamp("accept_time")));
+            deliveryDetail.setAcceptTime(rs.getString("accept_time"));
             deliveryDetail.setRemark(rs.getString("remark"));
             
             return deliveryDetail;

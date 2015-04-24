@@ -1,6 +1,7 @@
 package com.wms.controller;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -13,13 +14,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.DeliveryDao;
+import com.wms.dao.DeliveryDetailDao;
 import com.wms.dao.OrderinfoDao;
 import com.wms.model.Delivery;
+import com.wms.model.DeliveryDetail;
+import com.wms.task.GrabTask;
 
 @Controller
 @RequestMapping("/delivery")
@@ -29,6 +34,9 @@ public class DeliveryController {
     
     @Autowired
     private DeliveryDao deliveryDao;
+    
+    @Autowired
+    private DeliveryDetailDao deliveryDetailDao;
     
     @Autowired
     private OrderinfoDao orderinfoDao;
@@ -106,6 +114,40 @@ public class DeliveryController {
         }
         jsonTuple.put("value", result);
         return String.valueOf(result);
+    }
+    
+    @RequestMapping(value="detail", method=RequestMethod.GET)
+    public ModelAndView detailView(@RequestParam(value="content",defaultValue="") String content) {
+        ModelAndView modelView = new ModelAndView("/delivery/detail");
+        logger.info("RequestMapping:/delivery/detail");
+        List<DeliveryDetail> details = deliveryDetailDao.findByContent(content);
+        
+        modelView.addObject("details", details);
+        modelView.addObject("content", content);
+        return modelView;
+    }
+    
+    @RequestMapping(value="detail", method=RequestMethod.POST)
+    public ModelAndView detailViewNow(@RequestParam(value="content",defaultValue="") String content) {
+        ModelAndView modelView = new ModelAndView("/delivery/detail");
+        logger.info("RequestMapping:/delivery/detail POST");
+        
+        GrabTask grabTask = new GrabTask(deliveryDetailDao, content);
+        
+        grabTask.execute(content);
+        
+        try {
+            Thread.sleep(1L);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        List<DeliveryDetail> details = deliveryDetailDao.findByContent(content);
+        
+        modelView.addObject("details", details);
+        modelView.addObject("content", content);
+        return modelView;
     }
 
 }

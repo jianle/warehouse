@@ -31,7 +31,7 @@
     <table id="dg" title="订单出库" style="width:auto;height:auto">
         <thead>
             <tr>
-              <th field="expressId"       width="130px">快递单号</th>
+              <th field="expressId"  formatter="jumpDetail" width="130px">快递单号</th>
               <th field="expressName"     width="300px">快递公司</th>
               <th field="weight"          width="60px">重(g)</th>
               <th field="length"          width="60px">长(mm)</th>
@@ -48,7 +48,7 @@
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">编辑</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroy()">删除</a>
     </div>
-    
+
     <div id="dlg" class="easyui-dialog" style="width:500px;height:320px;padding:10px 20px"
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">快递单</div>
@@ -79,15 +79,16 @@
                     <label>备注信息:</label>
                     <input style="width:300px" name="remarks" class="easyui-textbox" />
                 </div>
-                
+
             </form>
       </div>
       <div id="dlg-buttons">
           <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
           <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
       </div>
-    
-<script type="text/javascript">    
+     
+
+<script type="text/javascript">
   $('#dg').datagrid({
       rownumbers:true,
       singleSelect: true,
@@ -95,8 +96,8 @@
       method: 'get',
       url: contextPath+'/delivery/getByoId',
       queryParams:{oId:${oId}},
-  });  
-    
+  });
+
   $(document).ready(function() {
         var sNameSuggest = $("#curoId").bsSuggest({
             url : contextPath + '/order/detail/getAlloId?oId=',
@@ -112,4 +113,4 @@
             // console.log("onUnsetSelectValue");
         });
     });
-</script>    
+</script>
