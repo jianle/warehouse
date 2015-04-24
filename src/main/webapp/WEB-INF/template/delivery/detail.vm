@@ -1,4 +1,4 @@
-
+#set($title="快递详情")
 
 <div class="row">
   <div class="col-md-12">
@@ -14,7 +14,7 @@
 <table class="table table-hover">
   <thead>
       <tr>
-        <th style="width:2px;"></th>
+        <th style="width:45px;"></th>
         <th style="width:100px">时间</th>
         <th style="width:600px">信息</th>
       </tr>
@@ -24,7 +24,7 @@
      #if($num==1)
      #set($num = 2)
      <tr style="color:red;height:50px">
-       <th><li/>[最新]</th>
+       <th><li>[最新]</li></th>
        <td>${detail.acceptTime}</td>
        <td><b>[</b> ${detail.acceptAddress} <b>]</b> &nbsp; ${detail.remark}</td>
      </tr>

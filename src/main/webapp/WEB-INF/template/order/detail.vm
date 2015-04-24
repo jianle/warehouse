@@ -1,4 +1,4 @@
-#set($title="订单信息")
+#set($title="订单明细")
 
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
