@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.wms.dao.DeliveryDetailDao;
-import com.wms.model.DeliveryDetail;
 
 @Component
 public class GrabTask implements Runnable {
@@ -59,24 +58,10 @@ public class GrabTask implements Runnable {
             e.printStackTrace();
         }
         if (jsonArray.size()>0) {
-            operation(content, jsonArray);
+            logger.info("Has find the content:" + content);
+            deliveryDetailDao.deleteByContent(content);
+            deliveryDetailDao.saveBatch(content, jsonArray);
         };
-    }
-    
-    private void operation(String content, JSONArray jsonArray) {
-        if (deliveryDetailDao == null) {
-            logger.info("deliveryDetailDao is null");
-            return;
-        }
-        deliveryDetailDao.deleteByContent(content);
-        DeliveryDetail deliveryDetail = null;
-        JSONObject jsonObject = new JSONObject();
-        for (int i = 0; i < jsonArray.size(); i++) {
-            jsonObject = JSONObject.fromObject(jsonArray.get(i));
-            deliveryDetail = new DeliveryDetail(content, jsonObject.getString("acceptAddress")
-                    , jsonObject.getString("acceptTime"), jsonObject.getString("remark"));
-            deliveryDetailDao.save(deliveryDetail);
-        }
     }
     
 }

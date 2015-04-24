@@ -1,14 +1,19 @@
 package com.wms.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -61,6 +66,37 @@ public class DeliveryDetailDao implements BaseDao<DeliveryDetail, Long>{
         }
         return false;
     }
+    
+    public Boolean saveBatch(String content, JSONArray jsonArray) {
+        try {
+            String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
+                    + ") VALUES (?, ?, ?, ?)";
+            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter(){
+
+                @Override
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    // TODO Auto-generated method stub
+                    JSONObject jsonObject = JSONObject.fromObject(jsonArray.get(i));
+                    ps.setString(1, content);
+                    ps.setString(2, jsonObject.getString("acceptAddress"));
+                    ps.setString(3, jsonObject.getString("acceptTime"));
+                    ps.setString(4, jsonObject.getString("remark"));
+                    
+                }
+
+                @Override
+                public int getBatchSize() {
+                    // TODO Auto-generated method stub
+                    return jsonArray.size();
+                }});
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return false;
+    }
+    
     @Override
     public List<DeliveryDetail> findAll() {
         // TODO Auto-generated method stub
