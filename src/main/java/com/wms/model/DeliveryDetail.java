@@ -7,6 +7,17 @@ public class DeliveryDetail {
     private String acceptAddress;
     private String acceptTime;
     private String remark;
+    
+    public DeliveryDetail() {
+        // TODO Auto-generated constructor stub
+    }
+    public DeliveryDetail(String content, String acceptAddress, String acceptTime, String remark) {
+        // TODO Auto-generated constructor stub
+        this.content = content;
+        this.acceptAddress = acceptAddress;
+        this.acceptTime = acceptTime;
+        this.remark = remark;
+    }
     public Long getDdId() {
         return ddId;
     }

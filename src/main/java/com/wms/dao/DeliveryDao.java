@@ -3,6 +3,7 @@ package com.wms.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,18 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("findByoId faield ." + e);
+        }
+        return null;
+    }
+    
+    public List<Map<String, Object>> getAllContent() {
+        try {
+            String sql = "select express_id content from " + TABLE_NAME ;
+            logger.info(sql);
+            return jdbcTemplate.queryForList(sql);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.info("get all conteng failed." + e);
         }
         return null;
     }

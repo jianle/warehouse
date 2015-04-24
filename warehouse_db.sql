@@ -153,3 +153,13 @@ CREATE TABLE `delivery` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单出库'
 ;
 
+CREATE TABLE `delivery_detail` (
+  `dd_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
+  `content` varchar(64) not null default '' comment '快递单号',
+  `accept_address` varchar(640) not null default '' comment '接收地址',
+  `accept_time` datetime not null DEFAULT '1900-01-01 00:00:00' comment '接收日期',
+  `remark` varchar(1000) not null default '' comment '备注',
+  PRIMARY KEY (`dd_id`),
+  index `content_index` (`content`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '快递详情'
+;

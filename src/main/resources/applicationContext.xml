@@ -50,18 +50,17 @@
       
       
       <!-- quartz -->
-      <bean id="grabInfoTask" class="com.wms.task.GrabTask" />
       
-      <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-	    <property name="targetObject" ref="grabInfoTask"/>
-	    <property name="targetMethod" value="execute"/>
-	  </bean>
-	  
+      <bean name="deliveryDao" class="com.wms.dao.DeliveryDao"/>
+      <bean name="deliveryDetailDao" class="com.wms.dao.DeliveryDetailDao"/>
+
       <bean name="quartzJob" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="com.wms.job.QuartzJob" />
         <property name="jobDataAsMap">
           <map>
-            <entry key="grabInfoTask" value-ref="grabInfoTask" />
+            <entry key="maxThreadNum" value="20" />
+            <entry key="deliveryDao"  value-ref="deliveryDao" />
+            <entry key="deliveryDetailDao"  value-ref="deliveryDetailDao" />
           </map>
         </property>
       </bean>
@@ -69,7 +68,7 @@
       
       <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="quartzJob" />
-        <property name="cronExpression" value="0 0 22 * * ?" />
+        <property name="cronExpression" value="0 0/3 * * * ?" />
       </bean>
       
       <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
