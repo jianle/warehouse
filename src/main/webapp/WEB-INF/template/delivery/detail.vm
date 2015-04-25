@@ -15,7 +15,7 @@
   <thead>
       <tr>
         <th style="width:45px;"></th>
-        <th style="width:100px">时间</th>
+        <th style="width:120px">时间</th>
         <th style="width:600px">信息</th>
       </tr>
     </thead>
