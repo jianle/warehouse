@@ -10,9 +10,9 @@
   var contextPath = '#springUrl('')';
 </script>
 <div>
-<form class="form-horizontal" id="formoId" style="padding-top:10px;">
+<form class="form-horizontal" action="#springUrl('/delivery')" method="get" style="padding-top:10px;">
  <div class="row">
-    <label for="oId" class="control-label" action="#springUrl('/delivery')" style="padding-left:15px;float:left" >订单编号</label>
+    <label for="oId" class="control-label" style="padding-left:15px;float:left" >订单编号</label>
     <div class="col-lg-2">
        <div class="input-group">
            <input type="text" class="form-control" id="curoId" value="${oId}" name="oId" />
@@ -26,8 +26,11 @@
        </div>
    </div>
  </form>
+ <div style="padding-right:15px;float:right">
+     <input onclick="formsubmit()" style="width:100px" class="btn btn-success pull-right" value="一键出库"/>
+ </div>
 </div>
- <hr/>
+ <hr style="margin-top:5px"/>
     <table id="dg" title="订单出库" style="width:auto;height:auto">
         <thead>
             <tr>
@@ -38,7 +41,7 @@
               <th field="wide"            width="60px">宽(mm)</th>
               <th field="high"            width="60px">高(mm)</th>
               <th field="remarks"         width="210px">备注</th>
-              <th field="status" align="center" width="60px">状态信息</th>
+              <th field="status" align="center" formatter="formatterStatus" width="60px">状态信息</th>
               <th field="updateTime"      width="150px">最新更新</th>
             </tr>
         </thead>
@@ -86,7 +89,7 @@
           <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
           <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
       </div>
-     
+
 
 <script type="text/javascript">
   $('#dg').datagrid({

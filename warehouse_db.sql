@@ -146,12 +146,15 @@ CREATE TABLE `delivery` (
   `wide`   int(10) not null default 0 comment '宽(mm)',
   `high`   int(10) not null default 0 comment '高(mm)',
   `remarks` varchar(1000) not null default '' comment '备注',
+  `status` smallint(3) not null default 0 comment '订单状态 0-等待出库、1-已经出库、',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`d_id`),
   index `o_id_index` (`o_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单出库'
 ;
+
+alter table delivery add `status` smallint(3) not null default 0 comment '订单状态 0-等待出库、1-已经出库、' after `remarks`;
 
 CREATE TABLE `delivery_detail` (
   `dd_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',

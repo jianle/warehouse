@@ -21,7 +21,7 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
     private Logger logger = LoggerFactory.getLogger(DeliveryDao.class);
     
     private static final String TABLE_NAME    = "delivery";
-    private static final String INSERT_FIELDS = "o_id, express_id, express_name, weight, length, wide, high, remarks, insert_dt, update_time";
+    private static final String INSERT_FIELDS = "o_id, express_id, express_name, weight, length, wide, high, remarks, status, insert_dt, update_time";
     private static final String SELECT_FIELDS = "d_id, " + INSERT_FIELDS;
     
     @Autowired
@@ -53,6 +53,19 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
         return null;
     }
     
+    @SuppressWarnings("deprecation")
+    public Integer findByoIdStatus(Long oId) {
+        // TODO Auto-generated method stub
+        try {
+            String sql = "SELECT sum(status) as status FROM " + TABLE_NAME + " WHERE o_id=? ";
+            return jdbcTemplate.queryForInt(sql, oId) > 0 ? 1:0;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findByoIdstatus faield ." + e);
+        }
+        return 0;
+    }
+    
     public List<Map<String, Object>> getAllContent() {
         try {
             String sql = "select express_id content from " + TABLE_NAME ;
@@ -70,7 +83,7 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql, 
                     object.getoId(),
                     object.getExpressId(),
@@ -80,6 +93,7 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
                     object.getWide(),
                     object.getHigh(),
                     object.getRemarks(),
+                    object.getStatus(),
                     object.getInsertDt(),
                     object.getUpdateTime()
                     );
@@ -104,6 +118,19 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
         } catch (Exception e) {
             // TODO: handle exception
             logger.info("delete by dId-" + dId + " failed." + e);
+        }
+        return false;
+    }
+    
+    public Boolean updateStatusByOId(Long oId, Integer status){
+        try {
+            String sql = "UPDATE " + TABLE_NAME + " SET "
+                    + " status=? "
+                    + " WHERE o_id=?";
+            return jdbcTemplate.update(sql, status, oId) > 0;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("update status by oId-" + oId + " failed." + e);
         }
         return false;
     }
@@ -150,6 +177,7 @@ public class DeliveryDao implements BaseDao<Delivery, Long> {
             delivery.setWide(rs.getInt("wide"));
             delivery.setHigh(rs.getInt("high"));
             delivery.setRemarks(rs.getString("remarks"));
+            delivery.setStatus(rs.getInt("status"));
             delivery.setInsertDt(String.valueOf(rs.getTimestamp("insert_dt")));
             delivery.setUpdateTime(String.valueOf(rs.getTimestamp("update_time")));
             

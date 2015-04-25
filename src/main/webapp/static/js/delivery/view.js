@@ -83,4 +83,63 @@ function destroy(){
 
 function jumpDetail(val,row,index){
     return '<a href="'+contextPath+'/delivery/detail?content='+row.expressId+'" target="_blank">'+row.expressId+'</a>';
-  }
+}
+
+var status=0;
+var statusType= new Array();
+var cssType= new Array();
+statusType[0]="待出库";
+cssType[0]="mini-label-primary";
+
+statusType[1]="已出库";
+cssType[1]="mini-label-success";
+function formatterStatus(val,row,index){
+	status=val;
+	return '<font color="red" class="mini-label '+ cssType[val] +'">' + statusType[val] + '</font>';
+}
+
+function formsubmit() {
+	var oId=$('#curoId').val();
+	if(status==1) {
+		$.messager.show({    // show error message
+            title: '提示',
+            msg: '订单已出库！'
+        });
+		return;
+	}
+	$.messager.confirm('提示','确认订单<code>'+ oId +'</code>是否出库?',function(r){
+        if (r){
+        	$.ajax({
+    			cache: true,
+    			type:"POST",
+    			url :contextPath + '/delivery',
+    			data: {oId:oId},
+    			async:true,
+    			dataType: 'json',
+    			success: function(data) {
+    				var result = eval('('+data+')');
+    				console.log(result);
+                    if (result){
+                    	$.messager.show({    // show error message
+                            title: '提示',
+                            msg: '出库成功！'
+                        });
+                        $('#dg').datagrid('reload', {oId:oId});    // reload the user data
+                    } else {
+                        $.messager.show({    // show error message
+                            title: '提示',
+                            msg: '出库失败！'
+                        });
+                    }
+    				
+    			},
+    			error:function(result) {
+    				 $.messager.show({    // show error message
+                         title: '提示',
+                         msg: '出库失败！'
+                     });
+    			}
+    		});
+        }
+    });
+}

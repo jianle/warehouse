@@ -41,7 +41,7 @@ public class DeliveryController {
     @Autowired
     private OrderinfoDao orderinfoDao;
     
-    @RequestMapping("")
+    @RequestMapping(value="", method=RequestMethod.GET)
     public ModelAndView view(@RequestParam(value="oId",defaultValue="0") Long oId) {
         ModelAndView modelView = new ModelAndView("/delivery/view");
         logger.info("RequestMapping:/delivery/view");
@@ -52,6 +52,21 @@ public class DeliveryController {
         
         modelView.addObject("oId", oId);
         return modelView;
+    }
+    
+    @RequestMapping(value="", method=RequestMethod.POST)
+    @ResponseBody
+    public String doDelivery(@RequestParam(value="oId",defaultValue="0") Long oId) {
+        logger.info("RequestMapping:/delivery/view");
+        boolean result = false;
+        if (oId == 0) {
+            return String.valueOf(result);
+        } else {
+            if (deliveryDao.updateStatusByOId(oId, 1)) {
+                result = true;
+            };
+        }
+        return String.valueOf(result);
     }
     
     @RequestMapping("getByoId")
@@ -76,7 +91,7 @@ public class DeliveryController {
         boolean result = false;
         delivery.setUpdateTime(String.valueOf(new Timestamp(System.currentTimeMillis())));
         delivery.setInsertDt(String.valueOf(new Timestamp(System.currentTimeMillis())));
-        delivery.setStatus(0);
+        delivery.setStatus(deliveryDao.findByoIdStatus(delivery.getoId()));
         
         logger.info(delivery.toString());
         
