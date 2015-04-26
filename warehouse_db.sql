@@ -29,10 +29,10 @@ CREATE TABLE `goods` (
   `is_disabled` char(1) not null DEFAULT 'F' comment 'T-不可用 F-有效',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
-  PRIMARY KEY (`g_id`)
+  PRIMARY KEY (`g_id`),
+  index `g_id_index` (`g_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 comment '商品信息表'
 ;
-alter table goods add index `g_id_index` (`g_id`);
 
 CREATE TABLE supplier(
   `s_id` bigint(20) not null AUTO_INCREMENT comment '供应商自增id',
@@ -65,7 +65,6 @@ CREATE TABLE `enter` (
   PRIMARY KEY (`e_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '商品入库表'
 ;
-alter table enter add `s_id` bigint(20) NOT NULL default 0 comment '供应商id' after g_id;
 
 CREATE TABLE `storage` (
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
@@ -81,9 +80,6 @@ CREATE TABLE `storage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '库存表'
 ;
 
-alter table storage add `s_id` bigint(20) NOT NULL default 0 comment '供应商id' after g_id;
-alter table storage add `chests` int(8) not null default 0 comment '共多少箱' after g_name;
-alter table storage add `amount` int(8) not null default 0 comment '共多少个' after boxes;
 
 CREATE TABLE `orderinfo` (
   `o_id` bigint(20) NOT NULL AUTO_INCREMENT comment '订单id',
@@ -154,7 +150,6 @@ CREATE TABLE `delivery` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单出库'
 ;
 
-alter table delivery add `status` smallint(3) not null default 0 comment '订单状态 0-等待出库、1-已经出库、' after `remarks`;
 
 CREATE TABLE `delivery_detail` (
   `dd_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',

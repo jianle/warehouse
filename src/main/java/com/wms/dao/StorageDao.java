@@ -165,7 +165,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
         return false;
     }
     
-    public Boolean updateSubAmountList(List<Map<String, Object>> list){
+    public Boolean updateSubAmountList(final List<Map<String, Object>> list){
         try {
             String sql = "UPDATE " + TABLE_NAME + " SET "
                     + " amount=amount-? "

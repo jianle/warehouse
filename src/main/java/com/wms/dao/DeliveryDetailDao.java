@@ -67,7 +67,7 @@ public class DeliveryDetailDao implements BaseDao<DeliveryDetail, Long>{
         return false;
     }
     
-    public Boolean saveBatch(String content, JSONArray jsonArray) {
+    public Boolean saveBatch(final String content, final JSONArray jsonArray) {
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
                     + ") VALUES (?, ?, ?, ?)";
