@@ -40,7 +40,6 @@
 							type:'combobox',
 							options:{
 				                onChange:function(newValue, oldValue){
-                                console.log('newValue:'+newValue + ' oldValue:'+oldValue);
 				                  if(newValue==undefined) {
 				                    newValue='';
 				                  }
@@ -136,7 +135,7 @@
 		}
 		if ($('#dg').datagrid('validateRow', editIndex)) {
 
-			console.log('editIndex:' + editIndex);
+			//console.log('editIndex:' + editIndex);
 			var ed = $('#dg').datagrid('getEditor', {
 				index : editIndex,
 				field : 'gId'
@@ -196,7 +195,6 @@
 			var row = $('#dg').datagrid('getRows')[currentIndex];
 			currentIndex = editIndex;
 			if (row.status == '修改' && currentIndex>=1 &&row.gId) {
-				console.log(row);
 				row.oId = $('#oId').val();
 				$.ajax({
 					cache : true,
@@ -206,23 +204,23 @@
 					async : true,
 					dataType : 'json',
 					success : function(result) {
-						if (result) {
+						if (result.value) {
 							$.messager.show({
-								timeout:350,
+								timeout:1300,
 								title : '提示信息',
-								msg : '操作成功'
+								msg : result.msg
 							});
 						} else {
 							$.messager.show({
 								title : '提示信息',
-								msg : '操作失败'
+								msg : result.msg
 							});
 						}
 					},
 					error : function(result) {
 						$.messager.show({
 							title : '提示信息',
-							msg : '操作失败'
+							msg : result.msg
 						});
 					}
 				});
@@ -237,7 +235,6 @@
 		}
 		var row = $('#dg').datagrid('getSelected');
 		row.oId = $('#oId').val();
-		console.log(JSON.stringify(row));
 		if(row.odId){
 			$.ajax({
 				cache : true,
@@ -251,7 +248,7 @@
 				success : function(result) {
 					if (result) {
 						$.messager.show({
-							timeout:350,
+							timeout:1300,
 							title : '提示信息',
 							msg : '操作成功'
 						});
@@ -279,7 +276,6 @@
 			var row = $('#dg').datagrid('getSelected');
 			row.oId = $('#oId').val();
 			row.status='保存';
-			console.log(JSON.stringify(row));
 			$.ajax({
 				cache : true,
 				type : "POST",
@@ -288,23 +284,23 @@
 				async : true,
 				dataType : 'json',
 				success : function(result) {
-					if (result) {
+					if (result.value) {
 						$.messager.show({
-							timeout:350,
+							timeout:1300,
 							title : '提示信息',
-							msg : '操作成功'
+							msg : result.msg
 						});
 					} else {
 						$.messager.show({
 							title : '提示信息',
-							msg : '操作失败'
+							msg : result.msg
 						});
 					}
 				},
 				error : function(result) {
 					$.messager.show({
 						title : '提示信息',
-						msg : '操作失败'
+						msg : result.msg
 					});
 				}
 			});

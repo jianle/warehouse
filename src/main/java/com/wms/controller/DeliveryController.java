@@ -21,7 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.DeliveryDao;
 import com.wms.dao.DeliveryDetailDao;
+import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
+import com.wms.dao.StorageDao;
 import com.wms.model.Delivery;
 import com.wms.model.DeliveryDetail;
 import com.wms.task.GrabTask;
@@ -40,6 +42,11 @@ public class DeliveryController {
     
     @Autowired
     private OrderinfoDao orderinfoDao;
+    @Autowired
+    private OrderDetailDao orderDetailDao;
+    
+    @Autowired
+    private StorageDao storageDao;
     
     @RequestMapping(value="", method=RequestMethod.GET)
     public ModelAndView view(@RequestParam(value="oId",defaultValue="0") Long oId) {
@@ -62,6 +69,10 @@ public class DeliveryController {
         if (oId == 0) {
             return String.valueOf(result);
         } else {
+            //订单最终出库，减库存
+            if (!storageDao.updateSubAmountList(orderDetailDao.findGIdsAndAmountByOId(oId))) {
+                return String.valueOf(result);
+            }
             if (deliveryDao.updateStatusByOId(oId, 1)) {
                 result = true;
             };

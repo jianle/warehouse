@@ -1,13 +1,16 @@
 package com.wms.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -137,6 +140,71 @@ public class StorageDao implements BaseDao<Storage, Long> {
             logger.debug("update storage boxes failed." + e);
         }
         return false;
+    }
+    
+    public Boolean updateAmount(Long gId, Long amount, String type){
+        try {
+            String sql = "UPDATE " + TABLE_NAME + " SET "
+                    + " amount=amount+? "
+                    + " WHERE g_id=? ";
+            if ("add".equals(type)) {
+                return jdbcTemplate.update(sql, 
+                        amount, gId) > 0;
+            } 
+            // 判断是否加减
+            sql = "UPDATE " + TABLE_NAME + " SET "
+                    + " amount=amount-? "
+                    + " WHERE g_id=? ";
+            if ("del".equals(type)) {
+                return jdbcTemplate.update(sql, amount, gId) > 0;
+            }
+            
+        } catch (Exception e) {
+            logger.debug("update storage amount failed." + e);
+        }
+        return false;
+    }
+    
+    public Boolean updateSubAmountList(List<Map<String, Object>> list){
+        try {
+            String sql = "UPDATE " + TABLE_NAME + " SET "
+                    + " amount=amount-? "
+                    + " WHERE g_id=? ";
+            jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+                
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    // TODO Auto-generated method stub
+                    Map<String, Object> map = list.get(i);
+                    ps.setLong(1, Long.valueOf(map.get("amount").toString()));
+                    ps.setLong(2, Long.valueOf(map.get("g_id").toString()));
+                }
+                
+                @Override
+                public int getBatchSize() {
+                    // TODO Auto-generated method stub
+                    return list.size();
+                }
+            });
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("updateSubAmountList faield." + e);
+        }
+        return false;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public Long findByGId(Long gId) {
+        Long amount = new Long(0);
+        try {
+            String sql = "select amount from " + TABLE_NAME + " where g_id=? ";
+            return jdbcTemplate.queryForLong(sql, gId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("find amount by gid faield." + e);
+        }
+        return amount;
     }
 
     @Override

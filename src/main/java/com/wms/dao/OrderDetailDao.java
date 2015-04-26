@@ -130,6 +130,20 @@ public class OrderDetailDao implements BaseDao<OrderDetail, Long> {
         return null;
     }
     
+    public List<Map<String, Object>> findGIdsAndAmountByOId(Long oId){
+        try {
+            String sql = "SELECT g_id, amount " 
+                    + " FROM " + TABLE_NAME 
+                    + " WHERE o_id=? ";
+            logger.info(sql);
+            return jdbcTemplate.queryForList(sql, oId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findByOId failed." + e);
+        }
+        return null;
+    }
+    
     public Boolean delete(Long odId){
         try {
             String sql = "DELETE FROM " + TABLE_NAME + " WHERE od_id=? ";

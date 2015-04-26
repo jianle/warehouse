@@ -23,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
+import com.wms.dao.StorageDao;
 import com.wms.model.OrderDetail;
 import com.wms.model.Orderinfo;
 import com.wms.model.Pagination;
@@ -40,6 +41,9 @@ public class OrderController {
     
     @Autowired
     private OrderinfoDao orderinfoDao;
+    
+    @Autowired
+    private StorageDao storageDao;
     
     @RequestMapping(value={"", "list"})
     public ModelAndView list(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
@@ -172,27 +176,42 @@ public class OrderController {
     
     @RequestMapping("detail/save")
     @ResponseBody
-    public String saveDetail(@ModelAttribute OrderDetail orderDetail) {
+    public JSONObject saveDetail(@ModelAttribute OrderDetail orderDetail) {
         orderDetail.setInsertDt(String.valueOf(new Timestamp(System.currentTimeMillis())));
         orderDetail.setUpdateTime(String.valueOf(new Timestamp(System.currentTimeMillis())));
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
+        String msg = "";
         logger.info(orderDetail.toString());
+        
+        //判断库存是否够了
+        if (orderDetail.getAmount()>storageDao.findByGId(orderDetail.getgId())) {
+            msg = "操作失败，库存不够，请仔细确认";
+            jsonTuple.put("value", result);
+            jsonTuple.put("msg", msg);
+            return jsonTuple;
+        }
         
         if (orderDetail.getOdId() != null) {
             logger.info("记录存在，更新");
             if (orderDetailDao.update(orderDetail)) {
                 result = true;
+                msg = "修改成功";
+            }else {
+                msg = "修改失败";
             }
         }else {
             logger.info("记录不存在，添加");
             if (orderDetailDao.save(orderDetail)) {
                 result = true;
+                msg = "添加成功";
+            }else {
+                msg = "保存失败";
             }
         }
-        
+        jsonTuple.put("msg", msg);
         jsonTuple.put("value", result);
-        return String.valueOf(result);
+        return jsonTuple;
     }
     
     @RequestMapping("detail/update")
@@ -200,6 +219,12 @@ public class OrderController {
     public JSONObject updateDetail(@ModelAttribute OrderDetail orderDetail) {
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
+        
+        //判断库存是否够了
+        if (orderDetail.getAmount()>storageDao.findByGId(orderDetail.getgId())) {
+            jsonTuple.put("value", result);
+            return jsonTuple;
+        }
         
         if (orderDetailDao.update(orderDetail)) {
             result = true;
