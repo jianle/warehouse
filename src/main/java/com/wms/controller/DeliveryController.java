@@ -73,6 +73,8 @@ public class DeliveryController {
             if (!storageDao.updateSubAmountList(orderDetailDao.findGIdsAndAmountByOId(oId))) {
                 return String.valueOf(result);
             }
+            //修改订单状态 --> 已出库
+            orderinfoDao.update(3, oId);
             if (deliveryDao.updateStatusByOId(oId, 1)) {
                 result = true;
             };
