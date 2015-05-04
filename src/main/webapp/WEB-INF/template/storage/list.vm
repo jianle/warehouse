@@ -64,7 +64,6 @@
         <th style="width:95px;">总库存个数</th>
         <th style="min-width:90px">备注</th>
         <th style="width:175px;">最新更新时间</th>
-        <th style="width:80px;">修改删除</th>
       </tr>
     </thead>
     <tbody>
@@ -76,11 +75,6 @@
         <td>${storage.amount}</td>
         <td>${storage.remarks}</td>
         <td>#if(${storage.updateTime})${storage.updateTime}#else${storage.insertDt}#end</td>
-        <td>
-          <a href="#Modal" id="edit" onclick="modalEdit(${storage.gId},${storage.sId})" data-toggle="modal"
-          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:modalDelete(${storage.gId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
-        </td>
       </tr>
       #end
     </tbody>
