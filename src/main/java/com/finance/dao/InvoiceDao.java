@@ -26,7 +26,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
 
     private static final String TABLE_NAME    = "invoice";
     private static final String INSERT_FIELDS = "br_id, inv_id, inv_head, valorem_tax, amount, amount_tax, rate_tax,"
-            + "inv_date, remark, inc_date, inv_to_company, verification, update_time";
+            + "inv_date, remark, inc_date, inv_to_company, verification, is_deleted, update_time";
     private static final String SELECT_FIELDS = INSERT_FIELDS;
     
     @Autowired
@@ -48,9 +48,33 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
     }
 
     @Override
-    public Boolean save(Invoice object) {
+    public Boolean save(Invoice obj) {
         // TODO Auto-generated method stub
-        return null;
+        try {
+            String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
+                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
+            jdbcTemplateFinance.update(sql,
+                    obj.getBrId(),
+                    obj.getInvId(),
+                    obj.getInvHead(),
+                    obj.getValoremTax(),
+                    obj.getAmount(),
+                    obj.getAmountTax(),
+                    obj.getRateTax(),
+                    obj.getInvDate(),
+                    obj.getRemark(),
+                    obj.getIncDate(),
+                    obj.getInvToCompany(),
+                    obj.getVerification(),
+                    obj.getIsDeleted(),
+                    obj.getUpdateTime()
+                    );
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("save failed." + e);
+        }
+        return false;
     }
 
     @Override
@@ -58,17 +82,53 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    public List<Invoice> findAllByBrId(Long brId) {
+        // TODO Auto-generated method stub
+        try {
+            String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME
+                    + " where br_id=?";
+            return jdbcTemplateFinance.query(sql, rowMapper, brId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findAllByBrId failed." + e);
+        }
+        return null;
+    }
+
 
     @Override
     public Boolean update(Invoice object) {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    public Boolean updateIsDeleted(Integer isDeleted, Long invId) {
+        // TODO Auto-generated method stub
+        try {
+            String sql = "update " + TABLE_NAME + " set is_deleted=? "
+                    + "where inv_id=?";
+            jdbcTemplateFinance.update(sql, isDeleted, invId);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("updateIsDeleted failed." + e);
+        }
+        return false;
+    }
 
     @Override
-    public Boolean delete(Long id) {
+    public Boolean delete(Long invId) {
         // TODO Auto-generated method stub
-        return null;
+        try {
+            String sql = "delete from " + TABLE_NAME + " where inv_id=? ";
+            jdbcTemplateFinance.update(sql, invId);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("delete failed." + e);
+        }
+        return false;
     }
     
     
@@ -90,6 +150,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             invoice.setIncDate(DATE_FORMAT.format(rs.getDate("inc_date")));
             invoice.setInvToCompany(rs.getString("inv_to_company"));
             invoice.setVerification(rs.getDouble("verification"));
+            invoice.setIsDeleted(rs.getInt("is_deleted"));
             invoice.setUpdateTime(DATET_TIME_FORMAT.format(rs.getDate("update_time")));
             return invoice;
         }

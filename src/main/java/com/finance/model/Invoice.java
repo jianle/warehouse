@@ -19,6 +19,7 @@ public class Invoice {
     private String incDate;
     private String invToCompany;
     private Double verification;
+    private Integer isDeleted;
     private String updateTime;
     
     public Long getBrId() {
@@ -116,6 +117,14 @@ public class Invoice {
     public void setVerification(Double verification) {
         this.verification = verification;
     }
+    
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+    
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
 
     public String getUpdateTime() {
         return updateTime;
@@ -132,8 +141,8 @@ public class Invoice {
                 + ", amountTax=" + amountTax + ", rateTax=" + rateTax
                 + ", invDate=" + invDate + ", remark=" + remark + ", incDate="
                 + incDate + ", invToCompany=" + invToCompany
-                + ", verification=" + verification + ", updateTime="
-                + updateTime + "]";
+                + ", verification=" + verification + ", isDeleted=" + isDeleted
+                + ", updateTime=" + updateTime + "]";
     }
     
 }

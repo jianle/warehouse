@@ -191,6 +191,7 @@ CREATE TABLE `invoice` (
 `inc_date` DATE NOT NULL default '1900-01-01' comment '进账日期',
 `inv_to_company` VARCHAR(640) NOT NULL default '' comment '开票公司',
 `verification` DOUBLE(20,4) NOT NULL default 0.0 comment '已核销金额',
+`is_deleted` smallint(2) not null default 0 comment '0-有效、1-被删除的',
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`inv_id`),
 index `br_id_index` (`br_id`)
