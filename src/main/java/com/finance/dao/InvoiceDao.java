@@ -151,7 +151,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             invoice.setInvToCompany(rs.getString("inv_to_company"));
             invoice.setVerification(rs.getDouble("verification"));
             invoice.setIsDeleted(rs.getInt("is_deleted"));
-            invoice.setUpdateTime(DATET_TIME_FORMAT.format(rs.getDate("update_time")));
+            invoice.setUpdateTime(DATET_TIME_FORMAT.format(rs.getTime("update_time")));
             return invoice;
         }
     };
