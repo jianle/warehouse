@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.logging.SimpleFormatter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,7 @@ import com.finance.model.BillReceivable;
 @Repository
 public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
     
-    private Logger Logger = LoggerFactory.getLogger(BillReceivableDao.class);
+    private Logger logger = LoggerFactory.getLogger(BillReceivableDao.class);
     
     private static final String TABLE_NAME    = "bill_receivable";
     private static final String INSERT_FIELDS = "customer_company, br_date, amount, remark";
@@ -37,7 +36,7 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
             return jdbcTemplateFinance.queryForObject(sql, rowMapper, id);
         } catch (Exception e) {
             // TODO: handle exception
-            Logger.debug("get faield." + e);
+            logger.debug("get faield." + e);
         }
         return null;
     }
@@ -45,8 +44,21 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
     @Override
     public Boolean save(BillReceivable object) {
         // TODO Auto-generated method stub
-        
-        return null;
+        try {
+            String sql = "insert into " + TABLE_NAME + " ("
+                    + INSERT_FIELDS + " ) values (?, ?, ?, ?)";
+            jdbcTemplateFinance.update(sql, 
+                    object.getCustomerCompany(),
+                    object.getBrDate(),
+                    object.getAmount(),
+                    object.getRemark()
+                    );
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("save failed." + e);
+        }
+        return false;
     }
 
     @Override
@@ -58,13 +70,37 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
     @Override
     public Boolean update(BillReceivable object) {
         // TODO Auto-generated method stub
-        return null;
+        try {
+            String sql = "update " + TABLE_NAME + " set "
+                    + "customer_company=?, br_date=?, amount=?, remark=? "
+                    + "where br_id=?";
+            jdbcTemplateFinance.update(sql, 
+                    object.getCustomerCompany(),
+                    object.getBrDate(),
+                    object.getAmount(),
+                    object.getRemark(),
+                    object.getBrId()
+                    );
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("save failed." + e);
+        }
+        return false;
     }
 
     @Override
     public Boolean delete(Long id) {
         // TODO Auto-generated method stub
-        return null;
+        try {
+            String sql = "delete from " + TABLE_NAME + " where br_id=? ";
+            jdbcTemplateFinance.update(sql, id);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("delete failed." + e);
+        }
+        return false;
     }
     
     private RowMapper<BillReceivable> rowMapper = new RowMapper<BillReceivable>() {
