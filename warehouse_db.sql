@@ -224,6 +224,7 @@ CREATE TABLE `invoice_income` (
 `inv_to_company` VARCHAR(640) NOT NULL default '' comment '开票对应公司',
 `remark` VARCHAR(640) NOT NULL default '' comment '备注',
 `rate_rebate` DOUBLE(20,4) NOT NULL default 0.0 comment '返点比例',
+`is_deleted` smallint(2) not null default 0 comment '0-有效、1-被删除的',
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`inv_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '进项增票登记表'
@@ -239,7 +240,7 @@ create table `debtor`(
   `amount` double(20,4) not null default 0.0 comment '金额',
   `remark` VARCHAR(640) NOT NULL default '' comment '备注',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
-  PRIMARY KEY (`lr_id`)
+  PRIMARY KEY (`de_id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '应收账款'
 ;
 
