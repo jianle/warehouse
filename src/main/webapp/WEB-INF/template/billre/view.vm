@@ -1,0 +1,112 @@
+#set($title='应收账单')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<link href="#springUrl('/static/css/billre/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/billre/view.js')"></script>
+
+<form id="firstFromId" action="#springUrl('/billReceivable/search')" method="POST">
+  <div class="filter-bar-sm" >
+    <div class="filter-title-sm">
+      <label>日期范围</label>
+    </div>
+    <div class="filter-content">
+      <div class="input-group">
+      <div class="ui corner labeled input">
+        <input id="startDate" value="$startDate" type="text" class="form-control" />
+      </div>
+      <span> &nbsp;<i class="glyphicon glyphicon-forward"></i>&nbsp;</span>
+      <div class="ui corner labeled input">
+        <input id="endDate" value="$endDate" type="text" class="form-control" />
+      </div>
+      </div>
+    </div>
+    <input type="hidden" name="currentPage" value="1" />
+    <input type="hidden" name="numPerPage" value="20" />
+    <div class="filter-content-right" style="margin-top:8px">
+      <div class="ui action left icon input">
+        <i class="search icon"></i>
+        <input type="text" name="customerCompany" value="$customerCompany" placeholder="客服公司">
+        <div id="btnSearch" class="ui teal submit button">Search</div>
+      </div>
+    </div>
+  </div>
+  
+</form>
+<hr/>
+  <div class="ui primary button" id="addButton">
+    <i class="plus icon"></i> 新增
+</div>
+
+<div class="row pull-right" style="padding-right:430px;margin-top: -25px;margin-right:0px">
+  <div class="easyui-pagination"
+  style="border:1px solid #000;background:white;position:fixed;"
+  data-options="
+  total: ${pagination.totalRows},
+  pageSize: ${pagination.numPerPage},
+  pageNumber:${pagination.currentPage},
+  pageList: [10,20,30,50],//可以设置每页记录条数的列表
+  beforePageText: '第 ',//页数文本框前显示的汉字
+  afterPageText: '页    共 {pages} 页',
+  displayMsg: '显示 {from} - {to}   共 {total} 条',
+  onSelectPage: function(pageNumber, pageSize){
+    console.log(pageNumber+'....'+pageSize);
+    $('#currentPage').val(pageNumber);
+    $('#numPerPage').val(pageSize);
+    document.getElementById('formPagination').submit();
+  }">
+</div>
+</div>
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>客服公司</th>
+      <th>日期</th>
+      <th>金额</th>
+      <th>备注</th>
+      <th width="85px">编辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $billReceivable in $pagination.getResultList() )
+      <tr id="${billReceivable.brId}_tr">
+        <td>${billReceivable.brId}</td>
+        <td>${billReceivable.customerCompany}</td>
+        <td>${billReceivable.brDate}</td>
+        <td>${billReceivable.amount}</td>
+        <td>${billReceivable.remark}</td>
+        <td>
+          <a id="supplierEdit" onclick="edit(${billReceivable.brId})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteInfo(${billReceivable.brId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+      </td>
+      </tr>
+    #end
+  </tbody>
+</table>
+
+<form name="formPagination" id="formPagination" action="#springUrl('/billReceivable/search')" method="get">
+  <input type="hidden" id="currentPage" name="currentPage" value="" />
+  <input type="hidden" id="numPerPage" name="numPerPage" value="" />
+  <input type="hidden" name="startDate" value="$startDate" />
+  <input type="hidden" name="endDate" value="$endDate" />
+  <input type="hidden" name="customerCompany" value="$customerCompany" />
+</form>
+
+#parse("/billre/modal.vm")
+
+<script>
+    $('#startDate').click(function(){
+        console.log('testdate');
+        document.body.classList.add('dimmable');
+        $("body").addClass('dimmable');
+    });
+    $('#endDate').click(function(){ 
+    document.body.classList.add('dimmable');
+        $("body").addClass('dimmable');
+    });
+</script>
+

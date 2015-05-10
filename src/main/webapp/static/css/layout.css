@@ -25,6 +25,12 @@
     margin-top: 11px;
 }
 
+.filter-title-sm {
+    float: left;
+    margin-right: 8px;
+    margin-top: 18px;
+}
+
 .filter-content {
     float: left;
     margin-right: 20px;

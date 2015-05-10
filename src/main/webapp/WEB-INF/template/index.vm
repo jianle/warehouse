@@ -1,5 +1,5 @@
 #set($title='首页')
-#set($layout = "layout.vm")
+#set($layout = "layout-index.vm")
 <script>
   var calDt = new Date();
 	var hour = calDt.getHours();

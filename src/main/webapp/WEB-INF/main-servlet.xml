@@ -25,6 +25,8 @@
     <context:component-scan base-package="com.wms.controller" />
     <context:component-scan base-package="com.wms.interceptor" />
     
+    <context:component-scan base-package="com.finance.controller" />
+    
 
     <!-- 配置渲染模板 velocity -->
     <bean id="velocityConfig"
