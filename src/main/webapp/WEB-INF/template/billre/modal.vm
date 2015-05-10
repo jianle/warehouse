@@ -23,7 +23,7 @@
           <div class="field form-group">
             <label for="contactName" class="col-sm-2 control-label" >金额</label>
             <div class="col-sm-3">
-              <input type="text" class="form-control" name="amount" id="amount" value="" />
+              <input type="text" class="form-control" required="true" name="amount" id="amount" value="" />
             </div>
 
           </div>

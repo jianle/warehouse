@@ -134,7 +134,6 @@ function addAndupdate(){
 			async:true,
 			dataType: 'text',
 			success: function(result) {
-				console.log(result);
 				if(result=='true'){
 					$.messager.confirm('提示', '添加成功，刷新页面查看', function(r){
 						if(r){

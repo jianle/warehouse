@@ -40,7 +40,7 @@
     <i class="plus icon"></i> 新增
 </div>
 
-<div class="row pull-right" style="padding-right:430px;margin-top: -25px;margin-right:0px">
+<div class="row pull-right" style="padding-right:430px;margin-top: -20px;margin-left:0px">
   <div class="easyui-pagination"
   style="border:1px solid #000;background:white;position:fixed;"
   data-options="
