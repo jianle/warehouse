@@ -40,7 +40,7 @@
     <i class="plus icon"></i> 新增
 </div>
 
-<div class="row pull-right" style="padding-right:430px;margin-top: -20px;margin-left:0px">
+<div class="row pull-right" style="padding-right:430px;margin-top: -50px;margin-left:0px">
   <div class="easyui-pagination"
   style="border:1px solid #000;background:white;position:fixed;"
   data-options="
@@ -96,17 +96,8 @@
   <input type="hidden" name="customerCompany" value="$customerCompany" />
 </form>
 
-#parse("/billre/modal.vm")
+#parse("/billre/dialog.vm")
 
 <script>
-    $('#startDate').click(function(){
-        console.log('testdate');
-        document.body.classList.add('dimmable');
-        $("body").addClass('dimmable');
-    });
-    $('#endDate').click(function(){ 
-    document.body.classList.add('dimmable');
-        $("body").addClass('dimmable');
-    });
 </script>
 
