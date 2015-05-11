@@ -96,23 +96,25 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         
         int totalRows = 0;
         logger.info(sql);
+        Pagination<Invoice> pagination = null;
         try {
             logger.info("try...");
             totalRows = jdbcTemplateFinance.queryForInt(sqlCount);
             logger.info("totalRows：" + totalRows);
-            Pagination<Invoice> pagination = new Pagination<Invoice>(totalRows, currentPage, numPerPage);
+            pagination = new Pagination<Invoice>(totalRows, currentPage, numPerPage);
             sql = pagination.getMySQLPageSQL(sql, pagination.getCurrentPage());
             logger.info(sql);
             List<Invoice> resultList = jdbcTemplateFinance.query(sql, rowMapper);
+            logger.info(resultList.toString());
             pagination.setResultList(resultList);
             
             return pagination;
         } catch (Exception e) {
             // TODO: handle exception
-            logger.debug("findPagination failed." + e);
+            e.printStackTrace();
         }
         
-        return null;
+        return pagination;
     }
     
     public List<Invoice> findAllByBrId(Long brId) {

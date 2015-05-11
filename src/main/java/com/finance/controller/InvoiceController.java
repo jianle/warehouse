@@ -36,13 +36,15 @@ public class InvoiceController {
     @Autowired
     private InvoiceDao invoiceDao;
     
-    @RequestMapping(value={"{brId}", ""})
+    @RequestMapping(value="{brId}")
     public ModelAndView search(@PathVariable(value="brId") Long brId,
             @RequestParam(value="currentPage", defaultValue="1") Integer currentPage,
             @RequestParam(value="numPerPage", defaultValue="20") Integer numPerPage
             ) {
         ModelAndView modelView = new ModelAndView("/invoice/view");
-        logger.info("brId:" + brId);
+        logger.info("brId:" + brId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
+        
+        System.out.println("brId:" + brId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
         
         Pagination<Invoice> pagination = invoiceDao.findPagination(brId, currentPage, numPerPage);
         
@@ -57,16 +59,24 @@ public class InvoiceController {
     public String save(HttpServletRequest request, 
             @ModelAttribute("invoice") Invoice invoice) {
         
-        logger.info(invoice.toString());
+        logger.info("init:"+invoice.toString());
         
         List<Invoice> invoices = new ArrayList<Invoice>();
         invoices.add(invoice);
-        Invoice tmpInvoice = null;
-        for (int i = 0; i < invoice.getNumber(); i++) {
-            tmpInvoice = invoice;
-            tmpInvoice.setInvId(invoice.getInvId() + i + 1);
-            invoices.add(tmpInvoice);
+        Long top = invoice.getInvId();
+        for (int i = 1; i < invoice.getNumber(); i++) {
+            try {
+                Invoice tmp = (Invoice) invoice.clone();
+                tmp.setInvId(top + i);
+                invoices.add(tmp);
+            } catch (CloneNotSupportedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+           
         }
+        
+        logger.info("list:"+invoices.toString());
         
         if (invoiceDao.saveBatch(invoices)) {
             return "true";

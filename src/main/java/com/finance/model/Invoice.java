@@ -4,7 +4,7 @@ package com.finance.model;
  * table -> invoice
  */
 
-public class Invoice {
+public class Invoice implements Cloneable {
     
     private Long brId;
     private Long invId;
@@ -142,6 +142,11 @@ public class Invoice {
 
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
+    }
+    
+    @Override  
+    public Object clone() throws CloneNotSupportedException {  
+        return super.clone();  
     }
 
     @Override
