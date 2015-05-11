@@ -1,0 +1,90 @@
+#set($title='发票明细')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<link href="#springUrl('/static/css/invoice/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/invoice/view.js')"></script>
+
+<br/>
+<div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
+  <div class="easyui-pagination"
+  style="border:1px solid #000;background:white;position:fixed;"
+  data-options="
+  total: ${pagination.totalRows},
+  pageSize: ${pagination.numPerPage},
+  pageNumber:${pagination.currentPage},
+  pageList: [10,20,30,50],//可以设置每页记录条数的列表
+  beforePageText: '第 ',//页数文本框前显示的汉字
+  afterPageText: '页    共 {pages} 页',
+  displayMsg: '显示 {from} - {to}   共 {total} 条',
+  onSelectPage: function(pageNumber, pageSize){
+    console.log(pageNumber+'....'+pageSize);
+    $('#currentPage').val(pageNumber);
+    $('#numPerPage').val(pageSize);
+    document.getElementById('formPagination').submit();
+  }">
+</div>
+</div>
+
+<div class="ui primary button" id="addButton">
+    <i class="plus icon"></i> 新增
+</div>
+
+
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th>发票号</th>
+      <th>发票抬头</th>
+      <th>价税合计</th>
+      <th>金额</th>
+      <th>税额</th>
+      <th>税率</th>
+      <th>开票日期</th>
+      <th>备注</th>
+      <th>进账日期</th>
+      <th>开票公司</th>
+      <th>已核销金额</th>
+      <th>状态</th>
+      <th width="85px">编辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $invoice in $pagination.getResultList() )
+      <tr id="${invoice.invId}_tr">
+        <td>${invoice.invId}</td>
+        <td>${invoice.invHead}</td>
+        <td>${invoice.valoremTax}</td>
+        <td>${invoice.amount}</td>
+        <td>${invoice.amountTax}</td>
+        <td>${invoice.rateTax}</td>
+        <td>${invoice.invDate}</td>
+        <td>${invoice.remark}</td>
+        <td>${invoice.incDate}</td>
+        <td>${invoice.invToCompany}</td>
+        <td>${invoice.verification}</td>
+        <td>${invoice.isDeleted}</td>
+        <td>
+          <a id="edit" onclick="edit(${invoice.invId})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteInfo(${invoice.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+      </td>
+      </tr>
+    #end
+  </tbody>
+</table>
+
+<form name="formPagination" id="formPagination" action="#springUrl('/invoice/search')" method="get">
+  <input type="hidden" id="currentPage" name="currentPage" value="" />
+  <input type="hidden" id="numPerPage" name="numPerPage" value="" />
+  <input type="hidden" id="brId" name="brId" value="$brId" />
+</form>
+
+#parse("/invoice/dialog.vm")
+
+<script>
+</script>
+

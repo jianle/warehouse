@@ -54,7 +54,6 @@ public class BillReceivableController {
         modelView.addObject("startDate", startDate);
         modelView.addObject("endDate", endDate);
         modelView.addObject("customerCompany", customerCompany);
-        logger.info(pagination.toString());
         
         return modelView;
     }

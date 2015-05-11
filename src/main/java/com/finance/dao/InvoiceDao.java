@@ -1,7 +1,9 @@
 package com.finance.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -9,11 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.finance.model.Invoice;
+import com.wms.model.Pagination;
 
 
 @Repository
@@ -48,8 +52,87 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
     }
 
     @Override
+    public Boolean update(Invoice obj) {
+        // TODO Auto-generated method stub
+        try {
+            String sql = "update " + TABLE_NAME + "set "
+                    + "inv_head=?, valorem_tax=?, amount=?, amount_tax=?, rate_tax=?,"
+            + "inv_date=?, remark=?, inc_date=?, inv_to_company=?, verification=?, is_deleted=? "
+            + "where inv_id=?" ;
+            jdbcTemplateFinance.update(sql,
+                    obj.getInvHead(),
+                    obj.getValoremTax(),
+                    obj.getAmount(),
+                    obj.getAmountTax(),
+                    obj.getRateTax(),
+                    obj.getInvDate(),
+                    obj.getRemark(),
+                    obj.getIncDate(),
+                    obj.getInvToCompany(),
+                    obj.getVerification(),
+                    obj.getIsDeleted(),
+                    obj.getInvId()
+                    );
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("save failed." + e);
+        }
+        return false;
+    }
+
+    @Override
+    public List<Invoice> findAll() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public Pagination<Invoice> findPagination(Long brId, int currentPage, int numPerPage) {
+        
+        String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where br_id=" + brId;
+        
+        String sqlCount = sql.replace(SELECT_FIELDS, "COUNT(1)");
+        
+        int totalRows = 0;
+        logger.info(sql);
+        try {
+            logger.info("try...");
+            totalRows = jdbcTemplateFinance.queryForInt(sqlCount);
+            logger.info("totalRows：" + totalRows);
+            Pagination<Invoice> pagination = new Pagination<Invoice>(totalRows, currentPage, numPerPage);
+            sql = pagination.getMySQLPageSQL(sql, pagination.getCurrentPage());
+            logger.info(sql);
+            List<Invoice> resultList = jdbcTemplateFinance.query(sql, rowMapper);
+            pagination.setResultList(resultList);
+            
+            return pagination;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findPagination failed." + e);
+        }
+        
+        return null;
+    }
+    
+    public List<Invoice> findAllByBrId(Long brId) {
+        // TODO Auto-generated method stub
+        try {
+            String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME
+                    + " where br_id=?";
+            return jdbcTemplateFinance.query(sql, rowMapper, brId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findAllByBrId failed." + e);
+        }
+        return null;
+    }
+
+
+    @Override
     public Boolean save(Invoice obj) {
         // TODO Auto-generated method stub
+     // TODO Auto-generated method stub
         try {
             String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
                     + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
@@ -76,31 +159,51 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         }
         return false;
     }
-
-    @Override
-    public List<Invoice> findAll() {
-        // TODO Auto-generated method stub
-        return null;
-    }
     
-    public List<Invoice> findAllByBrId(Long brId) {
+    public Boolean saveBatch(final List<Invoice> invoices) {
         // TODO Auto-generated method stub
+     // TODO Auto-generated method stub
         try {
-            String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME
-                    + " where br_id=?";
-            return jdbcTemplateFinance.query(sql, rowMapper, brId);
+            String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
+                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
+            
+            jdbcTemplateFinance.batchUpdate(sql, new BatchPreparedStatementSetter(){
+
+                @Override
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    // TODO Auto-generated method stub
+                    Invoice obj = invoices.get(i);
+                    ps.setObject(1,obj.getBrId());
+                    ps.setObject(2,obj.getInvId());
+                    ps.setObject(3,obj.getInvHead());
+                    ps.setObject(4,obj.getValoremTax());
+                    ps.setObject(5,obj.getAmount());
+                    ps.setObject(6,obj.getAmountTax());
+                    ps.setObject(7,obj.getRateTax());
+                    ps.setString(8,obj.getInvDate());
+                    ps.setString(9,obj.getRemark());
+                    ps.setString(10,obj.getIncDate());
+                    ps.setString(11,obj.getInvToCompany());
+                    ps.setObject(12,obj.getVerification());
+                    ps.setObject(13,obj.getIsDeleted());
+                    ps.setObject(14,new Timestamp(System.currentTimeMillis()));
+                    
+                }
+
+                @Override
+                public int getBatchSize() {
+                    // TODO Auto-generated method stub
+                    return invoices.size();
+                }});
+            
+           return true;
+           
         } catch (Exception e) {
             // TODO: handle exception
-            logger.debug("findAllByBrId failed." + e);
+            logger.debug("save failed." + e);
         }
-        return null;
-    }
-
-
-    @Override
-    public Boolean update(Invoice object) {
-        // TODO Auto-generated method stub
-        return null;
+        return false;
     }
     
     public Boolean updateIsDeleted(Integer isDeleted, Long invId) {
@@ -151,7 +254,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             invoice.setInvToCompany(rs.getString("inv_to_company"));
             invoice.setVerification(rs.getDouble("verification"));
             invoice.setIsDeleted(rs.getInt("is_deleted"));
-            invoice.setUpdateTime(DATET_TIME_FORMAT.format(rs.getTime("update_time")));
+            invoice.setUpdateTime(DATET_TIME_FORMAT.format(rs.getTimestamp("update_time")));
             return invoice;
         }
     };

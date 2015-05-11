@@ -36,11 +36,8 @@
   
 </form>
 <hr/>
-  <div class="ui primary button" id="addButton">
-    <i class="plus icon"></i> 新增
-</div>
 
-<div class="row pull-right" style="padding-right:430px;margin-top: -50px;margin-left:0px">
+<div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
   <div class="easyui-pagination"
   style="border:1px solid #000;background:white;position:fixed;"
   data-options="
@@ -57,8 +54,13 @@
     $('#numPerPage').val(pageSize);
     document.getElementById('formPagination').submit();
   }">
+ </div>
 </div>
+
+<div class="ui primary button" id="addButton">
+    <i class="plus icon"></i> 新增
 </div>
+
 <table class="ui blue striped table">
   <thead>
     <tr>
@@ -73,7 +75,7 @@
   <tbody>
     #foreach( $billReceivable in $pagination.getResultList() )
       <tr id="${billReceivable.brId}_tr">
-        <td>${billReceivable.brId}</td>
+        <td><a href="#springUrl('')invoice/${billReceivable.brId}" target="_blank">${billReceivable.brId}</a></td>
         <td>${billReceivable.customerCompany}</td>
         <td>${billReceivable.brDate}</td>
         <td>${billReceivable.amount}</td>

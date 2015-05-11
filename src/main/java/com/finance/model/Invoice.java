@@ -22,6 +22,16 @@ public class Invoice {
     private Integer isDeleted;
     private String updateTime;
     
+    private Integer number;
+    
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+    
+    public Integer getNumber() {
+        return number;
+    }
+    
     public Long getBrId() {
         return brId;
     }
