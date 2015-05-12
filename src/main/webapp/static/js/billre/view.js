@@ -23,7 +23,7 @@ $(document).ready(function(){
 	
 });
 
-var url = contextPath;
+var url;
 var flagTitle="编辑";
 var curDate = myformatter(new Date());
 $(document).ready(function() {
@@ -31,9 +31,9 @@ $(document).ready(function() {
 	$('#addButton').click(function(){
 		//$('#modal').modal('show');
 		$('#dlg').dialog('open').dialog('setTitle','新增');
-		url = url + '/billReceivable/save';
+		url = contextPath + '/billReceivable/save';
 		if(flagTitle=="编辑"){
-			$('#fm').form('clear');
+			$('#modalForm').form('clear');
 			$('#brDate').datebox('setValue', curDate);
 			$('#amount').numberbox('setValue', 0);
 			$('#remark').textbox('setValue', '');
@@ -44,7 +44,7 @@ $(document).ready(function() {
 
 
 function edit(Id){
-	url = url + '/billReceivable/update';
+	url = contextPath + '/billReceivable/update';
 	$('#dlg').dialog('open').dialog('setTitle','编辑');
 	var trId = Id+"_tr";
 	flagTitle="编辑";

@@ -9,7 +9,7 @@
 <script type="text/javascript" src="#springUrl('/static/js/invoice/view.js')"></script>
 
 <br/>
-<div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
+<div class="row pull-right" style="padding-right:440px;margin-top: -15px;margin-left:0px">
   <div class="easyui-pagination"
   style="border:1px solid #000;background:white;position:fixed;"
   data-options="

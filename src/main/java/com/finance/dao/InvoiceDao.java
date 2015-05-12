@@ -55,7 +55,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
     public Boolean update(Invoice obj) {
         // TODO Auto-generated method stub
         try {
-            String sql = "update " + TABLE_NAME + "set "
+            String sql = "update " + TABLE_NAME + " set "
                     + "inv_head=?, valorem_tax=?, amount=?, amount_tax=?, rate_tax=?,"
             + "inv_date=?, remark=?, inc_date=?, inv_to_company=?, verification=?, is_deleted=? "
             + "where inv_id=?" ;
@@ -73,7 +73,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                     obj.getIsDeleted(),
                     obj.getInvId()
                     );
-            
+            return true;
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("save failed." + e);
@@ -154,7 +154,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                     obj.getIsDeleted(),
                     obj.getUpdateTime()
                     );
-            
+            return true;
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("save failed." + e);

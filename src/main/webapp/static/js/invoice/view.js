@@ -1,5 +1,5 @@
 
-var url = contextPath;
+var url;
 var flagTitle="编辑";
 var curDate = myformatter(new Date());
 $(document).ready(function() {
@@ -7,9 +7,11 @@ $(document).ready(function() {
 	$('#addButton').click(function(){
 		//$('#modal').modal('show');
 		$('#dlg').dialog('open').dialog('setTitle','新增');
-		url = url + '/invoice/save';
+		url = contextPath + '/invoice/save';
+		$("#invId2").remove();
 		if(flagTitle=="编辑"){
-			$('#fm').form('clear');
+			$('#modalForm').form('clear');
+			$('#invId').numberbox('enable','true');
 			$('#valoremTax').numberbox('setValue', 0.0);
 			$('#amount').numberbox('setValue', 0.0);
 			$('#amountTax').numberbox('setValue', 0.0);
@@ -26,27 +28,29 @@ $(document).ready(function() {
 
 
 function edit(Id){
-	url = url + '/invoice/update';
+	url = contextPath + '/invoice/update';
 	$('#dlg').dialog('open').dialog('setTitle','编辑');
 	var trId = Id+"_tr";
+	var tdDate = $("#"+trId+" td");
 	flagTitle="编辑";
+	$("#modalForm").append('<input type="hidden" id="invId2" value="" name="invId" />')
 	//初始化 Modal 
-	$('#invId').numberbox('setValue', Id);
-	//$('.content #name').attr('readonly','readonly');
-	$('#valoremTax').numberbox('setValue', 0.0);
-	$('#amount').numberbox('setValue', 0.0);
-	$('#amountTax').numberbox('setValue', 0.0);
-	$('#rateTax').numberbox('setValue', 0.0);
-	$('#remark').textbox('setValue', '');
-	$('#invDate').datebox('setValue', curDate);
-	$('#incDate').datebox('setValue', curDate);
-	$('#verification').numberbox('setValue', 0);
-	$('#isDeleted').combobox('setValue', '0');
+	$('#invId').numberbox('setValue', tdDate[0].innerHTML);
+	$('#invId2').val(tdDate[0].innerHTML);
+	//$('#invId').numberbox('editable','false');
+	$('#invId').numberbox('disable','true');
+	$('#invHead').textbox('setValue', tdDate[1].innerHTML);
+	$('#valoremTax').numberbox('setValue', tdDate[2].innerHTML);
+	$('#amount').numberbox('setValue', tdDate[3].innerHTML);
+	$('#amountTax').numberbox('setValue', tdDate[4].innerHTML);
+	$('#rateTax').numberbox('setValue', tdDate[5].innerHTML);
+	$('#invDate').datebox('setValue', tdDate[6].innerHTML);
+	$('#remark').textbox('setValue', tdDate[7].innerHTML);
+	$('#incDate').datebox('setValue', tdDate[8].innerHTML);
+	$('#invToCompany').textbox('setValue', tdDate[9].innerHTML);
+	$('#verification').numberbox('setValue', tdDate[10].innerHTML);
+	$('#isDeleted').combobox('setValue', tdDate[11].innerHTML);
 	
-	$('#customerCompany').textbox('setValue', $("#"+trId+" td")[1].innerHTML );
-	$('#brDate').datebox('setValue', $("#"+trId+" td")[2].innerHTML );
-	$('#amount').numberbox('setValue', $("#"+trId+" td")[3].innerHTML );
-	$('#remark').textbox('setValue', $("#"+trId+" td")[4].innerHTML );
 }
 
 
@@ -63,7 +67,7 @@ function save(){
             	$('#dlg').dialog('close');
                 $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
 					console.log('ok');
-					window.location.href=contextPath + '/invoice/' + $('#brId').val();
+					window.location.reload();
                 });
             } else {
             	$.messager.show({

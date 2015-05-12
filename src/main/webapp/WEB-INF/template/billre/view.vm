@@ -75,7 +75,7 @@
   <tbody>
     #foreach( $billReceivable in $pagination.getResultList() )
       <tr id="${billReceivable.brId}_tr">
-        <td><a href="#springUrl('')invoice/${billReceivable.brId}" target="_blank">${billReceivable.brId}</a></td>
+        <td><a href="#springUrl('/')invoice/?brId=${billReceivable.brId}" target="_blank">${billReceivable.brId}</a></td>
         <td>${billReceivable.customerCompany}</td>
         <td>${billReceivable.brDate}</td>
         <td>${billReceivable.amount}</td>
