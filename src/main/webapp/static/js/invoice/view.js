@@ -27,7 +27,7 @@ $(document).ready(function() {
 });
 
 
-function edit(Id){
+function edit(Id, isDeleted){
 	url = contextPath + '/invoice/update';
 	$('#dlg').dialog('open').dialog('setTitle','编辑');
 	var trId = Id+"_tr";
@@ -49,7 +49,7 @@ function edit(Id){
 	$('#incDate').datebox('setValue', tdDate[8].innerHTML);
 	$('#invToCompany').textbox('setValue', tdDate[9].innerHTML);
 	$('#verification').numberbox('setValue', tdDate[10].innerHTML);
-	$('#isDeleted').combobox('setValue', tdDate[11].innerHTML);
+	$('#isDeleted').combobox('setValue', isDeleted);
 	
 }
 

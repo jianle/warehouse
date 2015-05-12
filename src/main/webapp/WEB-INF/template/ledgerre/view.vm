@@ -28,7 +28,7 @@
     <div class="filter-content-right" style="margin-top:8px">
       <div class="ui action left icon input">
         <i class="search icon"></i>
-        <input type="text" name="payCompany" value="$payCompany" placeholder="客服公司">
+        <input type="text" name="payCompany" value="$payCompany" placeholder="付款公司">
         <div id="btnSearch" class="ui teal submit button">Search</div>
       </div>
     </div>
@@ -65,18 +65,18 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>付款公司</th>
-      <th>金额</th>
-      <th>付款日期</th>
-      <th>已核销金额</th>
-      <th>备注</th>
+      <th min-width="250px">付款公司</th>
+      <th width="70px">金额</th>
+      <th width="110px">付款日期</th>
+      <th width="100px">已核销金额</th>
+      <th min-width="250px">备注</th>
       <th width="85px">编辑</th>
     </tr>
   </thead>
   <tbody>
     #foreach( $ledgerReceivable in $pagination.getResultList() )
       <tr id="${ledgerReceivable.lrId}_tr">
-        <td><a href="#springUrl('/')invoice/?brId=${ledgerReceivable.lrId}" target="_blank">${ledgerReceivable.lr_id}</a></td>
+        <td><a href="#springUrl('/')invoiceincome/?lrId=${ledgerReceivable.lrId}" target="_blank">${ledgerReceivable.lrId}</a></td>
         <td>${ledgerReceivable.payCompany}</td>
         <td>${ledgerReceivable.amount}</td>
         <td>${ledgerReceivable.payDate}</td>
@@ -97,7 +97,7 @@
   <input type="hidden" id="numPerPage" name="numPerPage" value="" />
   <input type="hidden" name="startDate" value="$startDate" />
   <input type="hidden" name="endDate" value="$endDate" />
-  <input type="hidden" name="customerCompany" value="$customerCompany" />
+  <input type="hidden" name="payCompany" value="$payCompany" />
 </form>
 
 #parse("/ledgerre/dialog.vm")

@@ -66,9 +66,13 @@
         <td>${invoice.incDate}</td>
         <td>${invoice.invToCompany}</td>
         <td>${invoice.verification}</td>
-        <td>${invoice.isDeleted}</td>
+        <td value="${invoice.isDeleted}">
+          <span class="mini-label #if(${invoice.isDeleted}==0) mini-label-primary #else mini-label-default #end">
+            #if(${invoice.isDeleted}==0) 有效 #else 无效 #end
+          </span>
+        </td>
         <td>
-          <a id="edit" onclick="edit(${invoice.invId})" data-toggle="modal"
+          <a id="edit" onclick="edit(${invoice.invId},${invoice.isDeleted})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
           <a href="javascript:deleteInfo(${invoice.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
       </td>

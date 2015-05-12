@@ -115,6 +115,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             Pagination<LedgerReceivable> pagination = new Pagination<LedgerReceivable>(totalRows, currentPage, numPerPage);
             sql = pagination.getMySQLPageSQL(sql, pagination.getCurrentPage());
             List<LedgerReceivable> resultList = jdbcTemplateFinance.query(sql, rowMapper);
+            logger.debug("resultList:"+resultList.toString());
             pagination.setResultList(resultList);
             logger.info(sql);
             return pagination;
@@ -176,7 +177,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             ledgerReceivable.setRemark(rs.getString("remark"));
             ledgerReceivable.setUpdateTime(DATET_TIME_FORMAT.format(rs.getTime("update_time")));
             // TODO Auto-generated method stub
-            return null;
+            return ledgerReceivable;
         }
     };
 

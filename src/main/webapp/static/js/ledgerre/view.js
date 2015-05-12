@@ -104,7 +104,7 @@ function deleteInfo(lrId){
 		                    title: '提示信息',
 		                    msg: '删除成功'
 		                });
-						$("#"+brId+"_tr").remove()
+						$("#"+lrId+"_tr").remove()
 					}else{
 						$.messager.alert("提示", "删除失败");
 					}

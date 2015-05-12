@@ -65,10 +65,10 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>客服公司</th>
-      <th>日期</th>
-      <th>金额</th>
-      <th>备注</th>
+      <th min-width="280px">客服公司</th>
+      <th width="110px">日期</th>
+      <th width="110px">金额</th>
+      <th min-width="250px">备注</th>
       <th width="85px">编辑</th>
     </tr>
   </thead>

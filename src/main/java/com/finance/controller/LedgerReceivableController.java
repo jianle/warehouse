@@ -54,6 +54,8 @@ public class LedgerReceivableController {
         modelView.addObject("endDate", endDate);
         modelView.addObject("payCompany", payCompany);
         
+        logger.info(pagination.getResultList().toString());
+        
         return modelView;
     }
     
