@@ -53,7 +53,7 @@
                   <a href="#springUrl('/billReceivable')">应收账单</a>
                 </li>
                 <li #if($title == '查看收款') class='active' #end>
-                  <a href="#springUrl('/')">查看收款</a>
+                  <a href="#springUrl('/ledgerReceivable')">查看收款</a>
                 </li>
                 <li #if($title == '进项增票登记') class='active' #end>
                   <a href="#springUrl('/')">进项增票登记</a>

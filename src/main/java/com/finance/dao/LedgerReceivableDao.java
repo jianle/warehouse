@@ -2,6 +2,7 @@ package com.finance.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.finance.model.LedgerReceivable;
+import com.wms.model.Pagination;
 
 @Repository
 public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
@@ -56,7 +58,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
                     object.getPayDate(),
                     object.getVerification(),
                     object.getRemark(),
-                    object.getUpdateTime()
+                    new Timestamp(System.currentTimeMillis())
                     );
             return true;
         } catch (Exception e) {
@@ -69,6 +71,57 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     @Override
     public List<LedgerReceivable> findAll() {
         // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @SuppressWarnings("deprecation")
+    public Pagination<LedgerReceivable> findPagination(String startDate,
+            String endDate, String payCompany, Integer currentPage,
+            Integer numPerPage) {
+        // TODO Auto-generated method stub
+        StringBuilder sqlBuilder = new StringBuilder("select ");
+        sqlBuilder.append(SELECT_FIELDS)
+                  .append(" from ")
+                  .append(TABLE_NAME);
+        
+        StringBuilder isWhere = new StringBuilder();
+        Boolean flagIsWhere = false;
+        if (startDate.compareTo(endDate)<0) {
+            isWhere.append(" where pay_date between '").append(startDate).append("' and '").append(endDate).append("' ");
+            flagIsWhere = true;
+        }
+        
+        if (!payCompany.equals("")) {
+            if (flagIsWhere) {
+                isWhere.append(" and pay_company like '%").append(payCompany).append("%' ");
+            } else {
+                isWhere.append(" where pay_company like '%").append(payCompany).append("%' ");
+            }
+            flagIsWhere = true;
+        }
+        
+        String sql = null;
+        if (flagIsWhere) {
+            sql = sqlBuilder.append(isWhere.toString()).toString();
+        } else {
+            sql = sqlBuilder.toString();
+        }
+        
+        String sqlTotal = sql.replace(SELECT_FIELDS, "COUNT(1)");
+        int totalRows = 0;
+        
+        try {
+            totalRows = jdbcTemplateFinance.queryForInt(sqlTotal);
+            Pagination<LedgerReceivable> pagination = new Pagination<LedgerReceivable>(totalRows, currentPage, numPerPage);
+            sql = pagination.getMySQLPageSQL(sql, pagination.getCurrentPage());
+            List<LedgerReceivable> resultList = jdbcTemplateFinance.query(sql, rowMapper);
+            pagination.setResultList(resultList);
+            logger.info(sql);
+            return pagination;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findPagination failed." + e);
+        }
         return null;
     }
     
@@ -85,7 +138,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
                     object.getPayDate(),
                     object.getVerification(),
                     object.getRemark(),
-                    object.getLr_id()
+                    object.getLrId()
                     );
             return true;
         } catch (Exception e) {
@@ -115,7 +168,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         public LedgerReceivable mapRow(ResultSet rs, int rowNum)
                 throws SQLException {
             LedgerReceivable ledgerReceivable = new LedgerReceivable();
-            ledgerReceivable.setLr_id(rs.getLong("lr_id"));
+            ledgerReceivable.setLrId(rs.getLong("lr_id"));
             ledgerReceivable.setPayCompany(rs.getString("pay_company"));
             ledgerReceivable.setAmount(rs.getDouble("amount"));
             ledgerReceivable.setPayDate(DATE_FORMAT.format(rs.getDate("pay_date")));
@@ -126,5 +179,6 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             return null;
         }
     };
+
 
 }

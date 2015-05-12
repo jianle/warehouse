@@ -1,0 +1,33 @@
+<div id="dlg" class="easyui-dialog" style="width:450px;height:320px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">应收账单</div>
+            <form id="modalForm" method="post" style="margin-top:20px" novalidate>
+                <input type="hidden" value="" name="lrId" id="lrId" />
+                
+                <div class="fitem">
+                    <label>客服公司:</label>
+                    <input name="payCompany" id="payCompany" style="width:300px" class="easyui-textbox" required="true" />
+                </div>
+                <div class="fitem">
+                    <label style="padding-left:0px;">付款日期:</label>
+                    <input name="payDate" id="payDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true"/>
+                </div>
+                <div class="fitem">
+                    <label style="padding-left:20px;">金  额:</label>
+                    <input name="amount" id="amount" class="easyui-numberbox" data-options="precision:2" required="true" />
+                </div>
+                <div class="fitem">
+                    <label>已核销金额:</label>
+                    <input name="verification" id="verification" class="easyui-numberbox" data-options="precision:2" required="true" />
+                </div>
+                <div class="fitem">
+                    <label>备注信息:</label>
+                    <input style="width:300px" name="remark" id="remark" class="easyui-textbox" />
+                </div>
+
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+      </div>

@@ -101,11 +101,11 @@ public class InvoiceController {
     @RequestMapping(value="delete", method=RequestMethod.POST)
     @ResponseBody
     public String delete(HttpServletRequest request, 
-            @ModelAttribute("brId") Long brId) {
+            @ModelAttribute("invId") Long invId) {
         
-        logger.info("brId :" + brId);
+        logger.info("invId :" + invId);
         
-        if (invoiceDao.delete(brId)) {
+        if (invoiceDao.delete(invId)) {
             return "true";
         }
         

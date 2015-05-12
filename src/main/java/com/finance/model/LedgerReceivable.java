@@ -6,18 +6,18 @@ package com.finance.model;
 
 public class LedgerReceivable {
     
-    private Long lr_id;
+    private Long lrId;
     private String payCompany;
     private Double amount;
     private String payDate;
     private Double verification;
     private String remark;
     private String updateTime;
-    public Long getLr_id() {
-        return lr_id;
+    public Long getLrId() {
+        return lrId;
     }
-    public void setLr_id(Long lr_id) {
-        this.lr_id = lr_id;
+    public void setLrId(Long lrId) {
+        this.lrId = lrId;
     }
     public String getPayCompany() {
         return payCompany;
@@ -57,7 +57,7 @@ public class LedgerReceivable {
     }
     @Override
     public String toString() {
-        return "LedgerReceivable [lr_id=" + lr_id + ", payCompany="
+        return "LedgerReceivable [lrId=" + lrId + ", payCompany="
                 + payCompany + ", amount=" + amount + ", payDate=" + payDate
                 + ", verification=" + verification + ", remark=" + remark
                 + ", updateTime=" + updateTime + "]";
