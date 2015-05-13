@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +64,15 @@ public class BillReceivableController {
     @ResponseBody
     public String save(HttpServletRequest request, 
             @ModelAttribute("billReceivable") BillReceivable billReceivable) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
         
         logger.info(billReceivable.toString());
         
         if (billReceivableDao.save(billReceivable)) {
             return "true";
         }
-        
+        jsonTuple.put("value", result);
         return "false";
     }
     
@@ -76,28 +80,30 @@ public class BillReceivableController {
     @ResponseBody
     public String update(HttpServletRequest request, 
             @ModelAttribute("billReceivable") BillReceivable billReceivable) {
-        
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
         logger.info(billReceivable.toString());
         
         if (billReceivableDao.update(billReceivable)) {
             return "true";
         }
-        
+        jsonTuple.put("value", result);
         return "false";
     }
     
     @RequestMapping(value="delete", method=RequestMethod.POST)
     @ResponseBody
-    public String delete(HttpServletRequest request, 
+    public JSONObject delete(HttpServletRequest request, 
             @ModelAttribute("brId") Long brId) {
-        
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
         logger.info("brId :" + brId);
         
         if (billReceivableDao.delete(brId)) {
-            return "true";
+            result = true;
         }
-        
-        return "false";
+        jsonTuple.put("value", result);
+        return jsonTuple;
     }
 
 }

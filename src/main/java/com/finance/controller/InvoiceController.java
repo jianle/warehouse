@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -100,16 +102,19 @@ public class InvoiceController {
     
     @RequestMapping(value="delete", method=RequestMethod.POST)
     @ResponseBody
-    public String delete(HttpServletRequest request, 
+    public JSONObject delete(HttpServletRequest request, 
             @ModelAttribute("invId") Long invId) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
         
         logger.info("invId :" + invId);
         
         if (invoiceDao.delete(invId)) {
-            return "true";
+            result = true;
         }
+        jsonTuple.put("value", result);
         
-        return "false";
+        return jsonTuple;
     }
 
 

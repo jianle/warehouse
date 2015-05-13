@@ -1,4 +1,3 @@
-
 var url;
 var flagTitle="编辑";
 var curDate = myformatter(new Date());
@@ -60,10 +59,11 @@ function save(){
 		onSubmit: function(){
             return $(this).form('validate');
         },
-        dataType:'text',
-        success: function(data){
-        	var result = eval('('+data+')');
-            if (result){
+        success: function(result){
+        	console.log(result.indexOf("true"));
+        	var hasTrue = result.indexOf("true");
+        	
+            if (hasTrue>=0){
             	$('#dlg').dialog('close');
                 $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
 					console.log('ok');
@@ -78,6 +78,7 @@ function save(){
             $('#dlg').dialog('close');
         }
 	}); 
+	$('#dlg').dialog('close');
 }
 
 
@@ -91,14 +92,15 @@ function deleteInfo(invId){
 				url :contextPath + '/invoice/delete',
 				data: {invId:invId},
 				async:true,
-				dataType: 'text',
+				dataType: 'json',
 				success: function(result) {
-					if(result=='true'){
+					console.log(result);
+					if(result.value){
 						$.messager.show({
 		                    title: '提示信息',
 		                    msg: '删除成功'
 		                });
-						$("#"+brId+"_tr").remove()
+						$("#"+invId+"_tr").remove()
 					}else{
 						$.messager.alert("提示", "删除失败");
 					}

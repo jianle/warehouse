@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,17 +91,18 @@ public class LedgerReceivableController {
     
     @RequestMapping(value="delete", method=RequestMethod.POST)
     @ResponseBody
-    public String delete(HttpServletRequest request, 
+    public JSONObject delete(HttpServletRequest request, 
             @ModelAttribute("lrId") Long lrId) {
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
         
         logger.info("lrId :" + lrId);
         
         if (ledgerReceivableDao.delete(lrId)) {
-            return "true";
+            result = true;
         }
-        
-        return "false";
+        jsonTuple.put("value", result);
+        return jsonTuple;
     }
-
 
 }

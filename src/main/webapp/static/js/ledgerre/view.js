@@ -67,11 +67,10 @@ function save(){
 		onSubmit: function(){
             return $(this).form('validate');
         },
-        dataType:'text',
-        success: function(data){
-        	var result = eval('('+data+')');
-            if (result){
-            	$('#dlg').dialog('close');
+        success: function(result){
+        	console.log(result.indexOf("true"));
+        	var hasTrue = result.indexOf("true");
+            if (hasTrue>=0){
                 $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
 					console.log('ok');
 					window.location.href=contextPath + '/ledgerReceivable';
@@ -84,6 +83,7 @@ function save(){
             }
         }
 	}); 
+	$('#dlg').dialog('close');
 }
 
 
@@ -97,9 +97,10 @@ function deleteInfo(lrId){
 				url :contextPath + '/ledgerReceivable/delete',
 				data: {lrId:lrId},
 				async:true,
-				dataType: 'text',
+				dataType: 'json',
 				success: function(result) {
-					if(result=='true'){
+					console.log(result);
+					if(result.value){
 						$.messager.show({
 		                    title: '提示信息',
 		                    msg: '删除成功'

@@ -65,11 +65,11 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th min-width="250px">付款公司</th>
+      <th min-width="200px">付款公司</th>
       <th width="70px">金额</th>
       <th width="110px">付款日期</th>
       <th width="100px">已核销金额</th>
-      <th min-width="250px">备注</th>
+      <th width="250px">备注</th>
       <th width="85px">编辑</th>
     </tr>
   </thead>
