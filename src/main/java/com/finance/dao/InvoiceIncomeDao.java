@@ -1,7 +1,9 @@
 package com.finance.dao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -9,11 +11,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.finance.model.InvoiceIncome;
+import com.wms.model.Pagination;
 
 
 @Repository
@@ -66,7 +70,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                     obj.getRemark(),
                     obj.getRateRebate(),
                     obj.getIsDeleted(),
-                    obj.getUpdateTime()
+                    new Timestamp(System.currentTimeMillis())
                     );
             
         } catch (Exception e) {
@@ -139,6 +143,73 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
             return invoiceIncome;
         }
     };
+
+	@SuppressWarnings("deprecation")
+	public Pagination<InvoiceIncome> findPagination(Long lrId,
+			Integer currentPage, Integer numPerPage) {
+		// TODO Auto-generated method stub
+		String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME ;
+        
+        String sqlCount = sql.replace(SELECT_FIELDS, "COUNT(1)");
+        
+        int totalRows = 0;
+        Pagination<InvoiceIncome> pagination = null;
+        try {
+            totalRows = jdbcTemplateFinance.queryForInt(sqlCount);
+            pagination = new Pagination<InvoiceIncome>(totalRows, currentPage, numPerPage);
+            sql = pagination.getMySQLPageSQL(sql, pagination.getCurrentPage());
+            List<InvoiceIncome> resultList = jdbcTemplateFinance.query(sql, rowMapper);
+            pagination.setResultList(resultList);
+            logger.info(sql);
+            return pagination;
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        
+        return pagination;
+	}
+
+	public boolean saveBatch(final List<InvoiceIncome> invoiceIncomes) {
+		// TODO Auto-generated method stub
+		try {
+            String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
+                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
+            jdbcTemplateFinance.batchUpdate(sql, new BatchPreparedStatementSetter(){
+
+                @Override
+                public void setValues(PreparedStatement ps, int i)
+                        throws SQLException {
+                    // TODO Auto-generated method stub
+                	InvoiceIncome obj = invoiceIncomes.get(i);
+                    ps.setObject(1, obj.getInvId());
+                    ps.setObject(2, obj.getInvHead());
+                    ps.setObject(3, obj.getValoremTax());
+                    ps.setObject(4, obj.getAmount());
+                    ps.setObject(5, obj.getAmountTax());
+                    ps.setObject(6, obj.getRateTax());
+                    ps.setObject(7, obj.getInvDate());
+                    ps.setObject(8, obj.getInvType());
+                    ps.setObject(9, obj.getInvToCompany());
+                    ps.setObject(10, obj.getRemark());
+                    ps.setObject(11, obj.getRateRebate());
+                    ps.setObject(12, obj.getIsDeleted());
+                    ps.setObject(13, new Timestamp(System.currentTimeMillis()));
+                    
+                }
+
+                @Override
+                public int getBatchSize() {
+                    // TODO Auto-generated method stub
+                    return invoiceIncomes.size();
+                }});
+            
+           return true;
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
     
     
 }

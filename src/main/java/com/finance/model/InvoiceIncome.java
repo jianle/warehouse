@@ -6,7 +6,7 @@ package com.finance.model;
  */
 
 
-public class InvoiceIncome {
+public class InvoiceIncome implements Cloneable {
     
     private Long invId;
     private String invHead;
@@ -21,7 +21,15 @@ public class InvoiceIncome {
     private Double rateRebate;
     private Integer isDeleted;
     private String updateTime;
-    public Long getInvId() {
+    private Integer number;
+    
+    public Integer getNumber() {
+		return number;
+	}
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+	public Long getInvId() {
         return invId;
     }
     public void setInvId(Long invId) {
@@ -99,6 +107,12 @@ public class InvoiceIncome {
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
+    
+    @Override  
+    public Object clone() throws CloneNotSupportedException {  
+        return super.clone();  
+    }
+    
     @Override
     public String toString() {
         return "InvoiceIncome [invId=" + invId + ", invHead=" + invHead

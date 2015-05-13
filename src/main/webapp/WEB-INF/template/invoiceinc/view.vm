@@ -1,0 +1,94 @@
+#set($title='进项增票登记')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<link href="#springUrl('/static/css/invoiceinc/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/invoiceinc/view.js')"></script>
+
+<br/>
+<div class="row pull-right" style="padding-right:440px;margin-top: -15px;margin-left:0px">
+  <div class="easyui-pagination"
+  style="border:1px solid #000;background:white;position:fixed;"
+  data-options="
+  total: ${pagination.totalRows},
+  pageSize: ${pagination.numPerPage},
+  pageNumber:${pagination.currentPage},
+  pageList: [10,20,30,50],//可以设置每页记录条数的列表
+  beforePageText: '第 ',//页数文本框前显示的汉字
+  afterPageText: '页    共 {pages} 页',
+  displayMsg: '显示 {from} - {to}   共 {total} 条',
+  onSelectPage: function(pageNumber, pageSize){
+    console.log(pageNumber+'....'+pageSize);
+    $('#currentPage').val(pageNumber);
+    $('#numPerPage').val(pageSize);
+    document.getElementById('formPagination').submit();
+  }">
+</div>
+</div>
+
+<div class="ui primary button" id="addButton">
+    <i class="plus icon"></i> 新增
+</div>
+
+
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th>发票号</th>
+      <th>发票抬头</th>
+      <th>价税合计</th>
+      <th>金额</th>
+      <th>税额</th>
+      <th>税率</th>
+      <th>开票日期</th>
+	  <th>发票所属</th>
+	  <th>开票公司</th>
+      <th>备注</th>
+      <th>返点比例</th>
+      <th>状态</th>
+      <th width="85px">编辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $invoiceIncome in $pagination.getResultList() )
+      <tr id="${invoiceIncome.invId}_tr">
+        <td>${invoiceIncome.invId}</td>
+        <td>${invoiceIncome.invHead}</td>
+        <td>${invoiceIncome.valoremTax}</td>
+        <td>${invoiceIncome.amount}</td>
+        <td>${invoiceIncome.amountTax}</td>
+        <td>${invoiceIncome.rateTax}</td>
+        <td>${invoiceIncome.invDate}</td>
+        <td>${invoiceIncome.invType}</td>
+        <td>${invoiceIncome.invToCompany}</td>
+        <td>${invoiceIncome.remark}</td>
+        <td>${invoiceIncome.rateRebate}</td>
+        <td value="${invoiceIncome.isDeleted}">
+          <span class="mini-label #if(${invoiceIncome.isDeleted}==0) mini-label-primary #else mini-label-default #end">
+            #if(${invoiceIncome.isDeleted}==0) 有效 #else 无效 #end
+          </span>
+        </td>
+        <td>
+          <a id="edit" onclick="edit(${invoiceIncome.invId},${invoiceIncome.isDeleted})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteInfo(${invoiceIncome.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+      </td>
+      </tr>
+    #end
+  </tbody>
+</table>
+
+<form name="formPagination" id="formPagination" action="#springUrl('/invoiceinc/search')" method="get">
+  <input type="hidden" id="currentPage" name="currentPage" value="" />
+  <input type="hidden" id="numPerPage" name="numPerPage" value="" />
+  <input type="hidden" id="brId" name="brId" value="$brId" />
+</form>
+
+#parse("/invoiceinc/dialog.vm")
+
+<script>
+</script>
+

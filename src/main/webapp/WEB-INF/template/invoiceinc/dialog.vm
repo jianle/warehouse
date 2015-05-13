@@ -1,0 +1,68 @@
+    <div id="dlg" class="easyui-dialog" style="width:500px;height:430px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">发票</div>
+            <form id="modalForm" method="post" style="margin-top:20px" novalidate>
+            
+                <input type="hidden" value="$brId" name="brId" />
+                                
+                <div class="fitem">
+                    <label style="padding-left:10px;">发票号:</label>
+                    <input name="invId" id="invId" class="easyui-numberbox" required="true" />
+                    <label style="padding-left:50px;padding-right:20px;width:100px">数量:</label>
+                    <input id="number" name="number" value="1" class="easyui-numberspinner" style="width:65px;"
+                        required="required" data-options="min:1,max:200,editable:true">
+                </div>
+                
+                <div class="fitem">
+                    <label style="padding-left:20px;">抬头:</label>
+                    <input name="invHead" id="invHead" style="width:350px" class="easyui-textbox" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label style="padding-left:0px;">价税合计:</label>
+                    <input name="valoremTax" id="valoremTax" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                    <label style="padding-left:80px;padding-right:10px;width:125px">金额:</label>
+                    <input name="amount" id="amount" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label style="padding-left:20px;">税 额:</label>
+                    <input name="amountTax" id="amountTax" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                    <label style="padding-left:60px;padding-right:10px;width:125px">税率(%):</label>
+                    <input name="rateTax" id="rateTax" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label style="padding-left:0px;">开票日期:</label>
+                    <input name="invDate" id="invDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true"/>
+                </div>
+                
+                <div class="fitem">
+                    <label>备注信息:</label>
+                    <input style="width:300px" name="remark" id="remark" class="easyui-textbox" />
+                </div>
+                
+                <div class="fitem">
+                    <label style="padding-left:0px;">进账日期:</label>
+                    <input name="incDate" id="incDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true"/>
+                </div>
+                <div class="fitem">
+                    <label style="padding-left:0px;">进账公司:</label>
+                    <input name="invToCompany" id="invToCompany" style="width:350px" class="easyui-textbox" required="true" />
+                </div>
+                <div class="fitem">
+                    <label style="padding-left:-5px;">已核销金额:</label>
+                    <input name="verification" id="verification" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                    <label style="padding-left:80px;padding-right:10px;width:125px">状态:</label>
+                    <select id="isDeleted" value="0" class="easyui-combobox" panelHeight="auto"  name="isDeleted" style="width:110px;">
+                      <option value="0">有效</option>
+                      <option value="1">无效</option>
+                    </select>
+                </div>
+
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+      </div>
