@@ -3,11 +3,15 @@
         <div class="ftitle">应收账单</div>
             <form id="modalForm" method="post" style="margin-top:20px" novalidate>
                 <input type="hidden" value="" name="brId" id="brId" />
-                
-                <div class="fitem">
-                    <label>客服公司:</label>
-                    <input name="customerCompany" id="customerCompany" style="width:300px" class="easyui-textbox" required="true" />
+				<div class="fitem">
+					<label>客服公司:</label>
+					<select id="conId" class="easyui-combobox" panelHeight="150px"  name="conId" style="width:300px;" required="true">
+                      #foreach( $key in $consumerMap.keySet().toArray())
+					  <option value="$key">${consumerMap.get($key)}</option>
+                      #end
+                    </select>
                 </div>
+				
                 <div class="fitem">
                     <label style="padding-left:20px;">日  期:</label>
                     <input name="brDate" id="brDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true"/>

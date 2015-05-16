@@ -22,7 +22,7 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
     private Logger logger = LoggerFactory.getLogger(BillReceivableDao.class);
     
     private static final String TABLE_NAME    = "bill_receivable";
-    private static final String INSERT_FIELDS = "customer_company, br_date, amount, remark";
+    private static final String INSERT_FIELDS = "con_id, br_date, amount, remark";
     private static final String SELECT_FIELDS = "br_id, " + INSERT_FIELDS;
     
     @Autowired
@@ -49,7 +49,7 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
             String sql = "insert into " + TABLE_NAME + " ("
                     + INSERT_FIELDS + " ) values (?, ?, ?, ?)";
             jdbcTemplateFinance.update(sql, 
-                    object.getCustomerCompany(),
+                    object.getConId(),
                     object.getBrDate(),
                     object.getAmount(),
                     object.getRemark()
@@ -70,7 +70,7 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
     
     @SuppressWarnings("deprecation")
     public  Pagination<BillReceivable> findPagination(String startDate, String endDate
-            , String customerCompany, int currentPage, int numPerPage) {
+            , String conIds, int currentPage, int numPerPage) {
         // TODO Auto-generated method stub
         
         StringBuilder sqlBuilder = new StringBuilder("select ");
@@ -85,11 +85,12 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
             flagIsWhere = true;
         }
         
-        if (!customerCompany.equals("")) {
+        if (conIds != null && !conIds.equals("")) {
+        	
             if (flagIsWhere) {
-                isWhere.append(" and customer_company like '%").append(customerCompany).append("%' ");
+                isWhere.append(" and con_id in ").append(conIds);
             } else {
-                isWhere.append(" where customer_company like '%").append(customerCompany).append("%' ");
+                isWhere.append(" where con_id in ").append(conIds);
             }
             flagIsWhere = true;
         }
@@ -125,10 +126,10 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "update " + TABLE_NAME + " set "
-                    + "customer_company=?, br_date=?, amount=?, remark=? "
+                    + "con_id=?, br_date=?, amount=?, remark=? "
                     + "where br_id=?";
             jdbcTemplateFinance.update(sql, 
-                    object.getCustomerCompany(),
+                    object.getConId(),
                     object.getBrDate(),
                     object.getAmount(),
                     object.getRemark(),
@@ -164,7 +165,7 @@ public class BillReceivableDao implements BaseDao<BillReceivable, Long> {
             // TODO Auto-generated method stub
             BillReceivable billReceivable = new BillReceivable();
             billReceivable.setBrId(rs.getLong("br_id"));
-            billReceivable.setCustomerCompany(rs.getString("customer_company"));
+            billReceivable.setConId((rs.getLong("con_id")));
             billReceivable.setBrDate(new SimpleDateFormat("yyyy-MM-dd").format(rs.getDate("br_date")));
             billReceivable.setAmount(rs.getDouble("amount"));
             billReceivable.setRemark(rs.getString("remark"));

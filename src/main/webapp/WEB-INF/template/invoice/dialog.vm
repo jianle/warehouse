@@ -3,7 +3,7 @@
         <div class="ftitle">发票</div>
             <form id="modalForm" method="post" style="margin-top:20px" novalidate>
             
-                <input type="hidden" value="$brId" name="brId" />
+                <input type="hidden" id="brId1" value="$brId" name="brId" />
                                 
                 <div class="fitem">
                     <label style="padding-left:10px;">发票号:</label>
@@ -15,7 +15,11 @@
                 
                 <div class="fitem">
                     <label style="padding-left:20px;">抬头:</label>
-                    <input name="invHead" id="invHead" style="width:350px" class="easyui-textbox" required="true" />
+                    <select id="conId" class="easyui-combobox" panelHeight="150px"  name="conId" style="width:351px;" required="true">
+                      #foreach( $key in $consumerMap.keySet().toArray())
+					  <option value="$key">${consumerMap.get($key)}</option>
+                      #end
+                    </select>
                 </div>
                 
                 <div class="fitem">
@@ -47,8 +51,12 @@
                     <input name="incDate" id="incDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true"/>
                 </div>
                 <div class="fitem">
-                    <label style="padding-left:0px;">进账公司:</label>
-                    <input name="invToCompany" id="invToCompany" style="width:350px" class="easyui-textbox" required="true" />
+                    <label style="padding-left:0px;">开票公司:</label>
+                    <select id="proId" class="easyui-combobox" panelHeight="150px"  name="proId" style="width:351px;" required="true">
+                      #foreach( $key in $producerMap.keySet().toArray())
+					  <option value="$key">${producerMap.get($key)}</option>
+                      #end
+                    </select>
                 </div>
                 <div class="fitem">
                     <label style="padding-left:-5px;">已核销金额:</label>

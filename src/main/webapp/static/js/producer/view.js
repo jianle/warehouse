@@ -1,20 +1,4 @@
 $(document).ready(function(){
-	
-	$('#startDate').datepicker({
-	    format: "yyyy-mm-dd",
-	    language: "zh-CN",
-	    orientation: "auto",
-	    autoclose: true
-	});
-	
-
-	$('#endDate').datepicker({
-	    format: "yyyy-mm-dd",
-	    language: "zh-CN",
-	    orientation: "auto right",
-	    autoclose: true
-	});
-	
 	$('#btnSearch').click(function(){
 		document.getElementById('firstFromId').submit();
 	});
@@ -29,11 +13,10 @@ $(document).ready(function() {
 	$('#addButton').click(function(){
 		//$('#modal').modal('show');
 		$('#dlg').dialog('open').dialog('setTitle','新增');
-		url = contextPath + '/billReceivable/save';
+		url = contextPath + '/producer/save';
 		if(flagTitle=="编辑"){
 			$('#modalForm').form('clear');
-			$('#brDate').datebox('setValue', curDate);
-			$('#amount').numberbox('setValue', 0);
+			$('#proName').textbox('setValue', '');
 			$('#remark').textbox('setValue', '');
 		}
 		flagTitle="新增";
@@ -41,19 +24,17 @@ $(document).ready(function() {
 });
 
 
-function edit(Id, conId){
-	url = contextPath + '/billReceivable/update';
+function edit(Id){
+	url = contextPath + '/producer/update';
 	$('#dlg').dialog('open').dialog('setTitle','编辑');
 	var trId = Id+"_tr";
 	flagTitle="编辑";
-	var tdDate = $("#"+trId+" td");
+	var tdDate= $("#"+trId+" td");
 	//初始化 Modal 
-	$('#brId').val(Id);
+	$('#proId').val(Id);
 	//$('.content #name').attr('readonly','readonly');
-	$('#conId').combobox('setValue', conId);
-	$('#brDate').datebox('setValue', tdDate[2].innerHTML );
-	$('#amount').numberbox('setValue', tdDate[3].innerHTML );
-	$('#remark').textbox('setValue', tdDate[4].innerHTML );
+	$('#proName').textbox('setValue', tdDate[0].innerHTML);
+	$('#remark').textbox('setValue', tdDate[1].innerHTML);
 }
 
 
@@ -72,7 +53,7 @@ function save(){
             	$('#dlg').dialog('close');
                 $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
 					console.log('ok');
-					window.location.href=contextPath + '/billReceivable';
+					window.location.href=contextPath + '/producer';
                 });
             } else {
             	$.messager.show({
@@ -86,15 +67,15 @@ function save(){
 }
 
 
-function deleteInfo(brId){
+function deleteInfo(proId){
 	$.messager.confirm('提示', '确认是否删除', function(r){
 		if(r) {
 			// 异步执行删除
 			$.ajax({
 				cache: true,
 				type:"POST",
-				url :contextPath + '/billReceivable/delete',
-				data: {brId:brId},
+				url :contextPath + '/producer/delete',
+				data: {proId:proId},
 				async:true,
 				dataType: 'json',
 				success: function(result) {
@@ -104,7 +85,7 @@ function deleteInfo(brId){
 		                    title: '提示信息',
 		                    msg: '删除成功'
 		                });
-						$("#"+brId+"_tr").remove()
+						$("#"+proId+"_tr").remove()
 					}else{
 						$.messager.alert("提示", "删除失败");
 					}

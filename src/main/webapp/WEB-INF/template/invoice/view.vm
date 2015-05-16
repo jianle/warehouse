@@ -8,8 +8,10 @@
 <link href="#springUrl('/static/css/invoice/view.css')" rel="stylesheet" />
 <script type="text/javascript" src="#springUrl('/static/js/invoice/view.js')"></script>
 
-<br/>
-<div class="row pull-right" style="padding-right:440px;margin-top: -15px;margin-left:0px">
+<h2 style="margin-top:4px"><code>录入发票明细</code></h2>
+
+<hr/>
+<div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
   <div class="easyui-pagination"
   style="border:1px solid #000;background:white;position:fixed;"
   data-options="
@@ -42,7 +44,7 @@
       <th>价税合计</th>
       <th>金额</th>
       <th>税额</th>
-      <th>税率</th>
+      <th>税率(%)</th>
       <th>开票日期</th>
       <th>备注</th>
       <th>进账日期</th>
@@ -55,8 +57,8 @@
   <tbody>
     #foreach( $invoice in $pagination.getResultList() )
       <tr id="${invoice.invId}_tr">
-        <td>${invoice.invId}</td>
-        <td>${invoice.invHead}</td>
+        <th>${invoice.invId}</th>
+        <td>${consumerMap.get($invoice.conId)}</td>
         <td>${invoice.valoremTax}</td>
         <td>${invoice.amount}</td>
         <td>${invoice.amountTax}</td>
@@ -64,7 +66,7 @@
         <td>${invoice.invDate}</td>
         <td>${invoice.remark}</td>
         <td>${invoice.incDate}</td>
-        <td>${invoice.invToCompany}</td>
+        <td>${producerMap.get($invoice.proId)}</td>
         <td>${invoice.verification}</td>
         <td value="${invoice.isDeleted}">
           <span class="mini-label #if(${invoice.isDeleted}==0) mini-label-primary #else mini-label-default #end">
@@ -72,7 +74,7 @@
           </span>
         </td>
         <td>
-          <a id="edit" onclick="edit(${invoice.invId},${invoice.isDeleted})" data-toggle="modal"
+          <a id="edit" onclick="edit(${invoice.invId},${invoice.conId},${invoice.proId},${invoice.isDeleted})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
           <a href="javascript:deleteInfo(${invoice.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
       </td>

@@ -8,7 +8,7 @@ public class Invoice implements Cloneable {
     
     private Long brId;
     private Long invId;
-    private String invHead;
+    private Long conId;
     private Double valoremTax;
     private Double amount;
     private Double amountTax;
@@ -17,14 +17,30 @@ public class Invoice implements Cloneable {
     private String invDate;
     private String remark;
     private String incDate;
-    private String invToCompany;
+    private Long  proId;
     private Double verification;
     private Integer isDeleted;
     private String updateTime;
     
     private Integer number;
     
-    public void setNumber(Integer number) {
+    public Long getConId() {
+		return conId;
+	}
+
+	public void setConId(Long conId) {
+		this.conId = conId;
+	}
+
+	public Long getProId() {
+		return proId;
+	}
+
+	public void setProId(Long proId) {
+		this.proId = proId;
+	}
+
+	public void setNumber(Integer number) {
         this.number = number;
     }
     
@@ -46,14 +62,6 @@ public class Invoice implements Cloneable {
 
     public void setInvId(Long invId) {
         this.invId = invId;
-    }
-
-    public String getInvHead() {
-        return invHead;
-    }
-
-    public void setInvHead(String invHead) {
-        this.invHead = invHead;
     }
 
     public Double getValoremTax() {
@@ -112,14 +120,6 @@ public class Invoice implements Cloneable {
         this.incDate = incDate;
     }
 
-    public String getInvToCompany() {
-        return invToCompany;
-    }
-
-    public void setInvToCompany(String invToCompany) {
-        this.invToCompany = invToCompany;
-    }
-
     public Double getVerification() {
         return verification;
     }
@@ -150,14 +150,14 @@ public class Invoice implements Cloneable {
     }
 
     @Override
-    public String toString() {
-        return "Invoice [brId=" + brId + ", invId=" + invId + ", invHead="
-                + invHead + ", valoremTax=" + valoremTax + ", amount=" + amount
-                + ", amountTax=" + amountTax + ", rateTax=" + rateTax
-                + ", invDate=" + invDate + ", remark=" + remark + ", incDate="
-                + incDate + ", invToCompany=" + invToCompany
-                + ", verification=" + verification + ", isDeleted=" + isDeleted
-                + ", updateTime=" + updateTime + "]";
-    }
+	public String toString() {
+		return "Invoice [brId=" + brId + ", invId=" + invId + ", conId="
+				+ conId + ", valoremTax=" + valoremTax + ", amount=" + amount
+				+ ", amountTax=" + amountTax + ", rateTax=" + rateTax
+				+ ", invDate=" + invDate + ", remark=" + remark + ", incDate="
+				+ incDate + ", proId=" + proId + ", verification="
+				+ verification + ", isDeleted=" + isDeleted + ", updateTime="
+				+ updateTime + ", number=" + number + "]";
+	}
     
 }

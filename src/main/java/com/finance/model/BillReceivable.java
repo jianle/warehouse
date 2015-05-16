@@ -6,7 +6,7 @@ package com.finance.model;
 public class BillReceivable {
     
     private Long brId;
-    private String customerCompany;
+    private Long conId;
     private String brDate;
     private Double amount;
     private String remark;
@@ -17,12 +17,12 @@ public class BillReceivable {
     public void setBrId(Long brId) {
         this.brId = brId;
     }
-    public String getCustomerCompany() {
-        return customerCompany;
-    }
-    public void setCustomerCompany(String customerCompany) {
-        this.customerCompany = customerCompany;
-    }
+    public void setConId(Long conId) {
+		this.conId = conId;
+	}
+    public Long getConId() {
+		return conId;
+	}
     public String getBrDate() {
         return brDate;
     }
@@ -43,8 +43,8 @@ public class BillReceivable {
     }
     @Override
     public String toString() {
-        return "BillReceivable [brId=" + brId + ", customerCompany="
-                + customerCompany + ", brDate=" + brDate + ", amount=" + amount
+        return "BillReceivable [brId=" + brId + ", conId="
+                + conId + ", brDate=" + brDate + ", amount=" + amount
                 + ", remark=" + remark + "]";
     }
     

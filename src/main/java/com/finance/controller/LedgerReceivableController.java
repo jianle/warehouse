@@ -2,6 +2,7 @@ package com.finance.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.finance.dao.ConsumerDao;
 import com.finance.dao.LedgerReceivableDao;
 import com.finance.model.LedgerReceivable;
 import com.wms.model.Pagination;
@@ -31,11 +33,13 @@ public class LedgerReceivableController {
     
     @Autowired
     private LedgerReceivableDao ledgerReceivableDao;
+    @Autowired
+    private ConsumerDao consumerDao;
     
     @RequestMapping(value={"", "search"})
     public ModelAndView search(@RequestParam(value="startDate", defaultValue="") String startDate, 
             @RequestParam(value="endDate", defaultValue="") String endDate,
-            @RequestParam(value="payCompany", defaultValue="") String payCompany,
+            @RequestParam(value="conName", defaultValue="") String conName,
             @RequestParam(value="currentPage", defaultValue="1") Integer currentPage,
             @RequestParam(value="numPerPage", defaultValue="20") Integer numPerPage
             ) {
@@ -48,13 +52,28 @@ public class LedgerReceivableController {
             endDate = curDate;
         }
         
+        String conIds = null;
+        Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
+        
+        if (conName == null || "".equals(conName)) {
+        	conIds = "";
+		} else {
+			Map<Long, String> consumerMapFilter = consumerDao.findAllMapIdAndName(conName);
+			if (consumerMapFilter.size()>=1) {
+				conIds = consumerMapFilter.keySet().toString().replace("[", "(").replace("]", ")");
+			}else {
+				conIds = "(-1)";
+			}
+		}
+        
         ModelAndView modelView = new ModelAndView("/ledgerre/view");
-        Pagination<LedgerReceivable> pagination = ledgerReceivableDao.findPagination(startDate, endDate, payCompany, currentPage, numPerPage);
+        Pagination<LedgerReceivable> pagination = ledgerReceivableDao.findPagination(startDate, endDate, conIds, currentPage, numPerPage);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("startDate", startDate);
         modelView.addObject("endDate", endDate);
-        modelView.addObject("payCompany", payCompany);
+        modelView.addObject("conName", conName);
+        modelView.addObject("consumerMap", consumerMap);
         
         logger.info(pagination.getResultList().toString());
         

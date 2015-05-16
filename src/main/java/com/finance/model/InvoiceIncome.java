@@ -9,14 +9,14 @@ package com.finance.model;
 public class InvoiceIncome implements Cloneable {
     
     private Long invId;
-    private String invHead;
+    private Long proId;
     private Double valoremTax;
     private Double amount;
     private Double amountTax;
     private Double rateTax;
     private String invDate;
     private Integer invType;
-    private String invToCompany;
+    private Long conId;
     private String remark;
     private Double rateRebate;
     private Integer isDeleted;
@@ -35,12 +35,12 @@ public class InvoiceIncome implements Cloneable {
     public void setInvId(Long invId) {
         this.invId = invId;
     }
-    public String getInvHead() {
-        return invHead;
-    }
-    public void setInvHead(String invHead) {
-        this.invHead = invHead;
-    }
+    public void setProId(Long proId) {
+		this.proId = proId;
+	}
+    public Long getProId() {
+		return proId;
+	}
     public Double getValoremTax() {
         return valoremTax;
     }
@@ -77,12 +77,12 @@ public class InvoiceIncome implements Cloneable {
     public void setInvType(Integer invType) {
         this.invType = invType;
     }
-    public String getInvToCompany() {
-        return invToCompany;
-    }
-    public void setInvToCompany(String invToCompany) {
-        this.invToCompany = invToCompany;
-    }
+    public void setConId(Long conId) {
+		this.conId = conId;
+	}
+    public Long getConId() {
+		return conId;
+	}
     public String getRemark() {
         return remark;
     }
@@ -115,11 +115,11 @@ public class InvoiceIncome implements Cloneable {
     
     @Override
     public String toString() {
-        return "InvoiceIncome [invId=" + invId + ", invHead=" + invHead
+        return "InvoiceIncome [invId=" + invId + ", proId=" + proId
                 + ", valoremTax=" + valoremTax + ", amount=" + amount
                 + ", amountTax=" + amountTax + ", rateTax=" + rateTax
                 + ", invDate=" + invDate + ", invType=" + invType
-                + ", invToCompany=" + invToCompany + ", remark=" + remark
+                + ", conId=" + conId + ", remark=" + remark
                 + ", rateRebate=" + rateRebate + ", isDeleted=" + isDeleted
                 + ", updateTime=" + updateTime + "]";
     }

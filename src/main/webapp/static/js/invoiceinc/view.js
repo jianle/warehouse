@@ -6,48 +6,50 @@ $(document).ready(function() {
 	$('#addButton').click(function(){
 		//$('#modal').modal('show');
 		$('#dlg').dialog('open').dialog('setTitle','新增');
-		url = contextPath + '/invoice/save';
+		url = contextPath + '/invoiceIncome/save';
 		$("#invId2").remove();
 		if(flagTitle=="编辑"){
 			$('#modalForm').form('clear');
 			$('#invId').numberbox('enable','true');
+			$('#number').numberbox('setValue', 1);
 			$('#valoremTax').numberbox('setValue', 0.0);
 			$('#amount').numberbox('setValue', 0.0);
 			$('#amountTax').numberbox('setValue', 0.0);
 			$('#rateTax').numberbox('setValue', 0.0);
+			$('#invType').combobox('setValue', 0);
 			$('#remark').textbox('setValue', '');
 			$('#invDate').datebox('setValue', curDate);
-			$('#incDate').datebox('setValue', curDate);
-			$('#verification').numberbox('setValue', 0);
-			$('#isDeleted').combobox('setValue', '0');
+			$('#rateRebate').numberbox('setValue', 0.0);
+			$('#isDeleted').combobox('setValue', 0);
 		}
 		flagTitle="新增";
 	});
 });
 
 
-function edit(Id, isDeleted){
-	url = contextPath + '/invoice/update';
+function edit(Id,proId,conId,invType,isDeleted){
+	url = contextPath + '/invoiceIncome/update';
 	$('#dlg').dialog('open').dialog('setTitle','编辑');
 	var trId = Id+"_tr";
 	var tdDate = $("#"+trId+" td");
 	flagTitle="编辑";
 	$("#modalForm").append('<input type="hidden" id="invId2" value="" name="invId" />')
 	//初始化 Modal 
-	$('#invId').numberbox('setValue', tdDate[0].innerHTML);
-	$('#invId2').val(tdDate[0].innerHTML);
+	$('#invId').numberbox('setValue', $("#"+trId+" th")[0].innerHTML);
+	$('#invId2').val($("#"+trId+" th")[0].innerHTML);
 	//$('#invId').numberbox('editable','false');
 	$('#invId').numberbox('disable','true');
-	$('#invHead').textbox('setValue', tdDate[1].innerHTML);
-	$('#valoremTax').numberbox('setValue', tdDate[2].innerHTML);
-	$('#amount').numberbox('setValue', tdDate[3].innerHTML);
-	$('#amountTax').numberbox('setValue', tdDate[4].innerHTML);
-	$('#rateTax').numberbox('setValue', tdDate[5].innerHTML);
-	$('#invDate').datebox('setValue', tdDate[6].innerHTML);
-	$('#remark').textbox('setValue', tdDate[7].innerHTML);
-	$('#incDate').datebox('setValue', tdDate[8].innerHTML);
-	$('#invToCompany').textbox('setValue', tdDate[9].innerHTML);
-	$('#verification').numberbox('setValue', tdDate[10].innerHTML);
+	$('#number').numberbox('disable','true');
+	$('#proId').combobox('setValue', proId);
+	$('#valoremTax').numberbox('setValue', tdDate[1].innerHTML);
+	$('#amount').numberbox('setValue', tdDate[2].innerHTML);
+	$('#amountTax').numberbox('setValue', tdDate[3].innerHTML);
+	$('#rateTax').numberbox('setValue', tdDate[4].innerHTML);
+	$('#invDate').datebox('setValue', tdDate[5].innerHTML);
+	$('#remark').textbox('setValue', tdDate[8].innerHTML);
+	$('#rateRebate').numberbox('setValue', tdDate[9].innerHTML);
+	$('#conId').combobox('setValue', conId);
+	$('#invType').combobox('setValue', invType);
 	$('#isDeleted').combobox('setValue', isDeleted);
 	
 }
@@ -89,7 +91,7 @@ function deleteInfo(invId){
 			$.ajax({
 				cache: true,
 				type:"POST",
-				url :contextPath + '/invoice/delete',
+				url :contextPath + '/invoiceIncome/delete',
 				data: {invId:invId},
 				async:true,
 				dataType: 'json',

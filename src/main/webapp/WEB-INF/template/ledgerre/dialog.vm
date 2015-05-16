@@ -6,7 +6,11 @@
                 
                 <div class="fitem">
                     <label>客服公司:</label>
-                    <input name="payCompany" id="payCompany" style="width:300px" class="easyui-textbox" required="true" />
+                    <select id="conId" class="easyui-combobox" panelHeight="150px"  name="conId" style="width:300px;" required="true">
+                      #foreach( $key in $consumerMap.keySet().toArray())
+					  <option value="$key">${consumerMap.get($key)}</option>
+                      #end
+                    </select>
                 </div>
                 <div class="fitem">
                     <label style="padding-left:0px;">付款日期:</label>

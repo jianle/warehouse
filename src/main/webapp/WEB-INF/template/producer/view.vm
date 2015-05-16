@@ -1,0 +1,58 @@
+#set($title='信息维护')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<link href="#springUrl('/static/css/producer/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/producer/view.js')"></script>
+
+<h2 style="margin-top:4px"><code>维护开票公司</code></h2>
+<hr/>
+<form id="firstFromId" action="#springUrl('/producer/search')">
+  <div class="filter-content-right" style="margin-top:0px;margin-right:0px">
+    <div class="ui action left icon input">
+      <i class="search icon"></i>
+      <input type="text" name="proName" value="$proName" placeholder="公司名称">
+      <div id="btnSearch" class="ui teal submit button">Search</div>
+    </div>
+  </div>
+</form>
+
+<div class="ui primary button" id="addButton">
+    <i class="plus icon"></i> 新增
+</div>
+
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th min-width="280px">公司名称</th>
+      <th min-width="250px">备注</th>
+	  <th>更新日期</th>
+      <th width="85px">编辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $producer in $producers )
+      <tr id="${producer.proId}_tr">
+		<th>${producer.proId}</th>
+        <td>${producer.proName}</td>
+        <td>${producer.remark}</td>
+		<td>${producer.updateTime}</td>
+        <td>
+          <a id="supplierEdit" onclick="edit(${producer.proId})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteInfo(${producer.proId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+      </td>
+      </tr>
+    #end
+  </tbody>
+</table>
+
+
+#parse("/producer/dialog.vm")
+
+<script>
+</script>
+

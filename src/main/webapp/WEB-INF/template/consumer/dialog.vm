@@ -1,0 +1,20 @@
+<div id="dlg" class="easyui-dialog" style="width:450px;height:250px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">开票公司</div>
+            <form id="modalForm" method="post" style="margin-top:20px" novalidate>  
+				<input type="hidden" id="conId" value="" name="conId" />
+                <div class="fitem">
+                    <label>公司名称:</label>
+                    <input name="conName" id="conName" style="width:300px" class="easyui-textbox" required="true" />
+                </div>
+                <div class="fitem">
+                    <label>备注信息:</label>
+                    <input style="width:300px" name="remark" id="remark" class="easyui-textbox" />
+                </div>
+
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+      </div>

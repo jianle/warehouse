@@ -7,6 +7,8 @@
 <link href="#springUrl('/static/css/billre/view.css')" rel="stylesheet" />
 <script type="text/javascript" src="#springUrl('/static/js/billre/view.js')"></script>
 
+<h2 style="margin-top:4px"><code>录入应收账单</code></h2>
+
 <form id="firstFromId" action="#springUrl('/billReceivable/search')" method="POST">
   <div class="filter-bar-sm" >
     <div class="filter-title-sm">
@@ -15,11 +17,11 @@
     <div class="filter-content">
       <div class="input-group">
       <div class="ui corner labeled input">
-        <input id="startDate" value="$startDate" type="text" class="form-control" />
+        <input id="startDate" name="startDate" value="$startDate" type="text" class="form-control" />
       </div>
       <span> &nbsp;<i class="glyphicon glyphicon-forward"></i>&nbsp;</span>
       <div class="ui corner labeled input">
-        <input id="endDate" value="$endDate" type="text" class="form-control" />
+        <input id="endDate" name="endDate" value="$endDate" type="text" class="form-control" />
       </div>
       </div>
     </div>
@@ -28,7 +30,7 @@
     <div class="filter-content-right" style="margin-top:8px">
       <div class="ui action left icon input">
         <i class="search icon"></i>
-        <input type="text" name="customerCompany" value="$customerCompany" placeholder="客服公司">
+        <input type="text" name="conName" value="$conName" placeholder="客服公司">
         <div id="btnSearch" class="ui teal submit button">Search</div>
       </div>
     </div>
@@ -37,7 +39,7 @@
 </form>
 <hr/>
 
-<div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
+<div class="row pull-right" style="padding-right:420px;margin-top: -15px;margin-right:0px;">
   <div class="easyui-pagination"
   style="border:1px solid #000;background:white;position:fixed;"
   data-options="
@@ -75,13 +77,13 @@
   <tbody>
     #foreach( $billReceivable in $pagination.getResultList() )
       <tr id="${billReceivable.brId}_tr">
-        <td><a href="#springUrl('/')invoice/?brId=${billReceivable.brId}" target="_blank">${billReceivable.brId}</a></td>
-        <td>${billReceivable.customerCompany}</td>
+        <td><a href="#springUrl('/')invoice/?brId=${billReceivable.brId}" target="_blank">录入发票</a></td>
+        <td>${consumerMap.get($billReceivable.conId)}</td>
         <td>${billReceivable.brDate}</td>
         <td>${billReceivable.amount}</td>
         <td>${billReceivable.remark}</td>
         <td>
-          <a id="supplierEdit" onclick="edit(${billReceivable.brId})" data-toggle="modal"
+          <a id="supplierEdit" onclick="edit(${billReceivable.brId},${billReceivable.conId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
           <a href="javascript:deleteInfo(${billReceivable.brId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
       </td>
@@ -95,7 +97,7 @@
   <input type="hidden" id="numPerPage" name="numPerPage" value="" />
   <input type="hidden" name="startDate" value="$startDate" />
   <input type="hidden" name="endDate" value="$endDate" />
-  <input type="hidden" name="customerCompany" value="$customerCompany" />
+  <input type="hidden" name="conName" value="$conName" />
 </form>
 
 #parse("/billre/dialog.vm")

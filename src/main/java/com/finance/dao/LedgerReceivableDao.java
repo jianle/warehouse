@@ -26,7 +26,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String TABLE_NAME    = "ledger_receivable";
-    private static final String INSERT_FIELDS = "pay_company, amount, pay_date, verification, remark, update_time";
+    private static final String INSERT_FIELDS = "con_id, amount, pay_date, verification, remark, update_time";
     private static final String SELECT_FIELDS = "lr_id, " + INSERT_FIELDS;
     
     @Autowired
@@ -53,7 +53,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
                     + " ) values (?, ?, ?, ?, ?, ?)" ;
             jdbcTemplateFinance.update(sql,
-                    object.getPayCompany(),
+                    object.getConId(),
                     object.getAmount(),
                     object.getPayDate(),
                     object.getVerification(),
@@ -76,7 +76,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     
     @SuppressWarnings("deprecation")
     public Pagination<LedgerReceivable> findPagination(String startDate,
-            String endDate, String payCompany, Integer currentPage,
+            String endDate, String conIds, Integer currentPage,
             Integer numPerPage) {
         // TODO Auto-generated method stub
         StringBuilder sqlBuilder = new StringBuilder("select ");
@@ -90,12 +90,13 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             isWhere.append(" where pay_date between '").append(startDate).append("' and '").append(endDate).append("' ");
             flagIsWhere = true;
         }
-        
-        if (!payCompany.equals("")) {
+
+        if (conIds != null && !conIds.equals("")) {
+        	
             if (flagIsWhere) {
-                isWhere.append(" and pay_company like '%").append(payCompany).append("%' ");
+                isWhere.append(" and con_id in ").append(conIds);
             } else {
-                isWhere.append(" where pay_company like '%").append(payCompany).append("%' ");
+                isWhere.append(" where con_id in ").append(conIds);
             }
             flagIsWhere = true;
         }
@@ -131,10 +132,10 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "update " + TABLE_NAME + " set "
-                    + "pay_company=?, amount=?, pay_date=?, verification=?, remark=? "
+                    + "con_id=?, amount=?, pay_date=?, verification=?, remark=? "
                     + "where lr_id=?" ;
             jdbcTemplateFinance.update(sql,
-                    object.getPayCompany(),
+                    object.getConId(),
                     object.getAmount(),
                     object.getPayDate(),
                     object.getVerification(),
@@ -170,7 +171,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
                 throws SQLException {
             LedgerReceivable ledgerReceivable = new LedgerReceivable();
             ledgerReceivable.setLrId(rs.getLong("lr_id"));
-            ledgerReceivable.setPayCompany(rs.getString("pay_company"));
+            ledgerReceivable.setConId(rs.getLong("con_id"));
             ledgerReceivable.setAmount(rs.getDouble("amount"));
             ledgerReceivable.setPayDate(DATE_FORMAT.format(rs.getDate("pay_date")));
             ledgerReceivable.setVerification(rs.getDouble("verification"));

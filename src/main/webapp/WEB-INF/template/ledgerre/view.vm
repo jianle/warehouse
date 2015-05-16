@@ -1,4 +1,4 @@
-#set($title='查看收款')
+#set($title='录入收款')
 #set($layout = "layout-finance.vm")
 
 <script>
@@ -7,6 +7,7 @@
 <link href="#springUrl('/static/css/ledgerre/view.css')" rel="stylesheet" />
 <script type="text/javascript" src="#springUrl('/static/js/ledgerre/view.js')"></script>
 
+<h2 style="margin-top:4px"><code>录入收款</code></h2>
 <form id="firstFromId" action="#springUrl('/ledgerReceivable/search')" method="POST">
   <div class="filter-bar-sm" >
     <div class="filter-title-sm">
@@ -15,11 +16,11 @@
     <div class="filter-content">
       <div class="input-group">
       <div class="ui corner labeled input">
-        <input id="startDate" value="$startDate" type="text" class="form-control" />
+        <input id="startDate" name="startDate" value="$startDate" type="text" class="form-control" />
       </div>
       <span> &nbsp;<i class="glyphicon glyphicon-forward"></i>&nbsp;</span>
       <div class="ui corner labeled input">
-        <input id="endDate" value="$endDate" type="text" class="form-control" />
+        <input id="endDate" name="endDate" value="$endDate" type="text" class="form-control" />
       </div>
       </div>
     </div>
@@ -28,7 +29,7 @@
     <div class="filter-content-right" style="margin-top:8px">
       <div class="ui action left icon input">
         <i class="search icon"></i>
-        <input type="text" name="payCompany" value="$payCompany" placeholder="付款公司">
+        <input type="text" name="conName" value="$conName" placeholder="付款公司">
         <div id="btnSearch" class="ui teal submit button">Search</div>
       </div>
     </div>
@@ -76,14 +77,14 @@
   <tbody>
     #foreach( $ledgerReceivable in $pagination.getResultList() )
       <tr id="${ledgerReceivable.lrId}_tr">
-        <td><a href="#springUrl('/')invoiceincome/?lrId=${ledgerReceivable.lrId}" target="_blank">${ledgerReceivable.lrId}</a></td>
-        <td>${ledgerReceivable.payCompany}</td>
+        <th>${ledgerReceivable.lrId}</th>
+        <td>${consumerMap.get($ledgerReceivable.conId)}</td>
         <td>${ledgerReceivable.amount}</td>
         <td>${ledgerReceivable.payDate}</td>
         <td>${ledgerReceivable.verification}</td>
         <td>${ledgerReceivable.remark}</td>
         <td>
-          <a id="edit" onclick="edit(${ledgerReceivable.lrId})" data-toggle="modal"
+          <a id="edit" onclick="edit(${ledgerReceivable.lrId},${ledgerReceivable.conId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
           <a href="javascript:deleteInfo(${ledgerReceivable.lrId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
       </td>
@@ -97,7 +98,7 @@
   <input type="hidden" id="numPerPage" name="numPerPage" value="" />
   <input type="hidden" name="startDate" value="$startDate" />
   <input type="hidden" name="endDate" value="$endDate" />
-  <input type="hidden" name="payCompany" value="$payCompany" />
+  <input type="hidden" name="conName" value="$conName" />
 </form>
 
 #parse("/ledgerre/dialog.vm")

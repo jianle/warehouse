@@ -3,6 +3,7 @@ package com.finance.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.finance.dao.BillReceivableDao;
+import com.finance.dao.ConsumerDao;
 import com.finance.dao.InvoiceDao;
+import com.finance.dao.ProducerDao;
 import com.finance.model.Invoice;
 import com.wms.model.Pagination;
 
@@ -33,9 +36,13 @@ public class InvoiceController {
     
     @Autowired
     private BillReceivableDao billReceivableDao;
-    
     @Autowired
     private InvoiceDao invoiceDao;
+    @Autowired
+    private ConsumerDao consumerDao;
+    @Autowired
+    private ProducerDao producerDao;
+    
     
     @RequestMapping(value={"","search"})
     public ModelAndView search(@RequestParam(value="brId") Long brId,
@@ -48,9 +55,13 @@ public class InvoiceController {
         System.out.println("brId:" + brId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
         
         Pagination<Invoice> pagination = invoiceDao.findPagination(brId, currentPage, numPerPage);
+        Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
+        Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("brId", brId);
+        modelView.addObject("consumerMap", consumerMap);
+        modelView.addObject("producerMap", producerMap);
         
         return modelView;
     }
@@ -65,11 +76,17 @@ public class InvoiceController {
         List<Invoice> invoices = new ArrayList<Invoice>();
         invoices.add(invoice);
         Long top = invoice.getInvId();
+        if (invoiceDao.get(top) != null) {
+			return "false";
+		}
         for (int i = 1; i < invoice.getNumber(); i++) {
             try {
                 Invoice tmp = (Invoice) invoice.clone();
                 tmp.setInvId(top + i);
                 invoices.add(tmp);
+                if (invoiceDao.get(tmp.getInvId()) != null) {
+					return "false";
+				}
             } catch (CloneNotSupportedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

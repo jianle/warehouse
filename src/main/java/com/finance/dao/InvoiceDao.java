@@ -29,8 +29,8 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String TABLE_NAME    = "invoice";
-    private static final String INSERT_FIELDS = "br_id, inv_id, inv_head, valorem_tax, amount, amount_tax, rate_tax,"
-            + "inv_date, remark, inc_date, inv_to_company, verification, is_deleted, update_time";
+    private static final String INSERT_FIELDS = "br_id, inv_id, con_id, valorem_tax, amount, amount_tax, rate_tax,"
+            + "inv_date, remark, inc_date, pro_id, verification, is_deleted, update_time";
     private static final String SELECT_FIELDS = INSERT_FIELDS;
     
     @Autowired
@@ -56,11 +56,11 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "update " + TABLE_NAME + " set "
-                    + "inv_head=?, valorem_tax=?, amount=?, amount_tax=?, rate_tax=?,"
-            + "inv_date=?, remark=?, inc_date=?, inv_to_company=?, verification=?, is_deleted=? "
+                    + "con_id=?, valorem_tax=?, amount=?, amount_tax=?, rate_tax=?,"
+            + "inv_date=?, remark=?, inc_date=?, pro_id=?, verification=?, is_deleted=? "
             + "where inv_id=?" ;
             jdbcTemplateFinance.update(sql,
-                    obj.getInvHead(),
+                    obj.getConId(),
                     obj.getValoremTax(),
                     obj.getAmount(),
                     obj.getAmountTax(),
@@ -68,7 +68,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                     obj.getInvDate(),
                     obj.getRemark(),
                     obj.getIncDate(),
-                    obj.getInvToCompany(),
+                    obj.getProId(),
                     obj.getVerification(),
                     obj.getIsDeleted(),
                     obj.getInvId()
@@ -136,7 +136,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             jdbcTemplateFinance.update(sql,
                     obj.getBrId(),
                     obj.getInvId(),
-                    obj.getInvHead(),
+                    obj.getConId(),
                     obj.getValoremTax(),
                     obj.getAmount(),
                     obj.getAmountTax(),
@@ -144,7 +144,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                     obj.getInvDate(),
                     obj.getRemark(),
                     obj.getIncDate(),
-                    obj.getInvToCompany(),
+                    obj.getProId(),
                     obj.getVerification(),
                     obj.getIsDeleted(),
                     obj.getUpdateTime()
@@ -173,7 +173,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                     Invoice obj = invoices.get(i);
                     ps.setObject(1,obj.getBrId());
                     ps.setObject(2,obj.getInvId());
-                    ps.setObject(3,obj.getInvHead());
+                    ps.setObject(3,obj.getConId());
                     ps.setObject(4,obj.getValoremTax());
                     ps.setObject(5,obj.getAmount());
                     ps.setObject(6,obj.getAmountTax());
@@ -181,7 +181,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                     ps.setString(8,obj.getInvDate());
                     ps.setString(9,obj.getRemark());
                     ps.setString(10,obj.getIncDate());
-                    ps.setString(11,obj.getInvToCompany());
+                    ps.setLong(11,obj.getProId());
                     ps.setObject(12,obj.getVerification());
                     ps.setObject(13,obj.getIsDeleted());
                     ps.setObject(14,new Timestamp(System.currentTimeMillis()));
@@ -240,7 +240,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             Invoice invoice = new Invoice();
             invoice.setBrId(rs.getLong("br_id"));
             invoice.setInvId(rs.getLong("inv_id"));
-            invoice.setInvHead(rs.getString("inv_head"));
+            invoice.setConId(rs.getLong("con_id"));
             invoice.setValoremTax(rs.getDouble("valorem_tax"));
             invoice.setAmount(rs.getDouble("amount"));
             invoice.setAmountTax(rs.getDouble("amount_tax"));
@@ -248,7 +248,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             invoice.setInvDate(DATE_FORMAT.format(rs.getDate("inv_date")));
             invoice.setRemark(rs.getString("remark"));
             invoice.setIncDate(DATE_FORMAT.format(rs.getDate("inc_date")));
-            invoice.setInvToCompany(rs.getString("inv_to_company"));
+            invoice.setProId(rs.getLong("pro_id"));
             invoice.setVerification(rs.getDouble("verification"));
             invoice.setIsDeleted(rs.getInt("is_deleted"));
             invoice.setUpdateTime(DATET_TIME_FORMAT.format(rs.getTimestamp("update_time")));

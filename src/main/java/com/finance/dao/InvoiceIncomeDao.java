@@ -29,8 +29,8 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String TABLE_NAME    = "invoice_income";
-    private static final String INSERT_FIELDS = "inv_id, inv_head, valorem_tax, amount, amount_tax, rate_tax,"
-            + "inv_date, inv_type, inv_to_company, remark, rate_rebate, is_deleted, update_time";
+    private static final String INSERT_FIELDS = "inv_id, pro_id, valorem_tax, amount, amount_tax, rate_tax,"
+            + "inv_date, inv_type, con_id, remark, rate_rebate, is_deleted, update_time";
     private static final String SELECT_FIELDS = INSERT_FIELDS;
     
     @Autowired
@@ -59,20 +59,20 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                     + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
             jdbcTemplateFinance.update(sql,
                     obj.getInvId(),
-                    obj.getInvHead(),
+                    obj.getProId(),
                     obj.getValoremTax(),
                     obj.getAmount(),
                     obj.getAmountTax(),
                     obj.getRateTax(),
                     obj.getInvDate(),
                     obj.getInvType(),
-                    obj.getInvToCompany(),
+                    obj.getConId(),
                     obj.getRemark(),
                     obj.getRateRebate(),
                     obj.getIsDeleted(),
                     new Timestamp(System.currentTimeMillis())
                     );
-            
+            return true;
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("save failed." + e);
@@ -101,9 +101,32 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
     }
 
     @Override
-    public Boolean update(InvoiceIncome object) {
+    public Boolean update(InvoiceIncome obj) {
         // TODO Auto-generated method stub
-        return null;
+    	try {
+            String sql = "update " + TABLE_NAME + " set  pro_id=?, valorem_tax=?, amount=?, amount_tax=?, rate_tax=?,"
+            + "inv_date=?, inv_type=?, con_id=?, remark=?, rate_rebate=?, is_deleted=? "
+            + "where inv_id=?" ;
+            jdbcTemplateFinance.update(sql,
+                    obj.getProId(),
+                    obj.getValoremTax(),
+                    obj.getAmount(),
+                    obj.getAmountTax(),
+                    obj.getRateTax(),
+                    obj.getInvDate(),
+                    obj.getInvType(),
+                    obj.getConId(),
+                    obj.getRemark(),
+                    obj.getRateRebate(),
+                    obj.getIsDeleted(),
+                    obj.getInvId()
+                    );
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("save failed." + e);
+        }
+        return false;
     }
 
     @Override
@@ -128,14 +151,14 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
             // TODO Auto-generated method stub
             InvoiceIncome invoiceIncome = new InvoiceIncome();
             invoiceIncome.setInvId(rs.getLong("inv_id"));
-            invoiceIncome.setInvHead(rs.getString("inv_head"));
+            invoiceIncome.setProId(rs.getLong("pro_id"));
             invoiceIncome.setValoremTax(rs.getDouble("valorem_tax"));
             invoiceIncome.setAmount(rs.getDouble("amount"));
             invoiceIncome.setAmountTax(rs.getDouble("amount_tax"));
             invoiceIncome.setRateTax(rs.getDouble("rate_tax"));
             invoiceIncome.setInvDate(DATE_FORMAT.format(rs.getDate("inv_date")));
             invoiceIncome.setInvType(rs.getInt("inv_type"));
-            invoiceIncome.setInvToCompany(rs.getString("inv_to_company"));
+            invoiceIncome.setConId(rs.getLong("con_id"));
             invoiceIncome.setRemark(rs.getString("remark"));
             invoiceIncome.setRateRebate(rs.getDouble("rate_rebate"));
             invoiceIncome.setIsDeleted(rs.getInt("is_deleted"));
@@ -183,14 +206,14 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                     // TODO Auto-generated method stub
                 	InvoiceIncome obj = invoiceIncomes.get(i);
                     ps.setObject(1, obj.getInvId());
-                    ps.setObject(2, obj.getInvHead());
+                    ps.setObject(2, obj.getProId());
                     ps.setObject(3, obj.getValoremTax());
                     ps.setObject(4, obj.getAmount());
                     ps.setObject(5, obj.getAmountTax());
                     ps.setObject(6, obj.getRateTax());
                     ps.setObject(7, obj.getInvDate());
                     ps.setObject(8, obj.getInvType());
-                    ps.setObject(9, obj.getInvToCompany());
+                    ps.setObject(9, obj.getConId());
                     ps.setObject(10, obj.getRemark());
                     ps.setObject(11, obj.getRateRebate());
                     ps.setObject(12, obj.getIsDeleted());

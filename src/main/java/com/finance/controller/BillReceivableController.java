@@ -2,6 +2,7 @@ package com.finance.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.finance.dao.BillReceivableDao;
+import com.finance.dao.ConsumerDao;
 import com.finance.model.BillReceivable;
 import com.wms.model.Pagination;
 
@@ -32,11 +34,13 @@ public class BillReceivableController {
     
     @Autowired
     private BillReceivableDao billReceivableDao;
+    @Autowired
+    private ConsumerDao consumerDao;
     
     @RequestMapping(value={"", "search"})
     public ModelAndView search(@RequestParam(value="startDate", defaultValue="") String startDate, 
             @RequestParam(value="endDate", defaultValue="") String endDate,
-            @RequestParam(value="customerCompany", defaultValue="") String customerCompany,
+            @RequestParam(value="conName", defaultValue="") String conName,
             @RequestParam(value="currentPage", defaultValue="1") Integer currentPage,
             @RequestParam(value="numPerPage", defaultValue="20") Integer numPerPage
             ) {
@@ -49,13 +53,30 @@ public class BillReceivableController {
             endDate = curDate;
         }
         
+        String conIds = null;
+        Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
+        if (conName == null || "".equals(conName)) {
+        	conIds = "";
+		} else {
+			Map<Long, String> consumerMapFilter = consumerDao.findAllMapIdAndName(conName);
+			if (consumerMapFilter.size()>=1) {
+				conIds = consumerMapFilter.keySet().toString().replace("[", "(").replace("]", ")");
+			}else {
+				conIds = "(-1)";
+			}
+		}
+        
+        logger.info(conIds);
+        
         ModelAndView modelView = new ModelAndView("/billre/view");
-        Pagination<BillReceivable> pagination = billReceivableDao.findPagination(startDate, endDate, customerCompany, currentPage, numPerPage);
+        Pagination<BillReceivable> pagination = billReceivableDao.findPagination(startDate, endDate, conIds, currentPage, numPerPage);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("startDate", startDate);
         modelView.addObject("endDate", endDate);
-        modelView.addObject("customerCompany", customerCompany);
+        modelView.addObject("conName", conName);
+
+        modelView.addObject("consumerMap", consumerMap);
         
         return modelView;
     }

@@ -44,7 +44,7 @@ $(document).ready(function() {
 });
 
 
-function edit(Id){
+function edit(Id,conId){
 	url = contextPath + '/ledgerReceivable/update';
 	$('#dlg').dialog('open').dialog('setTitle','编辑');
 	var trId = Id+"_tr";
@@ -53,11 +53,11 @@ function edit(Id){
 	//初始化 Modal 
 	$('#lrId').val(Id);
 	//$('.content #name').attr('readonly','readonly');
-	$('#payCompany').textbox('setValue', tdDate[1].innerHTML );
-	$('#amount').numberbox('setValue', tdDate[2].innerHTML );
-	$('#payDate').datebox('setValue', tdDate[3].innerHTML );
-	$('#verification').numberbox('setValue', tdDate[4].innerHTML );
-	$('#remark').textbox('setValue', tdDate[5].innerHTML );
+	$('#conId').combobox('setValue', conId);
+	$('#amount').numberbox('setValue', tdDate[1].innerHTML);
+	$('#payDate').datebox('setValue', tdDate[2].innerHTML);
+	$('#verification').numberbox('setValue', tdDate[3].innerHTML);
+	$('#remark').textbox('setValue', tdDate[4].innerHTML);
 }
 
 

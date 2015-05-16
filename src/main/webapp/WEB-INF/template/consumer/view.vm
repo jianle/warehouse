@@ -1,0 +1,58 @@
+#set($title='信息维护')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<link href="#springUrl('/static/css/consumer/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/consumer/view.js')"></script>
+
+<h2 style="margin-top:4px"><code>维护客户列表</code></h2>
+<hr/>
+<form id="firstFromId" action="#springUrl('/consumer/search')">
+  <div class="filter-content-right" style="margin-top:0px;margin-right:0px">
+    <div class="ui action left icon input">
+      <i class="search icon"></i>
+      <input type="text" name="conName" value="$conName" placeholder="公司名称">
+      <div id="btnSearch" class="ui teal submit button">Search</div>
+    </div>
+  </div>
+</form>
+
+<div class="ui primary button" id="addButton">
+    <i class="plus icon"></i> 新增
+</div>
+
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th min-width="280px">公司名称</th>
+      <th min-width="250px">备注</th>
+	  <th>更新日期</th>
+      <th width="85px">编辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $consumer in $consumers )
+      <tr id="${consumer.conId}_tr">
+		<th>${consumer.conId}</th>
+        <td>${consumer.conName}</td>
+        <td>${consumer.remark}</td>
+		<td>${consumer.updateTime}</td>
+        <td>
+          <a id="supplierEdit" onclick="edit(${consumer.conId})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteInfo(${consumer.conId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+      </td>
+      </tr>
+    #end
+  </tbody>
+</table>
+
+
+#parse("/consumer/dialog.vm")
+
+<script>
+</script>
+

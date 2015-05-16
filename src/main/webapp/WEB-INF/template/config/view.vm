@@ -1,0 +1,27 @@
+#set($title='信息维护')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<div class="ui divided list" style="">
+  <div class="item" style="margin-top:8px;padding:8px">
+    <i class="settings icon"></i>
+    <div class="content">
+      <a class="header" href="#springUrl('/producer')">维护开票公司</a>
+      <div class="description">括公司名称以及备注</div>
+    </div>
+  </div>
+  <div class="item" style="margin-top:8px;padding:8px">
+    <i class="settings icon"></i>
+    <div class="content">
+      <a class="header" href="#springUrl('/consumer')">维护客户列表</a>
+      <div class="description">括公司名称以及备注</div>
+    </div>
+  </div>
+</div>
+
+<script>
+</script>
+
