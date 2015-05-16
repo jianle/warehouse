@@ -8,9 +8,12 @@ $(document).ready(function() {
 		$('#dlg').dialog('open').dialog('setTitle','新增');
 		url = contextPath + '/invoiceIncome/save';
 		$("#invId2").remove();
+		$('#invId').numberbox('enable','true');
+		$('#number').numberbox('enable','true');
 		if(flagTitle=="编辑"){
 			$('#modalForm').form('clear');
 			$('#invId').numberbox('enable','true');
+			$('#number').numberbox('enable','true');
 			$('#number').numberbox('setValue', 1);
 			$('#valoremTax').numberbox('setValue', 0.0);
 			$('#amount').numberbox('setValue', 0.0);

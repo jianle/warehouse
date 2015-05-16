@@ -62,7 +62,7 @@
         <td>${invoice.valoremTax}</td>
         <td>${invoice.amount}</td>
         <td>${invoice.amountTax}</td>
-        <td>${invoice.rateTax}</td>
+        <td>${invoice.rateTax}%</td>
         <td>${invoice.invDate}</td>
         <td>${invoice.remark}</td>
         <td>${invoice.incDate}</td>

@@ -62,7 +62,7 @@
         <td>${invoiceIncome.valoremTax}</td>
         <td>${invoiceIncome.amount}</td>
         <td>${invoiceIncome.amountTax}</td>
-        <td>${invoiceIncome.rateTax}</td>
+        <td>${invoiceIncome.rateTax}%</td>
         <td>${invoiceIncome.invDate}</td>
         <td>
 		  <span class="mini-label #if(${invoiceIncome.invType}==0) mini-label-success #elseif(${invoiceIncome.invType}==1) mini-label-danger #else mini-label-warning #end">
@@ -74,7 +74,7 @@
 		</td>
         <td>${consumerMap.get($invoiceIncome.conId)}</td>
         <td>${invoiceIncome.remark}</td>
-        <td>${invoiceIncome.rateRebate}</td>
+        <td>${invoiceIncome.rateRebate}%</td>
         <td value="${invoiceIncome.isDeleted}">
           <span class="mini-label #if(${invoiceIncome.isDeleted}==0) mini-label-primary #else mini-label-default #end">
             #if(${invoiceIncome.isDeleted}==0) 有效 #else 无效 #end
@@ -90,10 +90,9 @@
   </tbody>
 </table>
 
-<form name="formPagination" id="formPagination" action="#springUrl('/invoiceinc/search')" method="get">
+<form name="formPagination" id="formPagination" action="#springUrl('/invoiceIncome/search')" method="get">
   <input type="hidden" id="currentPage" name="currentPage" value="" />
   <input type="hidden" id="numPerPage" name="numPerPage" value="" />
-  <input type="hidden" id="brId" name="brId" value="$brId" />
 </form>
 
 #parse("/invoiceinc/dialog.vm")

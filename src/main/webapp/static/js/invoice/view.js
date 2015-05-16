@@ -8,6 +8,8 @@ $(document).ready(function() {
 		$('#dlg').dialog('open').dialog('setTitle','新增');
 		url = contextPath + '/invoice/save';
 		$("#invId2").remove();
+		$('#invId').numberbox('enable','true');
+		$('#number').numberbox('enable','true');
 		if(flagTitle=="编辑"){
 			$('#modalForm').form('clear');
 			$('#brId1').val($('#brId').val())
