@@ -2,6 +2,7 @@ package com.finance.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.finance.dao.ConsumerDao;
+import com.finance.dao.InvoiceDao;
 import com.finance.dao.LedgerReceivableDao;
+import com.finance.dao.ProducerDao;
+import com.finance.model.Consumer;
+import com.finance.model.Invoice;
 import com.finance.model.LedgerReceivable;
 import com.wms.model.Pagination;
 
@@ -35,6 +40,10 @@ public class LedgerReceivableController {
     private LedgerReceivableDao ledgerReceivableDao;
     @Autowired
     private ConsumerDao consumerDao;
+    @Autowired
+    private InvoiceDao invoiceDao;
+    @Autowired
+    private ProducerDao producerDao;
     
     @RequestMapping(value={"", "search"})
     public ModelAndView search(@RequestParam(value="startDate", defaultValue="") String startDate, 
@@ -79,6 +88,58 @@ public class LedgerReceivableController {
         
         return modelView;
     }
+    
+    @RequestMapping(value="verification")
+    public ModelAndView verification(@RequestParam(value="conId", defaultValue="1") Long conId
+    		,@RequestParam(value="lrId", defaultValue="1") Long lrId) {
+    	ModelAndView modelAndView = new ModelAndView("/ledgerre/ver");
+    	List<Invoice> invoices = invoiceDao.findAllByConId(conId);
+    	Consumer consumer = consumerDao.get(conId);
+    	Map<Long, String> producersMap = producerDao.findAllMapIdAndName(null);
+    	LedgerReceivable ledgerReceivable = ledgerReceivableDao.get(lrId);
+    	
+    	modelAndView.addObject("invoices", invoices);
+    	modelAndView.addObject("consumer", consumer);
+    	modelAndView.addObject("producersMap", producersMap);
+    	modelAndView.addObject("ledgerReceivable", ledgerReceivable);
+    	
+    	return modelAndView;
+    }
+    
+    @RequestMapping("verification/confirm")
+    @ResponseBody
+    public JSONObject verificationConfirm(HttpServletRequest request, 
+            @ModelAttribute("invId") String invIds,
+            @RequestParam(value="lrId", defaultValue="1") Long lrId) {
+    	
+    	LedgerReceivable ledgerReceivable = ledgerReceivableDao.get(lrId);
+    	logger.info(ledgerReceivable.toString());
+    	
+    	//Double amountValid = ledgerReceivable.getAmount() - ledgerReceivable.getVerification();
+    	String[] invIdstemp = invIds.replaceAll("\"", "").split(",");
+    	Invoice invoice = null;
+    	Double verifi = (double) 0;
+    	Boolean result = true;
+    	
+    	for (String invId : invIdstemp) {
+    		logger.info(invId);
+			invoice = invoiceDao.get(Long.valueOf(invId));
+			verifi = verifi + invoice.getAmount();
+			if (!invoiceDao.updateVerification(Long.valueOf(invId), null)) {
+				result = false;
+			}
+		}
+    	
+    	if (!ledgerReceivableDao.updateVerification(lrId, verifi)) {
+    		result = false;
+		}
+    	
+    	
+    	JSONObject jsonTuple = new JSONObject();
+    	jsonTuple.put("value", result);
+    	return jsonTuple;
+    }
+    
     
     @RequestMapping(value="save", method=RequestMethod.POST)
     @ResponseBody

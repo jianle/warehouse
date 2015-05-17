@@ -182,5 +182,18 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         }
     };
 
+	public Boolean updateVerification(Long lrId, Double verifi) {
+		try {
+			String sql = "update " + TABLE_NAME + " set verification=verification + ? "
+                    + "where lr_id=?";
+			jdbcTemplateFinance.update(sql, verifi, lrId);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("updateVerification failed." + e);
+        }
+        return false;
+	}
+
 
 }

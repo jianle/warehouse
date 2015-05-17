@@ -71,7 +71,7 @@
       <th width="110px">付款日期</th>
       <th width="100px">已核销金额</th>
       <th width="250px">备注</th>
-	  <th width="120px">操作</th>
+	  <th width="80px">操作</th>
       <th width="85px">编辑</th>
     </tr>
   </thead>
@@ -84,8 +84,8 @@
         <td>${ledgerReceivable.payDate}</td>
         <td>${ledgerReceivable.verification}</td>
         <td>${ledgerReceivable.remark}</td>
-		<td><a onclick="editVer(${ledgerReceivable.lrId},${ledgerReceivable.conId})" data-toggle="modal"
-			class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">点击核销</a>
+		<td><a href="#springUrl('/ledgerReceivable/verification?conId=')${ledgerReceivable.conId}&lrId=${ledgerReceivable.lrId}"
+			class="easyui-linkbutton">核销</a>
 		</td>
         <td>
           <a id="edit" onclick="edit(${ledgerReceivable.lrId},${ledgerReceivable.conId})" data-toggle="modal"
@@ -106,7 +106,6 @@
 </form>
 
 #parse("/ledgerre/dialog.vm")
-#parse("/ledgerre/verification.vm")
 
 <script>
 </script>

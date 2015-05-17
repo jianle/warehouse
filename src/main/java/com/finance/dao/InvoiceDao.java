@@ -256,4 +256,39 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         }
     };
 
+	public List<Invoice> findAllByConId(Long conId) {
+		// TODO Auto-generated method stub
+        try {
+            String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME
+                    + " where is_deleted=0 and con_id=?";
+            logger.info(sql);
+            return jdbcTemplateFinance.query(sql, rowMapper, conId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findAllByConId failed." + e);
+        }
+        return null;
+	}
+
+	public Boolean updateVerification(Long invId, Double amount) {
+		// TODO Auto-generated method stub
+		try {
+			String sql = null;
+            if (amount == null) {
+            	sql = "update " + TABLE_NAME + " set verification=amount "
+                        + "where inv_id=?";
+            	jdbcTemplateFinance.update(sql, invId);
+			}else {
+				sql = "update " + TABLE_NAME + " set verification=verification + ? "
+                        + "where inv_id=?";
+				jdbcTemplateFinance.update(sql, amount, invId);
+			}
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("updateVerification failed." + e);
+        }
+        return false;
+	}
+
 }
