@@ -119,3 +119,16 @@ function deleteInfo(lrId){
 	});
 }
 
+
+
+function editVer(Id,conId){
+	url = contextPath + '/ledgerReceivable/verification';
+	$('#dlgver').dialog('open').dialog('setTitle','操作');
+	var trId = Id+"_tr";
+	flagTitle="编辑";
+	var tdDate = $("#"+trId+" td");
+	//初始化 Modal 
+	$('#lrIdver').val(Id);
+}
+
+

@@ -66,7 +66,7 @@
 <table class="ui blue striped table">
   <thead>
     <tr>
-      <th>ID</th>
+      <th>操作</th>
       <th min-width="280px">客服公司</th>
       <th width="110px">日期</th>
       <th width="110px">金额</th>
@@ -77,7 +77,9 @@
   <tbody>
     #foreach( $billReceivable in $pagination.getResultList() )
       <tr id="${billReceivable.brId}_tr">
-        <td><a href="#springUrl('/')invoice/?brId=${billReceivable.brId}" target="_blank">录入发票</a></td>
+        <td><a href="#springUrl('/')invoice/?brId=${billReceivable.brId}" target="_blank"
+			><b>录入发票</b></a>
+		</td>
         <td>${consumerMap.get($billReceivable.conId)}</td>
         <td>${billReceivable.brDate}</td>
         <td>${billReceivable.amount}</td>
@@ -85,7 +87,7 @@
         <td>
           <a id="supplierEdit" onclick="edit(${billReceivable.brId},${billReceivable.conId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:deleteInfo(${billReceivable.brId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+          <a href="javascript:deleteInfo(${billReceivable.brId})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
       </td>
       </tr>
     #end

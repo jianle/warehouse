@@ -43,7 +43,7 @@
         <td>
           <a id="supplierEdit" onclick="edit(${consumer.conId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:deleteInfo(${consumer.conId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+          <a href="javascript:deleteInfo(${consumer.conId})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
       </td>
       </tr>
     #end

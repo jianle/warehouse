@@ -76,7 +76,7 @@
         <td>
           <a id="edit" onclick="edit(${invoice.invId},${invoice.conId},${invoice.proId},${invoice.isDeleted})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:deleteInfo(${invoice.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-clear',plain:true"> </a>
+          <a href="javascript:deleteInfo(${invoice.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
       </td>
       </tr>
     #end
