@@ -62,7 +62,7 @@
                   <a href="#springUrl('/invoiceIncome')">进项增票登记</a>
                 </li>
                 <li #if($title == '应收账款') class='active' #end>
-                  <a href="#springUrl('/')">应收账款</a>
+                  <a href="#springUrl('/debtor')">应收账款</a>
                 </li>
                 <li #if($title == '收款信息') class='active' #end>
                   <a href="#springUrl('/')">收款信息</a>

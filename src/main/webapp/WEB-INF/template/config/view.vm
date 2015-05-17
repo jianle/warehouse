@@ -5,19 +5,26 @@
   var contextPath = '#springUrl('')';
 </script>
 
-<div class="ui divided list" style="">
+<div class="ui divided list">
   <div class="item" style="margin-top:8px;padding:8px">
-    <i class="settings icon"></i>
+    <i class="big teal settings icon"></i>
     <div class="content">
-      <a class="header" href="#springUrl('/producer')">维护开票公司</a>
+      <h2><a class="header" href="#springUrl('/producer')">维护开票公司</a></h2>
       <div class="description">括公司名称以及备注</div>
     </div>
   </div>
   <div class="item" style="margin-top:8px;padding:8px">
-    <i class="settings icon"></i>
+    <i class="big teal settings icon"></i>
     <div class="content">
-      <a class="header" href="#springUrl('/consumer')">维护客户列表</a>
+      <h2><a class="header" href="#springUrl('/consumer')">维护客户列表</a></h2>
       <div class="description">括公司名称以及备注</div>
+    </div>
+  </div>
+  <div class="item" style="margin-top:8px;padding:8px">
+    <i class="big teal settings icon"></i>
+    <div class="content">
+      <h2><a class="header" href="#springUrl('/incomePayment')">维护收入支出类型</a></h2>
+      <div class="description">维护一个三级菜单，包括收入类型、支出类型</div>
     </div>
   </div>
 </div>

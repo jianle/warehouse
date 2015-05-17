@@ -1,0 +1,13 @@
+#set($title='应收账款')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<link href="#springUrl('/static/css/invoice/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/invoice/view.js')"></script>
+
+<h2 style="margin-top:4px"><code>应收账单分析</code></h2>
+
+

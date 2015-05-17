@@ -49,11 +49,7 @@ $(document).ready(function(){
 			if(invIds.length==0) $.messager.alert('提示', '请勾选需核销发票');
 			else $.messager.alert('提示', '可销金额不够，请重新选择');
 		}
-		
 		console.log(invIds);
-		console.log(JSON.stringify(''+ invIds));
-		console.log(JSON.stringify(invIds));
-		
 	});
 });
 
