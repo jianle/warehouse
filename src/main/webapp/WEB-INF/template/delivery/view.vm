@@ -9,6 +9,11 @@
 <script>
   var contextPath = '#springUrl('')';
 </script>
+
+ <div style="padding-right:15px;float:right">
+     <input onclick="formsubmit()" style="width:100px" class="btn btn-success pull-right" value="一键出库"/>
+ </div>
+ 
 <div>
 <form class="form-horizontal" action="#springUrl('/delivery')" method="get" style="padding-top:10px;">
  <div class="row">
@@ -24,12 +29,11 @@
                </ul>
            </div>
        </div>
+	</div>
    </div>
  </form>
- <div style="padding-right:15px;float:right">
-     <input onclick="formsubmit()" style="width:100px" class="btn btn-success pull-right" value="一键出库"/>
- </div>
 </div>
+
  <hr style="margin-top:5px"/>
     <table id="dg" title="订单出库" style="width:auto;height:auto">
         <thead>

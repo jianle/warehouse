@@ -271,9 +271,15 @@ create table `debtor`(
 ;
 
 
-
-
-
+drop table if exists `incomepayment`;
+create table `incomepayment`(
+  `id` int(10) not null AUTO_INCREMENT comment '主键自增ID',
+  `parent_id`  int(10) not null default 0 comment '上级目录ID',
+  `type` varchar(255) not null default '' comment '支出类型',
+  `update_time` timestamp null on update current_timestamp comment '最近一次更新',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '收入支出维表'
+;
 
 
 

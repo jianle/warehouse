@@ -1,0 +1,78 @@
+
+#set($title='信息维护')
+#set($layout = "layout-finance.vm")
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<link href="#springUrl('/static/css/incomepayment/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/incomepayment/view.js')"></script>
+
+<h2 style="margin-top:4px"><code>维护收支维度</code></h2>
+<hr/>
+	
+<label style="padding-left:0px;width:65px">目录类别:</label>
+<select id="type" panelHeight="auto" style="width:80px">
+    <option value="0">一级目录</option>
+	<option value="1">二级目录</option>
+	<option value="2">三级目录</option>
+</select>
+
+<div  id="type0">
+   <form id="modalForm0" method="post" action="#springUrl('/incomepayment/save')" style="margin-top:20px" novalidate>  
+     <div class="fitem">
+       <label style="padding-left:0px;width:65px" >类型名称:</label>
+	   <input type="hidden" name="parentId" value="0" />
+       <input name="type" id="typeId" class="easyui-textbox" required="true" />
+     </div>
+   </form>
+</div>
+
+<div id="type1" style="display:none">
+   <form id="modalForm1" method="post" style="margin-top:20px" novalidate>  
+     <div class="fitem">
+       <label style="padding-left:0px;width:65px" >一级类型:</label>
+       <input name="parentId" class="easyui-combobox" data-options="
+        valueField: 'id',
+        textField: 'type',
+        url: contextPath+'/incomepayment/getByParentId?parentId=0'
+		" required="true" />
+	   <label>类型名称:</label>
+       <input name="type" class="easyui-textbox" required="true" />
+     </div>
+   </form>
+</div>
+
+<div id="type2" style="display:none">
+   <form id="modalForm2" method="post" style="margin-top:20px" novalidate>  
+     <div class="fitem">
+       <label style="padding-left:0px;width:65px" >一级类型:</label>
+       <input class="easyui-combobox" data-options="
+        valueField: 'id',
+        textField: 'type',
+        url: contextPath+'/incomepayment/getByParentId?parentId=0',
+        onSelect: function(rec){
+            var url = contextPath+'/incomepayment/getByParentId?parentId='+rec.id;
+			$('#parentId2').combobox('clear');
+            $('#parentId2').combobox('reload', url);
+        }" required="true" />
+	   <label>二级类型:</label>
+       <input id="parentId2" name="parentId" class="easyui-combobox" data-options="
+        valueField: 'id',
+        textField: 'type',
+        url: contextPath+'/incomepayment/getByParentId?parentId=0'
+        " required="true" />
+	   <label>类型名称:</label>
+       <input name="type" class="easyui-textbox" required="true" />
+     </div>
+   </form>
+</div>
+
+<div class="ui primary button" style="display:inline-block;">
+    <i class="search icon"></i>查看历史
+</div>
+<div class="ui teal button" id="addButton">
+    <i class="plus icon"></i>新增
+</div>
+
