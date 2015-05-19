@@ -1,6 +1,7 @@
 package com.finance.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -31,6 +32,13 @@ public class IncomepaymentController {
 	public ModelAndView view() {
 		ModelAndView modelView = new ModelAndView("/incomepayment/view");
 		logger.info("@requestMapping: /incomepayment/view");
+		
+		List<Map<String, Object>> incomepaymentIds = incomepaymentDao.findAllIds();
+		Map<Integer, String> incomePaymentMap = incomepaymentDao.findAllMapIdAndType();
+		
+		modelView.addObject("incomepaymentIds", incomepaymentIds);
+		modelView.addObject("incomePaymentMap", incomePaymentMap);
+		
 		return modelView;
 	}
 	
@@ -44,6 +52,20 @@ public class IncomepaymentController {
 			result = true;
 		}
 		logger.info("@requestMapping: /incomepayment/save -- " + result);
+		jsonObject.put("value", result);
+		return jsonObject;
+	}
+	
+	@RequestMapping("delete")
+	@ResponseBody
+	public JSONObject delete(@ModelAttribute("incpayid") Integer incpayid) {
+		JSONObject jsonObject = new JSONObject();
+		logger.info("incpayid:" + incpayid);
+		Boolean result = false;
+		if (incomepaymentDao.delete(incpayid)) {
+			result = true;
+		}
+		logger.info("@requestMapping: /incomepayment/delete -- " + result);
 		jsonObject.put("value", result);
 		return jsonObject;
 	}

@@ -44,3 +44,35 @@ $(document).ready(function(){
 	
 });
 
+function deleteInfo(incpayid){
+	$.messager.confirm('提示', '确认是否删除', function(r){
+		if(r) {
+			// 异步执行删除
+			$.ajax({
+				cache: true,
+				type:"POST",
+				url :contextPath + '/incomepayment/delete',
+				data: {incpayid:incpayid},
+				async:true,
+				dataType: 'json',
+				success: function(result) {
+					console.log(result);
+					if(result.value){
+						$.messager.show({
+		                    title: '提示信息',
+		                    msg: '删除成功'
+		                });
+						$("#"+incpayid+"_tr").remove()
+					}else{
+						$.messager.alert("提示", "删除失败");
+					}
+					
+				},
+				error:function(result) {
+					$.messager.alert("提示", "删除失败");
+				}
+			});
+		}
+	});
+}
+

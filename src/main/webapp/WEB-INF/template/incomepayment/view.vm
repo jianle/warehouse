@@ -68,11 +68,41 @@
      </div>
    </form>
 </div>
-
+<!--
 <div class="ui primary button" style="display:inline-block;">
     <i class="search icon"></i>查看历史
 </div>
+-->
 <div class="ui teal button" id="addButton">
     <i class="plus icon"></i>新增
 </div>
 
+<hr/>
+
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th>一级类型</th>
+      <th>二级类型</th>
+      <th>三级类型</th>
+	  <th>更新日期</th>
+      <th width="85px">编辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $ids in $incomepaymentIds )
+	  #set($incpayid=${ids.aId})
+	  #set($incpayid=${ids.bId})
+	  #set($incpayid=${ids.cId})
+      <tr id="${incpayid}_tr">
+		<th>${incomePaymentMap.get($ids.aId)}</th>
+        <td>#if(${incomePaymentMap.get($ids.bId)})${incomePaymentMap.get($ids.bId)}#else无#end</td>
+        <td>#if(${incomePaymentMap.get($ids.cId)})${incomePaymentMap.get($ids.cId)}#else无#end</td>
+		<td>${ids.updateTime}</td>
+        <td>
+          <a href="javascript:deleteInfo($incpayid)" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
+      </td>
+      </tr>
+    #end
+  </tbody>
+</table>
