@@ -281,5 +281,3 @@ create table `incomepayment`(
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '收入支出维表'
 ;
 
-
-
