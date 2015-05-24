@@ -1,0 +1,26 @@
+    <div id="dlgVer" class="easyui-dialog" style="width:300px;height:250px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">核销</div>
+            <form id="modalFormVer" method="post" style="margin-top:20px" novalidate>
+                <input type="hidden" name="invId" id="invIdVer" />
+                <div class="fitem">
+                    <label style="padding-left:20px;">金额:</label>
+                    <input id="amountVer" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label style="padding-left:-5px;">已核销金额:</label>
+                    <input id="verificationedVer" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label style="padding-left:-5px;">核销金额:</label>
+                    <input name="verification" id="verificationVer" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                </div>
+
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="verSubmit()" style="width:90px">核销</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlgVer').dialog('close')" style="width:90px">取消</a>
+      </div>

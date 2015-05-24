@@ -8,11 +8,18 @@ public class LedgerReceivable {
     
     private Long lrId;
     private Long conId;
+    private String monthId;
     private Double amount;
     private String payDate;
     private Double verification;
     private String remark;
     private String updateTime;
+    public void setMonthId(String monthId) {
+        this.monthId = monthId;
+    }
+    public String getMonthId() {
+        return monthId;
+    }
     public Long getLrId() {
         return lrId;
     }
@@ -20,11 +27,11 @@ public class LedgerReceivable {
         this.lrId = lrId;
     }
     public void setConId(Long conId) {
-		this.conId = conId;
-	}
+        this.conId = conId;
+    }
     public Long getConId() {
-		return conId;
-	}
+        return conId;
+    }
     public Double getAmount() {
         return amount;
     }

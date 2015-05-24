@@ -1,13 +1,13 @@
-#set($title='录入收款')
+#set($title='应收账单')
 #set($layout = "layout-finance.vm")
 
 <script>
   var contextPath = '#springUrl('')';
 </script>
-<link href="#springUrl('/static/css/ledgerre/view.css')" rel="stylesheet" />
+<link href="#springUrl('/static/css/ledgerre/viewInv.css')" rel="stylesheet" />
 <script type="text/javascript" src="#springUrl('/static/js/ledgerre/view.js')"></script>
 
-<h2 style="margin-top:4px"><code>录入收款</code></h2>
+<h2 style="margin-top:4px"><code>应收账单</code></h2>
 <form id="firstFromId" action="#springUrl('/ledgerReceivable/search')" method="POST">
   <div class="filter-bar-sm" >
     <div class="filter-title-sm">
@@ -59,39 +59,29 @@
 </div>
 
 <div class="ui primary button" id="addButton">
-    <i class="plus icon"></i> 新增
+    <i class="plus icon"></i> 录入发票
 </div>
 
 <table class="ui blue striped table">
   <thead>
     <tr>
-      <th>ID</th>
       <th min-width="200px">付款公司</th>
       <th width="70px">金额</th>
-      <th width="110px">付款日期</th>
+      <th width="110px">开票日期</th>
       <th width="100px">已核销金额</th>
       <th width="250px">备注</th>
-	  <th width="80px">操作</th>
-      <th width="85px">编辑</th>
     </tr>
   </thead>
   <tbody>
     #foreach( $ledgerReceivable in $pagination.getResultList() )
       <tr id="${ledgerReceivable.lrId}_tr">
-        <th>${ledgerReceivable.lrId}</th>
-        <td>${consumerMap.get($ledgerReceivable.conId)}</td>
+        <td><a href="#springUrl('/invoice?conId=')${ledgerReceivable.conId}&monthId=${ledgerReceivable.monthId}"
+            target="_blank">${consumerMap.get($ledgerReceivable.conId)}</a>
+        </td>
         <td>${ledgerReceivable.amount}</td>
-        <td>${ledgerReceivable.payDate}</td>
+        <td>${ledgerReceivable.monthId}</td>
         <td>${ledgerReceivable.verification}</td>
         <td>${ledgerReceivable.remark}</td>
-		<td><a href="#springUrl('/ledgerReceivable/verification?conId=')${ledgerReceivable.conId}&lrId=${ledgerReceivable.lrId}"
-			class="easyui-linkbutton">核销</a>
-		</td>
-        <td>
-          <a id="edit" onclick="edit(${ledgerReceivable.lrId},${ledgerReceivable.conId})" data-toggle="modal"
-          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
-          <a href="javascript:deleteInfo(${ledgerReceivable.lrId})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
-      </td>
       </tr>
     #end
   </tbody>
@@ -105,7 +95,7 @@
   <input type="hidden" name="conName" value="$conName" />
 </form>
 
-#parse("/ledgerre/dialog.vm")
+#parse("/ledgerre/dialogInv.vm")
 
 <script>
 </script>

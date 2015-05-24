@@ -7,11 +7,12 @@
 
 <link href="#springUrl('/static/css/invoice/view.css')" rel="stylesheet" />
 <script type="text/javascript" src="#springUrl('/static/js/invoice/view.js')"></script>
+<script type="text/javascript" src="#springUrl('/static/js/ledgerre/ver.js')"></script>
 
-<h2 style="margin-top:4px"><code>录入发票明细</code></h2>
+<h2 style="margin-top:4px"><code>发票明细&核销</code></h2>
 
 <hr/>
-<div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
+<div class="row pull-right" style="padding-right:450px;margin-top: -15px;margin-left:0px">
   <div class="easyui-pagination"
   style="border:1px solid #000;background:white;position:fixed;"
   data-options="
@@ -31,24 +32,26 @@
 </div>
 </div>
 
-<div class="ui primary button" id="addButton">
-    <i class="plus icon"></i> 新增
+<div class="ui green button" id="checkVerification">
+    <i class="checkmark icon"></i>核销勾选 
 </div>
 
 
 <table class="ui blue striped table">
   <thead>
     <tr>
-      <th>发票号</th>
-      <th>发票抬头</th>
+      <th style="padding-left:8px">
+        <div class="checkbox" style="margin-top:0px;margin-bottom:0px">
+           <label>
+             <input id="checkAll" onclick="checkAllMonitor()" type="checkbox">全选
+           </label>
+        </div>
+      </th>
+      <th>&nbsp;&nbsp;发票抬头</th>
       <th>价税合计</th>
       <th>金额</th>
       <th>税额</th>
-      <th>税率(%)</th>
       <th>开票日期</th>
-      <th>备注</th>
-      <th>进账日期</th>
-      <th>开票公司</th>
       <th>已核销金额</th>
       <th>状态</th>
       <th width="85px">编辑</th>
@@ -56,17 +59,30 @@
   </thead>
   <tbody>
     #foreach( $invoice in $pagination.getResultList() )
-      <tr id="${invoice.invId}_tr">
-        <th>${invoice.invId}</th>
-        <td>${consumerMap.get($invoice.conId)}</td>
+      <tr id="${invoice.invId}_tr" class="#if(${invoice.isDeleted}==1)warning
+        #elseif(${invoice.amount}==${invoice.verification})success
+        #elseif(${invoice.amount}>${invoice.verification} && ${invoice.verification}>0)error
+        #end">
+        <td>
+         #if(${invoice.amount}==${invoice.verification})
+          已核销
+         #elseif(${invoice.isDeleted}==1)无效发票
+         #else
+          <div class="checkbox" style="margin-top:0px;margin-bottom:0px">
+           <label>
+             <input name="invId" type="checkbox" value="${invoice.invId}">${invoice.invId}
+           </label>
+          </div>
+         #end
+        </td>
+        <td>
+          <a id="edit" onclick="edit(${invoice.invId},${invoice.conId},${invoice.proId},${invoice.isDeleted})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="plain:true">${consumerMap.get($invoice.conId)}</a>
+        </td>
         <td>${invoice.valoremTax}</td>
         <td>${invoice.amount}</td>
         <td>${invoice.amountTax}</td>
-        <td>${invoice.rateTax}%</td>
         <td>${invoice.invDate}</td>
-        <td>${invoice.remark}</td>
-        <td>${invoice.incDate}</td>
-        <td>${producerMap.get($invoice.proId)}</td>
         <td>${invoice.verification}</td>
         <td value="${invoice.isDeleted}">
           <span class="mini-label #if(${invoice.isDeleted}==0) mini-label-primary #else mini-label-default #end">
@@ -86,10 +102,12 @@
 <form name="formPagination" id="formPagination" action="#springUrl('/invoice/search')" method="get">
   <input type="hidden" id="currentPage" name="currentPage" value="" />
   <input type="hidden" id="numPerPage" name="numPerPage" value="" />
-  <input type="hidden" id="brId" name="brId" value="$brId" />
+  <input type="hidden" id="conIdSearch" name="conId" value="$conId" />
+  <input type="hidden" id="monthId" name="monthId" value="$monthId" />
 </form>
 
 #parse("/invoice/dialog.vm")
+#parse("/invoice/dialogVer.vm")
 
 <script>
 </script>

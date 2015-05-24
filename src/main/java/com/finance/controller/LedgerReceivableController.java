@@ -27,6 +27,7 @@ import com.finance.dao.ProducerDao;
 import com.finance.model.Consumer;
 import com.finance.model.Invoice;
 import com.finance.model.LedgerReceivable;
+import com.finance.util.Utils;
 import com.wms.model.Pagination;
 
 @Controller
@@ -65,24 +66,26 @@ public class LedgerReceivableController {
         Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
         
         if (conName == null || "".equals(conName)) {
-        	conIds = "";
-		} else {
-			Map<Long, String> consumerMapFilter = consumerDao.findAllMapIdAndName(conName);
-			if (consumerMapFilter.size()>=1) {
-				conIds = consumerMapFilter.keySet().toString().replace("[", "(").replace("]", ")");
-			}else {
-				conIds = "(-1)";
-			}
-		}
+            conIds = "";
+        } else {
+            Map<Long, String> consumerMapFilter = consumerDao.findAllMapIdAndName(conName);
+            if (consumerMapFilter.size()>=1) {
+                conIds = consumerMapFilter.keySet().toString().replace("[", "(").replace("]", ")");
+            }else {
+                conIds = "(-1)";
+            }
+        }
         
         ModelAndView modelView = new ModelAndView("/ledgerre/view");
         Pagination<LedgerReceivable> pagination = ledgerReceivableDao.findPagination(startDate, endDate, conIds, currentPage, numPerPage);
+        Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("startDate", startDate);
         modelView.addObject("endDate", endDate);
         modelView.addObject("conName", conName);
         modelView.addObject("consumerMap", consumerMap);
+        modelView.addObject("producerMap", producerMap);
         
         logger.info(pagination.getResultList().toString());
         
@@ -91,53 +94,84 @@ public class LedgerReceivableController {
     
     @RequestMapping(value="verification")
     public ModelAndView verification(@RequestParam(value="conId", defaultValue="1") Long conId
-    		,@RequestParam(value="lrId", defaultValue="1") Long lrId) {
-    	ModelAndView modelAndView = new ModelAndView("/ledgerre/ver");
-    	List<Invoice> invoices = invoiceDao.findAllByConId(conId);
-    	Consumer consumer = consumerDao.get(conId);
-    	Map<Long, String> producersMap = producerDao.findAllMapIdAndName(null);
-    	LedgerReceivable ledgerReceivable = ledgerReceivableDao.get(lrId);
-    	
-    	modelAndView.addObject("invoices", invoices);
-    	modelAndView.addObject("consumer", consumer);
-    	modelAndView.addObject("producersMap", producersMap);
-    	modelAndView.addObject("ledgerReceivable", ledgerReceivable);
-    	
-    	return modelAndView;
+            ,@RequestParam(value="lrId", defaultValue="1") Long lrId) {
+        ModelAndView modelAndView = new ModelAndView("/ledgerre/ver");
+        List<Invoice> invoices = invoiceDao.findAllByConId(conId);
+        Consumer consumer = consumerDao.get(conId);
+        Map<Long, String> producersMap = producerDao.findAllMapIdAndName(null);
+        LedgerReceivable ledgerReceivable = ledgerReceivableDao.get(lrId);
+        
+        modelAndView.addObject("invoices", invoices);
+        modelAndView.addObject("consumer", consumer);
+        modelAndView.addObject("producersMap", producersMap);
+        modelAndView.addObject("ledgerReceivable", ledgerReceivable);
+        
+        return modelAndView;
     }
     
     @RequestMapping("verification/confirm")
     @ResponseBody
     public JSONObject verificationConfirm(HttpServletRequest request, 
-            @ModelAttribute("invId") String invIds,
-            @RequestParam(value="lrId", defaultValue="1") Long lrId) {
-    	
-    	LedgerReceivable ledgerReceivable = ledgerReceivableDao.get(lrId);
-    	logger.info(ledgerReceivable.toString());
-    	
-    	//Double amountValid = ledgerReceivable.getAmount() - ledgerReceivable.getVerification();
-    	String[] invIdstemp = invIds.replaceAll("\"", "").split(",");
-    	Invoice invoice = null;
-    	Double verifi = (double) 0;
-    	Boolean result = true;
-    	
-    	for (String invId : invIdstemp) {
-    		logger.info(invId);
-			invoice = invoiceDao.get(Long.valueOf(invId));
-			verifi = verifi + invoice.getAmount();
-			if (!invoiceDao.updateVerification(Long.valueOf(invId), null)) {
-				result = false;
-			}
-		}
-    	
-    	if (!ledgerReceivableDao.updateVerification(lrId, verifi)) {
-    		result = false;
-		}
-    	
-    	
-    	JSONObject jsonTuple = new JSONObject();
-    	jsonTuple.put("value", result);
-    	return jsonTuple;
+            @ModelAttribute("invId") String invIds) {
+        
+        //Double amountValid = ledgerReceivable.getAmount() - ledgerReceivable.getVerification();
+        String[] invIdstemp = invIds.replaceAll("\"", "").split(",");
+        Invoice invoice = null;
+        Double verifi = (double) 0;
+        Boolean result = false;
+        
+        for (String invId : invIdstemp) {
+            logger.info(invId);
+            invoice = invoiceDao.get(Long.valueOf(invId));
+            verifi = verifi + invoice.getAmount();
+            if (invoiceDao.updateVerification(Long.valueOf(invId), null)) {
+                result = true;
+            }
+        }
+        
+        if (result) {
+            result = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
+                    , Utils.getMonthId(invoice.getInvDate()));
+        }
+        
+        if (result) {
+            result = ledgerReceivableDao.saveByInvoice(invoice.getConId()
+                    , Utils.getMonthId(invoice.getInvDate()));
+        }
+        
+        JSONObject jsonTuple = new JSONObject();
+        jsonTuple.put("value", result);
+        return jsonTuple;
+    }
+    
+    @RequestMapping("verification/confirmone")
+    @ResponseBody
+    public JSONObject verificationConfirmone(HttpServletRequest request, 
+            @ModelAttribute("invId") Long invId,
+            @RequestParam(value="verification", defaultValue="0") Double verification) {
+        
+        Boolean result = false;
+        Invoice invoice = invoiceDao.get(invId);
+        
+        logger.info("invId:" + invId + ", verification:" + verification);
+        
+        if (invoiceDao.updateVerification(invId, verification)) {
+            result = true;
+        }
+        
+        if (result) {
+            result = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
+                    , Utils.getMonthId(invoice.getInvDate()));
+        }
+        
+        if (result) {
+            result = ledgerReceivableDao.saveByInvoice(invoice.getConId()
+                    , Utils.getMonthId(invoice.getInvDate()));
+        }
+        
+        JSONObject jsonTuple = new JSONObject();
+        jsonTuple.put("value", result);
+        return jsonTuple;
     }
     
     

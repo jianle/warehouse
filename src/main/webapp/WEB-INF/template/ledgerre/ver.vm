@@ -11,8 +11,8 @@
 #set($valid=${ledgerReceivable.amount}-${ledgerReceivable.verification})
 <hr/>
 <div style="float:right">
-	<input type="hidden" id="lrId" value="${ledgerReceivable.lrId}" />
-	<h2 style="margin-top:4px">可用核销金额：<code id="amount">$valid</code></h2>
+    <input type="hidden" id="lrId" value="${ledgerReceivable.lrId}" />
+    <h2 style="margin-top:4px">可用核销金额：<code id="amount">$valid</code></h2>
 </div>
 <div class="ui green button" id="checkVerification">
     <i class="checkmark icon"></i>核销勾选 
@@ -22,16 +22,16 @@
   <thead>
     <tr>
       <th style="padding-left:8px">
-		<div class="checkbox" style="margin-top:0px;margin-bottom:0px">
+        <div class="checkbox" style="margin-top:0px;margin-bottom:0px">
            <label>
              <input id="checkAll" onclick="checkAllMonitor()" type="checkbox">全选
            </label>
         </div>
-	  </th>
+      </th>
       <th>发票抬头</th>
       <th>金额</th>
-	  <th>已核销金额</th>
-	  <th>进账日期</th>
+      <th>已核销金额</th>
+      <th>进账日期</th>
       <th>开票公司</th>
     </tr>
   </thead>
@@ -39,20 +39,20 @@
     #foreach( $invoice in $invoices)
       <tr id="${invoice.invId}_tr" class="#if(${invoice.amount}==${invoice.verification})error#end">
         <td>
-		 #if(${invoice.amount}==${invoice.verification})
-		  已核销
-	     #else
-		  <div class="checkbox" style="margin-top:0px;margin-bottom:0px">
+         #if(${invoice.amount}==${invoice.verification})
+          已核销
+         #else
+          <div class="checkbox" style="margin-top:0px;margin-bottom:0px">
            <label>
              <input name="invId" type="checkbox" value="${invoice.invId}">${invoice.invId}
            </label>
           </div>
-		 #end
-		</td>
+         #end
+        </td>
         <td>${consumer.conName}</td>
         <td>${invoice.amount}</td>
-		<td>${invoice.verification}</td>
-		<td>${invoice.incDate}</td>
+        <td>${invoice.verification}</td>
+        <td>${invoice.incDate}</td>
         <td>${producersMap.get($invoice.proId)}</td>
       </tr>
     #end

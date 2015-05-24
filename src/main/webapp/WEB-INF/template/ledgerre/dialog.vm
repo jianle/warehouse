@@ -8,7 +8,7 @@
                     <label>客服公司:</label>
                     <select id="conId" class="easyui-combobox" panelHeight="150px"  name="conId" style="width:300px;" required="true">
                       #foreach( $key in $consumerMap.keySet().toArray())
-					  <option value="$key">${consumerMap.get($key)}</option>
+                      <option value="$key">${consumerMap.get($key)}</option>
                       #end
                     </select>
                 </div>

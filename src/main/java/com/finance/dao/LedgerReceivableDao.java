@@ -26,7 +26,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String TABLE_NAME    = "ledger_receivable";
-    private static final String INSERT_FIELDS = "con_id, amount, pay_date, verification, remark, update_time";
+    private static final String INSERT_FIELDS = "con_id, month_id, amount, pay_date, verification, remark, update_time";
     private static final String SELECT_FIELDS = "lr_id, " + INSERT_FIELDS;
     
     @Autowired
@@ -67,6 +67,36 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         }
         return false;
     }
+    
+    public Boolean saveByInvoice(Long conId, String monthId) {
+        try {
+            
+            String sql = "insert into ledger_receivable(con_id, month_id, amount, verification,update_time) "
+                    + "select con_id,date_format(inv_date,'%YM%m') month_id,sum(amount) amount "
+                    + ",sum(verification) verification,current_timestamp() from invoice "
+                    + "where is_deleted=0 and con_id=? and date_format(inv_date,'%YM%m')=? "
+                    + "group by 1,2";
+            logger.info(sql);
+            jdbcTemplateFinance.update(sql, conId, monthId);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        
+        return false;
+    }
+    
+    public Boolean deleteByInvIdAndMonthId(Long conId, String monthId) {
+        try {
+            String sql = "delete from " + TABLE_NAME + " where con_id=? and month_id=?";
+            jdbcTemplateFinance.update(sql, conId, monthId);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("deleteByInvIdAndMonthId failed. " + e);
+        }
+        return false;
+    }
 
     @Override
     public List<LedgerReceivable> findAll() {
@@ -92,7 +122,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         }
 
         if (conIds != null && !conIds.equals("")) {
-        	
+            
             if (flagIsWhere) {
                 isWhere.append(" and con_id in ").append(conIds);
             } else {
@@ -172,6 +202,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             LedgerReceivable ledgerReceivable = new LedgerReceivable();
             ledgerReceivable.setLrId(rs.getLong("lr_id"));
             ledgerReceivable.setConId(rs.getLong("con_id"));
+            ledgerReceivable.setMonthId(rs.getString("month_id"));
             ledgerReceivable.setAmount(rs.getDouble("amount"));
             ledgerReceivable.setPayDate(DATE_FORMAT.format(rs.getDate("pay_date")));
             ledgerReceivable.setVerification(rs.getDouble("verification"));
@@ -182,18 +213,17 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         }
     };
 
-	public Boolean updateVerification(Long lrId, Double verifi) {
-		try {
-			String sql = "update " + TABLE_NAME + " set verification=verification + ? "
+    public Boolean updateVerification(Long lrId, Double verifi) {
+        try {
+            String sql = "update " + TABLE_NAME + " set verification=verification + ? "
                     + "where lr_id=?";
-			jdbcTemplateFinance.update(sql, verifi, lrId);
+            jdbcTemplateFinance.update(sql, verifi, lrId);
             return true;
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("updateVerification failed." + e);
         }
         return false;
-	}
-
+    }
 
 }

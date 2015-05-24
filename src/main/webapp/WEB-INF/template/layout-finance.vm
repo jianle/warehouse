@@ -49,14 +49,11 @@
             </div>
             <div class="navbar-collapse collapse bs-navbar-collapse">
               <ul class="nav navbar-nav navbar-left">
-				<li #if($title == '信息维护') class='active' #end>
+                <li #if($title == '信息维护') class='active' #end>
                   <a href="#springUrl('/config')">信息维护</a>
                 </li>
                 <li #if($title == '应收账单') class='active' #end>
-                  <a href="#springUrl('/billReceivable')">应收账单</a>
-                </li>
-                <li #if($title == '录入收款') class='active' #end>
-                  <a href="#springUrl('/ledgerReceivable')">录入收款</a>
+                  <a href="#springUrl('/ledgerReceivable')">应收账单</a>
                 </li>
                 <li #if($title == '进项增票登记') class='active' #end>
                   <a href="#springUrl('/invoiceIncome')">进项增票登记</a>

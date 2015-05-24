@@ -2,6 +2,7 @@
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">发票</div>
             <form id="modalForm" method="post" style="margin-top:20px" novalidate>
+                                            
                 <div class="fitem">
                     <label style="padding-left:10px;">发票号:</label>
                     <input name="invId" id="invId" class="easyui-numberbox" required="true" />

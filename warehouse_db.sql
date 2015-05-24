@@ -2,17 +2,18 @@ CREATE DATABASE `warehouse_db` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
 CREATE TABLE `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `username` varchar(256) NOT NULL,
-  `password` varchar(20) NOT NULL,
-  `truename` varchar(256) NOT NULL,
-  `email` varchar(256) NOT NULL,
-  `role` int(11) NOT NULL,
-  `created` datetime NOT NULL,
+  `parent_id` bigint(20) NOT NULL default 0 comment '对应上级ID',
+  `username` varchar(256) NOT NULL default '' comment '账户',
+  `password` varchar(20) NOT NULL default 'pwd' comment '密码',
+  `truename` varchar(256) NOT NULL default '' comment '用户中文名',
+  `email` varchar(256) NOT NULL default '' comment '邮箱',
+  `role` int(11) NOT NULL default 0 comment '角色',
+  `created` datetime NOT NULL comment '创建时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 ;
 
-insert into `user`(username,password,truename,email,role,created) values('admin','admin','管理员','admin@xxx.com',1,current_time());
+insert into `user`(username,password,truename,email,role,created) values('admin','admin123','管理员','admin@xxx.com',1,current_time());
 
 CREATE TABLE `goods` (
   `g_id` bigint(20) NOT NULL AUTO_INCREMENT comment '商品自增id',
@@ -170,7 +171,10 @@ drop table if exists `producer`;
 CREATE TABLE `producer` (
 `pro_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
 `pro_name` VARCHAR(644) NOT NULL default '' comment '公司名称',
+`contact_name` VARCHAR(30) NOT NULL default '' comment '联系人',
+`contact_addr` VARCHAR(640) NOT NULL default '' comment '联系地址',
 `remark` VARCHAR(640) NOT NULL default '' comment '备注',
+`insert_dt` timestamp not null comment '建立日期',
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`pro_id`) 
 )ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 comment '生产商，供应商'
@@ -200,7 +204,6 @@ index `idx` (con_id)
 
 drop table if exists `invoice`;
 CREATE TABLE `invoice` (
-`br_id` bigint(20) NOT NULL default 0 comment '应收账单ID',
 `inv_id` bigint(20) NOT NULL default 0 comment '发票号',
 `con_id` bigint(20) NOT NULL default 0 comment '发票抬头',
 `valorem_tax` DOUBLE(20,4) NOT NULL  default 0.0 comment '价税合计',
@@ -215,23 +218,28 @@ CREATE TABLE `invoice` (
 `is_deleted` smallint(2) not null default 0 comment '0-有效、1-被删除的',
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`inv_id`),
-index `br_id_index` (`br_id`),
 index `con_id_index` (`con_id`),
 index `pro_id_index` (`pro_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '发票表'
 ;
 
+delete from ledger_receivable where con_id=? and month_id=?;
+insert into ledger_receivable(con_id, month_id, amount, verification)
+select con_id,date_format(inc_date,'%YM%m') month_id,sum(amount) amount,sum(verification) verification from invoice where is_deleted=0 group by 1,2;
+
 drop table if exists `ledger_receivable`;
 create table `ledger_receivable`(
   `lr_id` bigint(20) not null AUTO_INCREMENT comment '主键自增ID',
   `con_id` varchar(255) not null default '' comment '付款公司（客服公司）',
+  `month_id` varchar(10) not null default '' comment '所属月份',
   `amount` double(20,4) not null default 0.0 comment '金额',
   `pay_date` date not null default '1900-01-01' comment '付款日期',
   `verification` DOUBLE(20,4) NOT NULL default 0.0 comment '已核销金额',
   `remark` VARCHAR(640) NOT NULL default '' comment '备注',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`lr_id`),
-  index `con_id_index` (con_id)
+  index `con_id_index` (con_id),
+  index `month_id_index` (month_id)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '收款表'
 ;
 

@@ -29,7 +29,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String TABLE_NAME    = "invoice";
-    private static final String INSERT_FIELDS = "br_id, inv_id, con_id, valorem_tax, amount, amount_tax, rate_tax,"
+    private static final String INSERT_FIELDS = " inv_id, con_id, valorem_tax, amount, amount_tax, rate_tax,"
             + "inv_date, remark, inc_date, pro_id, verification, is_deleted, update_time";
     private static final String SELECT_FIELDS = INSERT_FIELDS;
     
@@ -88,9 +88,10 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Invoice> findPagination(Long brId, int currentPage, int numPerPage) {
+    public Pagination<Invoice> findPagination(Long conId, String monthId, int currentPage, int numPerPage) {
         
-        String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where br_id=" + brId;
+        String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where con_id=" + conId + " and "
+                + "date_format(inv_date,'%YM%m')='" + monthId + "'";
         
         String sqlCount = sql.replace(SELECT_FIELDS, "COUNT(1)");
         
@@ -112,12 +113,12 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         return pagination;
     }
     
-    public List<Invoice> findAllByBrId(Long brId) {
+    public List<Invoice> findAllByBrId(Long conId) {
         // TODO Auto-generated method stub
         try {
             String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME
-                    + " where br_id=?";
-            return jdbcTemplateFinance.query(sql, rowMapper, brId);
+                    + " where con_id=?";
+            return jdbcTemplateFinance.query(sql, rowMapper, conId);
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("findAllByBrId failed." + e);
@@ -132,9 +133,8 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
      // TODO Auto-generated method stub
         try {
             String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
-                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
+                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
             jdbcTemplateFinance.update(sql,
-                    obj.getBrId(),
                     obj.getInvId(),
                     obj.getConId(),
                     obj.getValoremTax(),
@@ -162,7 +162,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
      // TODO Auto-generated method stub
         try {
             String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
-                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
+                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
             
             jdbcTemplateFinance.batchUpdate(sql, new BatchPreparedStatementSetter(){
 
@@ -171,20 +171,19 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                         throws SQLException {
                     // TODO Auto-generated method stub
                     Invoice obj = invoices.get(i);
-                    ps.setObject(1,obj.getBrId());
-                    ps.setObject(2,obj.getInvId());
-                    ps.setObject(3,obj.getConId());
-                    ps.setObject(4,obj.getValoremTax());
-                    ps.setObject(5,obj.getAmount());
-                    ps.setObject(6,obj.getAmountTax());
-                    ps.setObject(7,obj.getRateTax());
-                    ps.setString(8,obj.getInvDate());
-                    ps.setString(9,obj.getRemark());
-                    ps.setString(10,obj.getIncDate());
-                    ps.setLong(11,obj.getProId());
-                    ps.setObject(12,obj.getVerification());
-                    ps.setObject(13,obj.getIsDeleted());
-                    ps.setObject(14,new Timestamp(System.currentTimeMillis()));
+                    ps.setObject(1,obj.getInvId());
+                    ps.setObject(2,obj.getConId());
+                    ps.setObject(3,obj.getValoremTax());
+                    ps.setObject(4,obj.getAmount());
+                    ps.setObject(5,obj.getAmountTax());
+                    ps.setObject(6,obj.getRateTax());
+                    ps.setString(7,obj.getInvDate());
+                    ps.setString(8,obj.getRemark());
+                    ps.setString(9,obj.getIncDate());
+                    ps.setLong(10,obj.getProId());
+                    ps.setObject(11,obj.getVerification());
+                    ps.setObject(12,obj.getIsDeleted());
+                    ps.setObject(13,new Timestamp(System.currentTimeMillis()));
                     
                 }
 
@@ -238,7 +237,6 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         public Invoice mapRow(ResultSet rs, int rowNum) throws SQLException {
             // TODO Auto-generated method stub
             Invoice invoice = new Invoice();
-            invoice.setBrId(rs.getLong("br_id"));
             invoice.setInvId(rs.getLong("inv_id"));
             invoice.setConId(rs.getLong("con_id"));
             invoice.setValoremTax(rs.getDouble("valorem_tax"));
@@ -256,8 +254,8 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         }
     };
 
-	public List<Invoice> findAllByConId(Long conId) {
-		// TODO Auto-generated method stub
+    public List<Invoice> findAllByConId(Long conId) {
+        // TODO Auto-generated method stub
         try {
             String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME
                     + " where is_deleted=0 and con_id=?";
@@ -268,27 +266,27 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             logger.debug("findAllByConId failed." + e);
         }
         return null;
-	}
+    }
 
-	public Boolean updateVerification(Long invId, Double amount) {
-		// TODO Auto-generated method stub
-		try {
-			String sql = null;
+    public Boolean updateVerification(Long invId, Double amount) {
+        // TODO Auto-generated method stub
+        try {
+            String sql = null;
             if (amount == null) {
-            	sql = "update " + TABLE_NAME + " set verification=amount "
+                sql = "update " + TABLE_NAME + " set verification=amount "
                         + "where inv_id=?";
-            	jdbcTemplateFinance.update(sql, invId);
-			}else {
-				sql = "update " + TABLE_NAME + " set verification=verification + ? "
+                jdbcTemplateFinance.update(sql, invId);
+            }else {
+                sql = "update " + TABLE_NAME + " set verification=verification + ? "
                         + "where inv_id=?";
-				jdbcTemplateFinance.update(sql, amount, invId);
-			}
+                jdbcTemplateFinance.update(sql, amount, invId);
+            }
             return true;
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("updateVerification failed." + e);
         }
         return false;
-	}
+    }
 
 }

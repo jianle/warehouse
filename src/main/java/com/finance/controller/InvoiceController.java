@@ -23,8 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.finance.dao.BillReceivableDao;
 import com.finance.dao.ConsumerDao;
 import com.finance.dao.InvoiceDao;
+import com.finance.dao.LedgerReceivableDao;
 import com.finance.dao.ProducerDao;
 import com.finance.model.Invoice;
+import com.finance.util.Utils;
 import com.wms.model.Pagination;
 
 
@@ -42,24 +44,26 @@ public class InvoiceController {
     private ConsumerDao consumerDao;
     @Autowired
     private ProducerDao producerDao;
+    @Autowired
+    private LedgerReceivableDao ledgerReceivableDao;
     
     
     @RequestMapping(value={"","search"})
-    public ModelAndView search(@RequestParam(value="brId") Long brId,
+    public ModelAndView search(@RequestParam(value="conId") Long conId,
+            @RequestParam(value="monthId", defaultValue="") String monthId,
             @RequestParam(value="currentPage", defaultValue="1") Integer currentPage,
             @RequestParam(value="numPerPage", defaultValue="20") Integer numPerPage
             ) {
         ModelAndView modelView = new ModelAndView("/invoice/view");
-        logger.info("brId:" + brId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
-        
-        System.out.println("brId:" + brId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
-        
-        Pagination<Invoice> pagination = invoiceDao.findPagination(brId, currentPage, numPerPage);
+        logger.info("conId:" + conId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
+                
+        Pagination<Invoice> pagination = invoiceDao.findPagination(conId, monthId, currentPage, numPerPage);
         Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
         Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
         
         modelView.addObject("pagination", pagination);
-        modelView.addObject("brId", brId);
+        modelView.addObject("conId", conId);
+        modelView.addObject("monthId", monthId);
         modelView.addObject("consumerMap", consumerMap);
         modelView.addObject("producerMap", producerMap);
         
@@ -70,7 +74,7 @@ public class InvoiceController {
     @ResponseBody
     public String save(HttpServletRequest request, 
             @ModelAttribute("invoice") Invoice invoice) {
-        
+        Boolean flagBoolean = false; 
         logger.info("init:"+invoice.toString());
         
         List<Invoice> invoices = new ArrayList<Invoice>();
@@ -97,10 +101,20 @@ public class InvoiceController {
         logger.info("list:"+invoices.toString());
         
         if (invoiceDao.saveBatch(invoices)) {
-            return "true";
+            flagBoolean = true;
         }
         
-        return "false";
+        if (flagBoolean) {
+            flagBoolean = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
+                    , Utils.getMonthId(invoice.getInvDate()));
+        }
+        
+        if (flagBoolean) {
+            flagBoolean = ledgerReceivableDao.saveByInvoice(invoice.getConId()
+                    , Utils.getMonthId(invoice.getInvDate()));
+        }
+        
+        return String.valueOf(flagBoolean);
     }
     
     @RequestMapping(value="update", method=RequestMethod.POST)
@@ -130,6 +144,21 @@ public class InvoiceController {
             result = true;
         }
         jsonTuple.put("value", result);
+        
+        return jsonTuple;
+    }
+    
+    @RequestMapping(value="get")
+    @ResponseBody
+    public JSONObject getInvJsonObject(HttpServletRequest request, 
+            @ModelAttribute("invId") Long invId) {
+        JSONObject jsonTuple = new JSONObject();
+        
+        logger.info("invId :" + invId);
+        
+        Invoice invoice = invoiceDao.get(invId);
+        jsonTuple = JSONObject.fromObject(invoice);
+        logger.info(jsonTuple.toString());
         
         return jsonTuple;
     }
