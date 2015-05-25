@@ -77,7 +77,7 @@
         </td>
         <td>
           <a id="edit" onclick="edit(${invoice.invId},${invoice.conId},${invoice.proId},${invoice.isDeleted})" data-toggle="modal"
-          class="easyui-linkbutton" data-options="plain:true">${consumerMap.get($invoice.conId)}</a>
+           style="cursor:pointer;">${consumerMap.get($invoice.conId)}</a>
         </td>
         <td>${invoice.valoremTax}</td>
         <td>${invoice.amount}</td>

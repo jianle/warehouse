@@ -24,32 +24,32 @@ import com.finance.model.Consumer;
 @Controller
 @RequestMapping("/consumer")
 public class ConsumerController {
-	
-	private Logger logger = LoggerFactory.getLogger(ConsumerController.class);
-	
-	@Autowired
-	private ConsumerDao consumerDao;
+    
+    private Logger logger = LoggerFactory.getLogger(ConsumerController.class);
+    
+    @Autowired
+    private ConsumerDao consumerDao;
 
-	@RequestMapping(value = { "", "search" })
-	public ModelAndView search(
-			@RequestParam(value = "conName", defaultValue = "") String conName) {
-		
-		ModelAndView modelAndView = new ModelAndView("/consumer/view");
-		List<Consumer> consumers = new ArrayList<Consumer>();
+    @RequestMapping(value = { "", "search" })
+    public ModelAndView search(
+            @RequestParam(value = "conName", defaultValue = "") String conName) {
+        
+        ModelAndView modelAndView = new ModelAndView("/consumer/view");
+        List<Consumer> consumers = new ArrayList<Consumer>();
 
-		logger.info("@RequestMapping: /consumer");
-		if (conName == null || "".equals(conName)) {
-			consumers = consumerDao.findAll();
-		} else {
-			consumers = consumerDao.findByName(conName.trim());
-		}
-		modelAndView.addObject("consumers", consumers);
-		modelAndView.addObject("conName", conName);
+        logger.info("@RequestMapping: /consumer");
+        if (conName == null || "".equals(conName)) {
+            consumers = consumerDao.findAll();
+        } else {
+            consumers = consumerDao.findByName(conName.trim());
+        }
+        modelAndView.addObject("consumers", consumers);
+        modelAndView.addObject("conName", conName);
 
-		return modelAndView;
-	}
-	
-	@RequestMapping(value="save", method=RequestMethod.POST)
+        return modelAndView;
+    }
+    
+    @RequestMapping(value="save", method=RequestMethod.POST)
     @ResponseBody
     public String save(HttpServletRequest request, 
             @ModelAttribute("consumer") Consumer consumer) {
@@ -66,7 +66,7 @@ public class ConsumerController {
     @RequestMapping(value="update", method=RequestMethod.POST)
     @ResponseBody
     public String update(HttpServletRequest request, 
-    		@ModelAttribute("consumer") Consumer consumer) {
+            @ModelAttribute("consumer") Consumer consumer) {
         
         logger.info(consumer.toString());
         
@@ -92,6 +92,19 @@ public class ConsumerController {
         jsonTuple.put("value", result);
         return jsonTuple;
     }
-	
+    
+    @RequestMapping(value="getInfo")
+    @ResponseBody
+    public JSONObject getInfo(HttpServletRequest request, 
+            @ModelAttribute("conId") Long conId) {
+        JSONObject jsonTuple = new JSONObject();
+        
+        logger.info("conId :" + conId);
+        
+        jsonTuple = JSONObject.fromObject(consumerDao.get(conId));
+        
+        return jsonTuple;
+    }
+    
 
 }

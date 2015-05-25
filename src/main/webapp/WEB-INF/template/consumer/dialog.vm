@@ -1,17 +1,53 @@
-<div id="dlg" class="easyui-dialog" style="width:450px;height:250px;padding:10px 20px"
+<div id="dlg" class="easyui-dialog" style="width:460px;height:440px;padding:10px 20px"
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">开票公司</div>
             <form id="modalForm" method="post" style="margin-top:20px" novalidate>  
-				<input type="hidden" id="conId" value="" name="conId" />
+                <input type="hidden" id="conId" value="" name="conId" />
                 <div class="fitem">
                     <label>公司名称:</label>
                     <input name="conName" id="conName" style="width:300px" class="easyui-textbox" required="true" />
                 </div>
+                
+                <div class="fitem">
+                    <label>开户行名称:</label>
+                    <input style="width:300px" name="accountCompany" id="accountCompany" class="easyui-textbox" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label>账号:</label>
+                    <input style="width:300px" name="account" id="account" class="easyui-textbox" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label>纳税人识别号:</label>
+                    <input style="width:300px" name="taxpayerId" id="taxpayerId" class="easyui-textbox" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label>地址:</label>
+                    <input style="width:300px" name="contactAddr" id="contactAddr" class="easyui-textbox" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label>联系电话:</label>
+                    <input style="width:300px" name="contactName" id="contactName" class="easyui-textbox" required="true" />
+                </div>
+                
+                <div class="fitem">
+                    <label>联系人:</label>
+                    <input style="width:300px" name="contactTel" id="contactTel" class="easyui-textbox" required="true" />
+                </div>
+                
                 <div class="fitem">
                     <label>备注信息:</label>
                     <input style="width:300px" name="remark" id="remark" class="easyui-textbox" />
                 </div>
-
+                
+                <div class="fitem">
+                    <label>建立日期:</label>
+                    <input style="width:300px" name="insertDt" id="insertDt" class="easyui-datebox" data-options="formatter:myformatter,parser:myparser" required="true" />
+                </div>
+                
             </form>
       </div>
       <div id="dlg-buttons">

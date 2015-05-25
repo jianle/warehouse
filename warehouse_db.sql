@@ -171,10 +171,7 @@ drop table if exists `producer`;
 CREATE TABLE `producer` (
 `pro_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
 `pro_name` VARCHAR(644) NOT NULL default '' comment '公司名称',
-`contact_name` VARCHAR(30) NOT NULL default '' comment '联系人',
-`contact_addr` VARCHAR(640) NOT NULL default '' comment '联系地址',
 `remark` VARCHAR(640) NOT NULL default '' comment '备注',
-`insert_dt` timestamp not null comment '建立日期',
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`pro_id`) 
 )ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 comment '生产商，供应商'
@@ -184,10 +181,17 @@ drop table if exists `consumer`;
 CREATE TABLE `consumer` (
 `con_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
 `con_name` VARCHAR(644) NOT NULL default '' comment '公司名称',
+`account_company` varchar(640) not null default '' comment '开户名称',
+`account` varchar(100) not null default '' comment '账号',
+`taxpayer_id` varchar(100) not null default '' comment '纳税人识别号',
+`contact_addr` VARCHAR(640) NOT NULL default '' comment '联系地址',
+`contact_name` VARCHAR(30) NOT NULL default '' comment '联系人',
+`contact_tel` VARCHAR(20) NOT NULL default '' comment '联系电话',
 `remark` VARCHAR(640) NOT NULL default '' comment '备注',
+`insert_dt` timestamp not null comment '建立日期',
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`con_id`) 
-)ENGINE=InnoDB AUTO_INCREMENT=20000 DEFAULT CHARSET=utf8 comment '消费者，客服公司'
+)ENGINE=InnoDB AUTO_INCREMENT=20000 DEFAULT CHARSET=utf8 comment '客服公司'
 ;
 
 drop table if exists `bill_receivable`;
