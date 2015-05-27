@@ -8,6 +8,7 @@ public class LedgerReceivable {
     
     private Long lrId;
     private Long conId;
+    private Long proId;
     private String monthId;
     private Double amount;
     private String payDate;
@@ -31,6 +32,12 @@ public class LedgerReceivable {
     }
     public Long getConId() {
         return conId;
+    }
+    public void setProId(Long proId) {
+        this.proId = proId;
+    }
+    public Long getProId() {
+        return proId;
     }
     public Double getAmount() {
         return amount;
@@ -62,12 +69,18 @@ public class LedgerReceivable {
     public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
+    
+    public String getConcat() {
+        return this.conId + "_" +  this.proId;
+    }
+    
     @Override
     public String toString() {
-        return "LedgerReceivable [lrId=" + lrId + ", conId="
-                + conId + ", amount=" + amount + ", payDate=" + payDate
-                + ", verification=" + verification + ", remark=" + remark
-                + ", updateTime=" + updateTime + "]";
+        return "LedgerReceivable [lrId=" + lrId + ", conId=" + conId
+                + ", proId=" + proId + ", monthId=" + monthId + ", amount="
+                + amount + ", payDate=" + payDate + ", verification="
+                + verification + ", remark=" + remark + ", updateTime="
+                + updateTime + "]";
     }
     
 }

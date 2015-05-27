@@ -131,12 +131,12 @@ public class LedgerReceivableController {
         
         if (result) {
             result = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
-                    , Utils.getMonthId(invoice.getInvDate()));
+                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
         }
         
         if (result) {
             result = ledgerReceivableDao.saveByInvoice(invoice.getConId()
-                    , Utils.getMonthId(invoice.getInvDate()));
+                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
         }
         
         JSONObject jsonTuple = new JSONObject();
@@ -161,12 +161,12 @@ public class LedgerReceivableController {
         
         if (result) {
             result = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
-                    , Utils.getMonthId(invoice.getInvDate()));
+                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
         }
         
         if (result) {
             result = ledgerReceivableDao.saveByInvoice(invoice.getConId()
-                    , Utils.getMonthId(invoice.getInvDate()));
+                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
         }
         
         JSONObject jsonTuple = new JSONObject();

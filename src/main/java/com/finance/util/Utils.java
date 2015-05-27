@@ -45,6 +45,23 @@ public class Utils {
         return String.format("%dM%02d", year, monthId);
     }
     
+    public static String monthToMonthId(String month) {
+        
+        if ("".equals(month)) {
+            return getMonthId(new Date());
+        }
+        try {
+            int year = Integer.valueOf(month.substring(0, 4));
+            int monthId = Integer.valueOf(month.substring(5));
+            return String.format("%dM%02d", year, monthId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println("monthToMonthId failed." + e);
+            return getMonthId(new Date());
+        }
+        
+    }
+    
     public static String getMonthId(String dateStr) {
         
         Date date = null;
@@ -65,7 +82,7 @@ public class Utils {
     }
     
     public static void main(String[] args) throws ParseException {
-        System.out.println(getMonthId(new SimpleDateFormat("yyyy-MM-dd").parse("2014-12-31")));
+        System.out.println(monthToMonthId("2015年12"));
     }
 
 }

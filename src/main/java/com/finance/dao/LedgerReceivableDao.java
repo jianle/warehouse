@@ -26,7 +26,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String TABLE_NAME    = "ledger_receivable";
-    private static final String INSERT_FIELDS = "con_id, month_id, amount, pay_date, verification, remark, update_time";
+    private static final String INSERT_FIELDS = "con_id, pro_id, month_id, amount, pay_date, verification, remark, update_time";
     private static final String SELECT_FIELDS = "lr_id, " + INSERT_FIELDS;
     
     @Autowired
@@ -68,16 +68,16 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         return false;
     }
     
-    public Boolean saveByInvoice(Long conId, String monthId) {
+    public Boolean saveByInvoice(Long conId, Long proId, String monthId) {
         try {
             
-            String sql = "insert into ledger_receivable(con_id, month_id, amount, verification,update_time) "
-                    + "select con_id,date_format(inv_date,'%YM%m') month_id,sum(amount) amount "
+            String sql = "insert into ledger_receivable(con_id, pro_id, month_id, amount, verification,update_time) "
+                    + "select con_id, pro_id,date_format(inv_date,'%YM%m') month_id,sum(amount) amount "
                     + ",sum(verification) verification,current_timestamp() from invoice "
-                    + "where is_deleted=0 and con_id=? and date_format(inv_date,'%YM%m')=? "
-                    + "group by 1,2";
+                    + "where con_id=? and pro_id=? and date_format(inv_date,'%YM%m')=? and is_deleted=0 "
+                    + "group by 1,2,3";
             logger.info(sql);
-            jdbcTemplateFinance.update(sql, conId, monthId);
+            jdbcTemplateFinance.update(sql, conId, proId, monthId);
             return true;
         } catch (Exception e) {
             // TODO: handle exception
@@ -86,10 +86,10 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         return false;
     }
     
-    public Boolean deleteByInvIdAndMonthId(Long conId, String monthId) {
+    public Boolean deleteByInvIdAndMonthId(Long conId, Long proId, String monthId) {
         try {
-            String sql = "delete from " + TABLE_NAME + " where con_id=? and month_id=?";
-            jdbcTemplateFinance.update(sql, conId, monthId);
+            String sql = "delete from " + TABLE_NAME + " where con_id=? and pro_id=? and month_id=?";
+            jdbcTemplateFinance.update(sql, conId, proId, monthId);
             return true;
         } catch (Exception e) {
             // TODO: handle exception
@@ -202,6 +202,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             LedgerReceivable ledgerReceivable = new LedgerReceivable();
             ledgerReceivable.setLrId(rs.getLong("lr_id"));
             ledgerReceivable.setConId(rs.getLong("con_id"));
+            ledgerReceivable.setProId(rs.getLong("pro_id"));
             ledgerReceivable.setMonthId(rs.getString("month_id"));
             ledgerReceivable.setAmount(rs.getDouble("amount"));
             ledgerReceivable.setPayDate(DATE_FORMAT.format(rs.getDate("pay_date")));
@@ -224,6 +225,30 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             logger.debug("updateVerification failed." + e);
         }
         return false;
+    }
+
+    public List<LedgerReceivable> findToDebtor(String startMonth,
+            String endMonth, String conIds) {
+        StringBuilder sqlBuilder = new StringBuilder("select ");
+        sqlBuilder.append(SELECT_FIELDS)
+                  .append(" from ")
+                  .append(TABLE_NAME);
+        
+        sqlBuilder.append(" where month_id between '").append(startMonth).append("' and '").append(endMonth).append("' ");
+        
+        if (conIds != null && !conIds.equals("()")) {
+            sqlBuilder.append(" and con_id in ").append(conIds);
+        }
+        
+        logger.info(sqlBuilder.toString());
+        try {
+            return jdbcTemplateFinance.query(sqlBuilder.toString(), rowMapper);
+        } catch (Exception e) {
+            // TODO Auto-generated method stub
+            logger.debug("findToDebtor failed." + e);
+            return null;
+        }
+        
     }
 
 }

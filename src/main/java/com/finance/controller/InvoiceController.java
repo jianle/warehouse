@@ -106,12 +106,12 @@ public class InvoiceController {
         
         if (flagBoolean) {
             flagBoolean = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
-                    , Utils.getMonthId(invoice.getInvDate()));
+                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
         }
         
         if (flagBoolean) {
             flagBoolean = ledgerReceivableDao.saveByInvoice(invoice.getConId()
-                    , Utils.getMonthId(invoice.getInvDate()));
+                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
         }
         
         return String.valueOf(flagBoolean);

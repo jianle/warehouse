@@ -65,11 +65,11 @@
 <table class="ui blue striped table">
   <thead>
     <tr>
-      <th min-width="200px">付款公司</th>
+      <th width="200px">付款公司</th>
       <th width="70px">金额</th>
+      <th width="110px">开票公司</th>
       <th width="110px">开票日期</th>
       <th width="100px">已核销金额</th>
-      <th width="250px">备注</th>
     </tr>
   </thead>
   <tbody>
@@ -79,9 +79,9 @@
             target="_blank">${consumerMap.get($ledgerReceivable.conId)}</a>
         </td>
         <td>${ledgerReceivable.amount}</td>
+        <td>${producerMap.get($ledgerReceivable.proId)}</td>
         <td>${ledgerReceivable.monthId}</td>
         <td>${ledgerReceivable.verification}</td>
-        <td>${ledgerReceivable.remark}</td>
       </tr>
     #end
   </tbody>

@@ -5,9 +5,62 @@
   var contextPath = '#springUrl('')';
 </script>
 
-<link href="#springUrl('/static/css/invoice/view.css')" rel="stylesheet" />
-<script type="text/javascript" src="#springUrl('/static/js/invoice/view.js')"></script>
+<link href="#springUrl('/static/css/debtor/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/debtor/view.js')"></script>
 
 <h2 style="margin-top:4px"><code>应收账单分析</code></h2>
 
 
+<form id="firstFromId" action="#springUrl('/debtor/search')" method="POST">
+  <div class="filter-bar-sm" >
+    <div class="filter-title-sm">
+      <label>日期范围</label>
+    </div>
+    <div class="filter-content">
+      <div class="input-group">
+      <div class="ui corner labeled input">
+        <input id="startDate" name="startDate" value="$startDate" type="text" class="form-control" />
+      </div>
+      <span> &nbsp;<i class="glyphicon glyphicon-forward"></i>&nbsp;</span>
+      <div class="ui corner labeled input">
+        <input id="endDate" name="endDate" value="$endDate" type="text" class="form-control" />
+      </div>
+      </div>
+    </div>
+    <input type="hidden" name="currentPage" value="1" />
+    <input type="hidden" name="numPerPage" value="20" />
+    <div class="filter-content-right" style="margin-top:8px">
+      <div class="ui action left icon input">
+        <i class="search icon"></i>
+        <input type="text" name="conName" value="#if($conName)$conName#end" placeholder="客服公司">
+        <div id="btnSearch" class="ui teal submit button">Search</div>
+      </div>
+    </div>
+  </div>
+  
+</form>
+<hr/>
+
+
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th min-width="150px">客户公司</th>
+      <th min-width="150px">公司名称</th>
+      #foreach($monthId in $monthIdList)
+        <th width="100px">$monthId.replace("M","年")月</th>
+      #end
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $row in $tableList )
+      <tr id="${consumer.conId}_tr">
+        <td>${consumerMap.get($row.get("conId"))}</td>
+        <td>${producerMap.get($row.get("proId"))}</td>
+        #foreach($monthId in $monthIdList)
+        <th width="100px">#if(${row.get($monthId)})${row.get($monthId)}#else--#end</th>
+      #end
+      </tr>
+    #end
+  </tbody>
+</table>

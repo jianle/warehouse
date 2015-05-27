@@ -223,18 +223,15 @@ CREATE TABLE `invoice` (
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`inv_id`),
 index `con_id_index` (`con_id`),
-index `pro_id_index` (`pro_id`)
+index `pro_id_index` (`pro_id`),
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '发票表'
 ;
-
-delete from ledger_receivable where con_id=? and month_id=?;
-insert into ledger_receivable(con_id, month_id, amount, verification)
-select con_id,date_format(inc_date,'%YM%m') month_id,sum(amount) amount,sum(verification) verification from invoice where is_deleted=0 group by 1,2;
 
 drop table if exists `ledger_receivable`;
 create table `ledger_receivable`(
   `lr_id` bigint(20) not null AUTO_INCREMENT comment '主键自增ID',
-  `con_id` varchar(255) not null default '' comment '付款公司（客服公司）',
+  `con_id` bigint(20) not null default 0 comment '付款公司（客服公司）',
+  `pro_id` bigint(20) not null default 0 comment '付款公司（客服公司）',
   `month_id` varchar(10) not null default '' comment '所属月份',
   `amount` double(20,4) not null default 0.0 comment '金额',
   `pay_date` date not null default '1900-01-01' comment '付款日期',
@@ -242,7 +239,7 @@ create table `ledger_receivable`(
   `remark` VARCHAR(640) NOT NULL default '' comment '备注',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`lr_id`),
-  index `con_id_index` (con_id),
+  index `con_id_index` (`con_id`,`pro_id`),
   index `month_id_index` (month_id)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '收款表'
 ;
