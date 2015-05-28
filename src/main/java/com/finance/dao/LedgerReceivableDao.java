@@ -115,12 +115,9 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
                   .append(TABLE_NAME);
         
         StringBuilder isWhere = new StringBuilder();
-        Boolean flagIsWhere = false;
-        if (startDate.compareTo(endDate)<0) {
-            isWhere.append(" where pay_date between '").append(startDate).append("' and '").append(endDate).append("' ");
-            flagIsWhere = true;
-        }
-
+        Boolean flagIsWhere = true;
+        isWhere.append(" where month_id between '").append(startDate).append("' and '").append(endDate).append("' ");
+        
         if (conIds != null && !conIds.equals("")) {
             
             if (flagIsWhere) {

@@ -52,7 +52,7 @@ public class DebtorController {
         String startMonth = null;
         String endMonth = null;
         
-        if ("".equals(startDate)) {
+        if ("".equals(startDate) || startDate.compareTo(endDate)>0) {
             startDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtils.addMonths(cale.getTime(), -3));
             endDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtils.addMonths(cale.getTime(), 3));
             startMonth = Utils.getMonthId(startDate);
@@ -62,25 +62,26 @@ public class DebtorController {
             endMonth = Utils.getMonthId(endDate);
         }
         
+        
         logger.info("startMonth:" + startMonth + ", endMonth:" + endMonth);
         
         List<String> monthIdList = generateMonthIdList(startMonth, endMonth);
-        
-        logger.info(monthIdList.toString());
-        
+                
         String conIds = "";
         
         Map<Long, String> mapConIdsMap = consumerDao.findAllMapIdAndName(conName);
         if (mapConIdsMap != null) {
-            conIds = mapConIdsMap.keySet().toString().replace("[", "(").replace("]", ")");
+             if (mapConIdsMap.size() > 0) {
+                conIds = mapConIdsMap.keySet().toString().replace("[", "(").replace("]", ")");
+            } else {
+                conIds = "(-1)";
+            }
         }
         
         List<LedgerReceivable> ledgerReceivables = ledgerReceivableDao.findToDebtor(startMonth, endMonth, conIds);
         
         List<Map<String, Object>> tableList =  generateTableList(ledgerReceivables);
-        
-        logger.info(tableList.toString());
-        
+                
         ModelAndView modelView = new ModelAndView("/debtor/view");
         logger.info("@RequestMapping:/debtor)");
         
@@ -134,7 +135,7 @@ public class DebtorController {
     private List<String> generateMonthIdList(String startMonthId, String endMonthId) {
         List<String> resultList = new ArrayList<String>();
         
-        if (startMonthId.compareTo(endMonthId) >=0) {
+        if (startMonthId.compareTo(endMonthId) >0) {
             resultList.add(Utils.getMonthId(new Date()));
             return resultList;
         }

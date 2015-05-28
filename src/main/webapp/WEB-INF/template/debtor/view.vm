@@ -58,7 +58,7 @@
         <td>${consumerMap.get($row.get("conId"))}</td>
         <td>${producerMap.get($row.get("proId"))}</td>
         #foreach($monthId in $monthIdList)
-        <th width="100px">#if(${row.get($monthId)})${row.get($monthId)}#else--#end</th>
+        <td width="100px">#if(${row.get($monthId)})${row.get($monthId)}#else--#end</td>
       #end
       </tr>
     #end

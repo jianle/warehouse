@@ -50,6 +50,7 @@ public class InvoiceController {
     
     @RequestMapping(value={"","search"})
     public ModelAndView search(@RequestParam(value="conId") Long conId,
+            @RequestParam(value="proId") Long proId,
             @RequestParam(value="monthId", defaultValue="") String monthId,
             @RequestParam(value="currentPage", defaultValue="1") Integer currentPage,
             @RequestParam(value="numPerPage", defaultValue="20") Integer numPerPage
@@ -57,7 +58,7 @@ public class InvoiceController {
         ModelAndView modelView = new ModelAndView("/invoice/view");
         logger.info("conId:" + conId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
                 
-        Pagination<Invoice> pagination = invoiceDao.findPagination(conId, monthId, currentPage, numPerPage);
+        Pagination<Invoice> pagination = invoiceDao.findPagination(conId, proId, monthId, currentPage, numPerPage);
         Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
         Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
         

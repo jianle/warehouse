@@ -54,7 +54,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/**" />
             <mvc:exclude-mapping path="/login" />
-            <mvc:exclude-mapping path="/static/**" />
+            <mvc:exclude-mapping path="/static/css/**" />
             <bean class="com.wms.interceptor.AuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

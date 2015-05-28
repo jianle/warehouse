@@ -4,6 +4,8 @@ $(document).ready(function(){
     
     $('#startDate').datepicker({
         format: "yyyy-mm-dd",
+        startView: 1,
+        minViewMode: 1,
         language: "zh-CN",
         orientation: "auto",
         autoclose: true
@@ -12,6 +14,8 @@ $(document).ready(function(){
 
     $('#endDate').datepicker({
         format: "yyyy-mm-dd",
+        startView: 1,
+        minViewMode: 1,
         language: "zh-CN",
         orientation: "auto right",
         autoclose: true

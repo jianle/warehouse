@@ -88,10 +88,10 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Invoice> findPagination(Long conId, String monthId, int currentPage, int numPerPage) {
+    public Pagination<Invoice> findPagination(Long conId, Long proId, String monthId, int currentPage, int numPerPage) {
         
-        String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where con_id=" + conId + " and "
-                + "date_format(inv_date,'%YM%m')='" + monthId + "'";
+        String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where con_id=" + conId + " and pro_id="
+                + proId + " and date_format(inv_date,'%YM%m')='" + monthId + "'";
         
         String sqlCount = sql.replace(SELECT_FIELDS, "COUNT(1)");
         

@@ -11,7 +11,7 @@
 <form id="firstFromId" action="#springUrl('/ledgerReceivable/search')" method="POST">
   <div class="filter-bar-sm" >
     <div class="filter-title-sm">
-      <label>日期范围</label>
+      <label>日期范围 : </label>
     </div>
     <div class="filter-content">
       <div class="input-group">
@@ -26,6 +26,18 @@
     </div>
     <input type="hidden" name="currentPage" value="1" />
     <input type="hidden" name="numPerPage" value="20" />
+    <div class="filter-title-sm">
+      <label>开票公司 : </label>
+    </div>
+    <div class="filter-content">
+      <div class="input-group col-xs-12">
+        <select class="form-control">
+            #foreach( $key in $producerMap.keySet().toArray())
+            <option value="$key">${producerMap.get($key)}</option>
+            #end
+        </select>
+      </div>
+    </div>
     <div class="filter-content-right" style="margin-top:8px">
       <div class="ui action left icon input">
         <i class="search icon"></i>
@@ -75,7 +87,7 @@
   <tbody>
     #foreach( $ledgerReceivable in $pagination.getResultList() )
       <tr id="${ledgerReceivable.lrId}_tr">
-        <td><a href="#springUrl('/invoice?conId=')${ledgerReceivable.conId}&monthId=${ledgerReceivable.monthId}"
+        <td><a href="#springUrl('/invoice?conId=')${ledgerReceivable.conId}&proId=${ledgerReceivable.proId}&monthId=${ledgerReceivable.monthId}"
             target="_blank">${consumerMap.get($ledgerReceivable.conId)}</a>
         </td>
         <td>${ledgerReceivable.amount}</td>

@@ -77,7 +77,7 @@ public class LedgerReceivableController {
         }
         
         ModelAndView modelView = new ModelAndView("/ledgerre/view");
-        Pagination<LedgerReceivable> pagination = ledgerReceivableDao.findPagination(startDate, endDate, conIds, currentPage, numPerPage);
+        Pagination<LedgerReceivable> pagination = ledgerReceivableDao.findPagination(Utils.getMonthId(startDate), Utils.getMonthId(endDate), conIds, currentPage, numPerPage);
         Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
         
         modelView.addObject("pagination", pagination);
