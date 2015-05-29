@@ -25,6 +25,10 @@ $(document).ready(function(){
         document.getElementById('firstFromId').submit();
     });
     
+    $('#selProId').change(function(){
+        document.getElementById('firstFromId').submit();
+    });
+    
 });
 
 var url;

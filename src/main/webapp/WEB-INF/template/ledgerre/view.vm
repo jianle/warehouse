@@ -8,7 +8,7 @@
 <script type="text/javascript" src="#springUrl('/static/js/ledgerre/view.js')"></script>
 
 <h2 style="margin-top:4px"><code>应收账单</code></h2>
-<form id="firstFromId" action="#springUrl('/ledgerReceivable/search')" method="POST">
+<form id="firstFromId" action="#springUrl('/ledgerReceivable/search')" method="get">
   <div class="filter-bar-sm" >
     <div class="filter-title-sm">
       <label>日期范围 : </label>
@@ -31,9 +31,10 @@
     </div>
     <div class="filter-content">
       <div class="input-group col-xs-12">
-        <select class="form-control">
+        <select class="form-control" name="proId" id="selProId">
+            <option value="0">全部</option>
             #foreach( $key in $producerMap.keySet().toArray())
-            <option value="$key">${producerMap.get($key)}</option>
+            <option #if($key==$proId)selected='selected'#end value="$key">${producerMap.get($key)}</option>
             #end
         </select>
       </div>

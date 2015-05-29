@@ -50,6 +50,7 @@ public class LedgerReceivableController {
     public ModelAndView search(@RequestParam(value="startDate", defaultValue="") String startDate, 
             @RequestParam(value="endDate", defaultValue="") String endDate,
             @RequestParam(value="conName", defaultValue="") String conName,
+            @RequestParam(value="proId", defaultValue="0") Long proId,
             @RequestParam(value="currentPage", defaultValue="1") Integer currentPage,
             @RequestParam(value="numPerPage", defaultValue="20") Integer numPerPage
             ) {
@@ -77,17 +78,16 @@ public class LedgerReceivableController {
         }
         
         ModelAndView modelView = new ModelAndView("/ledgerre/view");
-        Pagination<LedgerReceivable> pagination = ledgerReceivableDao.findPagination(Utils.getMonthId(startDate), Utils.getMonthId(endDate), conIds, currentPage, numPerPage);
+        Pagination<LedgerReceivable> pagination = ledgerReceivableDao.findPagination(Utils.getMonthId(startDate), Utils.getMonthId(endDate), conIds, proId, currentPage, numPerPage);
         Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("startDate", startDate);
         modelView.addObject("endDate", endDate);
+        modelView.addObject("proId", proId);
         modelView.addObject("conName", conName);
         modelView.addObject("consumerMap", consumerMap);
         modelView.addObject("producerMap", producerMap);
-        
-        logger.info(pagination.getResultList().toString());
         
         return modelView;
     }

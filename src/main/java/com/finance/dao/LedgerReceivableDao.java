@@ -106,7 +106,7 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     
     @SuppressWarnings("deprecation")
     public Pagination<LedgerReceivable> findPagination(String startDate,
-            String endDate, String conIds, Integer currentPage,
+            String endDate, String conIds, Long proId, Integer currentPage,
             Integer numPerPage) {
         // TODO Auto-generated method stub
         StringBuilder sqlBuilder = new StringBuilder("select ");
@@ -126,6 +126,10 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
                 isWhere.append(" where con_id in ").append(conIds);
             }
             flagIsWhere = true;
+        }
+        
+        if (proId != null && proId != 0) {
+            isWhere.append(" and pro_id=").append(proId);
         }
         
         String sql = null;
