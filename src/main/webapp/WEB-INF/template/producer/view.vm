@@ -1,5 +1,6 @@
 #set($title='信息维护')
 #set($layout = "layout-finance.vm")
+#set($role=$session.getAttribute('user').role)
 
 <script>
   var contextPath = '#springUrl('')';
@@ -43,7 +44,9 @@
         <td>
           <a id="supplierEdit" onclick="edit(${producer.proId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          #if($role==1)
           <a href="javascript:deleteInfo(${producer.proId})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
+          #end
       </td>
       </tr>
     #end

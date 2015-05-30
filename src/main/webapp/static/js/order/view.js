@@ -18,6 +18,10 @@ function myparser(s){
     }
 }
 
+function jumpDetail(val,row,index){
+    return '<a href="'+contextPath+'/order/detail?oId='+row.oId+'" target="_blank">查看明细</a>';
+  }
+
 // 定义默认当前日期
 var curDate = new Date();
 var url;

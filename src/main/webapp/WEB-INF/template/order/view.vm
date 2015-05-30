@@ -18,7 +18,7 @@
            toolbar="#toolbar" pagination="true">
         <thead>
             <tr>
-              <th field="oId" formatter="jumpDetail" width="40px">ID</th>
+              <th field="oId" formatter="jumpDetail" width="60px">ID</th>
               <th field="documentCode"    width="70px">单据编码</th>
               <th field="orderCode"       width="70px">订单编码</th>
               <th field="orderType"       width="70px">订单类型</th>
@@ -127,7 +127,7 @@
       </form>
 
 <script type="text/javascript">
-    var curuserName='$session.getAttribute('user').truename';
+    var curuserName='$session.getAttribute("user").truename';
     var data=$.parseJSON('${ordersJson}');
     $(function() {
        $('#dg').datagrid('getPager')
@@ -147,9 +147,5 @@
             }
        });
     });
-
-    function jumpDetail(val,row,index){
-      return '<a href="'+contextPath+'/order/detail?oId='+row.oId+'" target="_blank">'+row.oId+'</a>';
-    }
 
 </script>

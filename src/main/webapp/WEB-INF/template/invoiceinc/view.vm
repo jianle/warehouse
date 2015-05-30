@@ -1,5 +1,6 @@
 #set($title='进项增票登记')
 #set($layout = "layout-finance.vm")
+#set($role=$session.getAttribute('user').role)
 
 <script>
   var contextPath = '#springUrl('')';
@@ -113,8 +114,6 @@
             #if(${invTypesMap.get($invoiceIncome.invType)})${invTypesMap.get($invoiceIncome.invType)}#end
           </span>
         </td>
-        #set($amountTax_rateRebate = ${invoiceIncome.amountTax}*(${invoiceIncome.rateRebate}/100) + "")
-        #set($rateRebate = $amountTax_rateRebate.split("\."))
         <td>${invoiceIncome.getRebateAmount()}</td>
         <td>${producerMap.get($invoiceIncome.proId)}</td>
         <td value="${invoiceIncome.isDeleted}">
@@ -125,7 +124,9 @@
         <td>
           <a id="edit" onclick="edit(${invoiceIncome.invId},${invoiceIncome.proId},${invoiceIncome.conId},${invoiceIncome.invType},${invoiceIncome.isDeleted})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          #if($role==1)
           <a href="javascript:deleteInfo(${invoiceIncome.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
+          #end
       </td>
       </tr>
     #end

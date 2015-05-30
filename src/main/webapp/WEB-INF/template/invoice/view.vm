@@ -1,5 +1,6 @@
 #set($title='发票明细')
 #set($layout = "layout-finance.vm")
+#set($role=$session.getAttribute('user').role)
 
 <script>
   var contextPath = '#springUrl('')';
@@ -92,7 +93,9 @@
         <td>
           <a id="edit" onclick="edit(${invoice.invId},${invoice.conId},${invoice.proId},${invoice.isDeleted})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          #if($role==1)
           <a href="javascript:deleteInfo(${invoice.invId})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
+          #end
       </td>
       </tr>
     #end
