@@ -78,7 +78,7 @@
 <table class="ui blue striped table">
   <thead>
     <tr>
-      <th width="200px">付款公司</th>
+      <th width="200px">发票抬头</th>
       <th width="70px">金额</th>
       <th width="110px">开票公司</th>
       <th width="110px">开票日期</th>

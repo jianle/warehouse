@@ -1,5 +1,7 @@
 package com.finance.model;
 
+import java.text.DecimalFormat;
+
 
 /*
  * Table -> invoice_income
@@ -23,24 +25,30 @@ public class InvoiceIncome implements Cloneable {
     private String updateTime;
     private Integer number;
     
+    private DecimalFormat df=new DecimalFormat("#0.00"); 
+    
+    public String getRebateAmount() {
+        return df.format(this.amountTax * (this.rateRebate/100));
+    }
+    
     public Integer getNumber() {
-		return number;
-	}
-	public void setNumber(Integer number) {
-		this.number = number;
-	}
-	public Long getInvId() {
+        return number;
+    }
+    public void setNumber(Integer number) {
+        this.number = number;
+    }
+    public Long getInvId() {
         return invId;
     }
     public void setInvId(Long invId) {
         this.invId = invId;
     }
     public void setProId(Long proId) {
-		this.proId = proId;
-	}
+        this.proId = proId;
+    }
     public Long getProId() {
-		return proId;
-	}
+        return proId;
+    }
     public Double getValoremTax() {
         return valoremTax;
     }
@@ -78,11 +86,11 @@ public class InvoiceIncome implements Cloneable {
         this.invType = invType;
     }
     public void setConId(Long conId) {
-		this.conId = conId;
-	}
+        this.conId = conId;
+    }
     public Long getConId() {
-		return conId;
-	}
+        return conId;
+    }
     public String getRemark() {
         return remark;
     }

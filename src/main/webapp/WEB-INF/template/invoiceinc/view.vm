@@ -90,6 +90,7 @@
       <th>税率(%)</th>
       <th>开票日期</th>
       <th>发票所属</th>
+      <th>返点金额</th>
       <th>发票抬头</th>
       <th>状态</th>
       <th width="85px">编辑</th>
@@ -112,6 +113,9 @@
             #if(${invTypesMap.get($invoiceIncome.invType)})${invTypesMap.get($invoiceIncome.invType)}#end
           </span>
         </td>
+        #set($amountTax_rateRebate = ${invoiceIncome.amountTax}*(${invoiceIncome.rateRebate}/100) + "")
+        #set($rateRebate = $amountTax_rateRebate.split("\."))
+        <td>${invoiceIncome.getRebateAmount()}</td>
         <td>${producerMap.get($invoiceIncome.proId)}</td>
         <td value="${invoiceIncome.isDeleted}">
           <span class="mini-label #if(${invoiceIncome.isDeleted}==0) mini-label-primary #else mini-label-default #end">
