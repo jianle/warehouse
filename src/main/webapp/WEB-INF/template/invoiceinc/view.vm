@@ -10,6 +10,49 @@
 
 <h2 style="margin-top:4px"><code>录入进项增票</code></h2>
 
+<form id="firstFromId" action="#springUrl('/invoiceIncome/search')" method="get">
+  <div class="filter-bar-sm" >
+    <div class="filter-title-sm">
+      <label>日期范围 : </label>
+    </div>
+    <div class="filter-content">
+      <div class="input-group">
+      <div class="ui corner labeled input">
+        <input id="startDate" name="startDate" value="$startDate" type="text" class="form-control" />
+      </div>
+      <span> &nbsp;<i class="glyphicon glyphicon-forward"></i>&nbsp;</span>
+      <div class="ui corner labeled input">
+        <input id="endDate" name="endDate" value="$endDate" type="text" class="form-control" />
+      </div>
+      </div>
+    </div>
+    <input type="hidden" name="currentPage" value="1" />
+    <input type="hidden" name="numPerPage" value="20" />
+    <div class="filter-title-sm">
+      <label>发票所属 : </label>
+    </div>
+    <div class="filter-content">
+      <div class="input-group col-xs-12">
+        <select class="form-control" name="invType" id="selinvType">
+            <option value="-1">全部</option>
+            #foreach( $key in $invTypesMap.keySet().toArray())
+            <option #if($key==$invType)selected='selected'#end value="$key"> ${invTypesMap.get($key)} </option>
+            #end
+        </select>
+      </div>
+    </div>
+    <div class="filter-content-right" style="margin-top:8px">
+      <div class="ui action left icon input">
+        <i class="search icon"></i>
+        <input type="text" name="conName" value="$conName" placeholder="开票公司">
+        <div id="btnSearch" class="ui teal submit button">Search</div>
+      </div>
+    </div>
+  </div>
+  
+</form>
+
+
 <hr/>
 <div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
   <div class="easyui-pagination"
@@ -40,16 +83,14 @@
   <thead>
     <tr>
       <th>发票号</th>
-      <th>发票抬头</th>
+      <th>开票公司</th>
       <th>价税合计</th>
       <th>金额</th>
       <th>税额</th>
       <th>税率(%)</th>
       <th>开票日期</th>
-	  <th>发票所属</th>
-	  <th>开票公司</th>
-      <th>备注</th>
-      <th>返点比例(%)</th>
+      <th>发票所属</th>
+      <th>发票抬头</th>
       <th>状态</th>
       <th width="85px">编辑</th>
     </tr>
@@ -58,23 +99,20 @@
     #foreach( $invoiceIncome in $pagination.getResultList() )
       <tr id="${invoiceIncome.invId}_tr">
         <th>${invoiceIncome.invId}</th>
-        <td>${producerMap.get($invoiceIncome.proId)}</td>
+        <td><a id="edit" onclick="edit(${invoiceIncome.invId},${invoiceIncome.proId},${invoiceIncome.conId},${invoiceIncome.invType},${invoiceIncome.isDeleted})" data-toggle="modal"
+          style="cursor:pointer;" >${consumerMap.get($invoiceIncome.conId)}</a>
+        </td>
         <td>${invoiceIncome.valoremTax}</td>
         <td>${invoiceIncome.amount}</td>
         <td>${invoiceIncome.amountTax}</td>
         <td>${invoiceIncome.rateTax}%</td>
         <td>${invoiceIncome.invDate}</td>
         <td>
-		  <span class="mini-label #if(${invoiceIncome.invType}==0) mini-label-success #elseif(${invoiceIncome.invType}==1) mini-label-danger #else mini-label-warning #end">
-			#if(${invoiceIncome.invType}==0) 公司	
-		    #elseif(${invoiceIncome.invType}==1) 个人
-			#else 其它
-			#end
-		  </span>
-		</td>
-        <td>${consumerMap.get($invoiceIncome.conId)}</td>
-        <td>${invoiceIncome.remark}</td>
-        <td>${invoiceIncome.rateRebate}%</td>
+          <span class="mini-label #if(${invoiceIncome.invType}==0) mini-label-success #elseif(${invoiceIncome.invType}==2) mini-label-danger #else mini-label-primary #end">
+            #if(${invTypesMap.get($invoiceIncome.invType)})${invTypesMap.get($invoiceIncome.invType)}#end
+          </span>
+        </td>
+        <td>${producerMap.get($invoiceIncome.proId)}</td>
         <td value="${invoiceIncome.isDeleted}">
           <span class="mini-label #if(${invoiceIncome.isDeleted}==0) mini-label-primary #else mini-label-default #end">
             #if(${invoiceIncome.isDeleted}==0) 有效 #else 无效 #end
@@ -93,6 +131,10 @@
 <form name="formPagination" id="formPagination" action="#springUrl('/invoiceIncome/search')" method="get">
   <input type="hidden" id="currentPage" name="currentPage" value="" />
   <input type="hidden" id="numPerPage" name="numPerPage" value="" />
+  <input type="hidden" name="startDate" value="$startDate" />
+  <input type="hidden" name="invType" value="$invType" />
+  <input type="hidden" name="endDate" value="$endDate" />
+  <input type="hidden" name="conName" value="$conName" />
 </form>
 
 #parse("/invoiceinc/dialog.vm")

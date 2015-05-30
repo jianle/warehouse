@@ -1,6 +1,9 @@
 package com.finance.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +27,7 @@ import com.finance.dao.BillReceivableDao;
 import com.finance.dao.ConsumerDao;
 import com.finance.dao.InvoiceIncomeDao;
 import com.finance.dao.ProducerDao;
+import com.finance.model.Invoice;
 import com.finance.model.InvoiceIncome;
 import com.wms.model.Pagination;
 
@@ -31,6 +36,15 @@ import com.wms.model.Pagination;
 public class InvoiceIncomeController {
     
     private Logger logger = LoggerFactory.getLogger(InvoiceIncomeController.class);
+    
+    public static Map<Integer, String> invTypesMap = new HashMap<Integer, String>() ;
+    static {
+        invTypesMap.put(0, "公司");
+        invTypesMap.put(2, "其他");
+        invTypesMap.put(3, "张峰");
+        invTypesMap.put(4, "吕峰");
+        invTypesMap.put(5, "陈皓");
+    }
     
     @Autowired
     private BillReceivableDao billReceivableDao;
@@ -44,23 +58,50 @@ public class InvoiceIncomeController {
     private ProducerDao producerDao;
 
     @RequestMapping(value={"","search"})
-    public ModelAndView search(@RequestParam(value="lrId", defaultValue="1") Long lrId,
+    public ModelAndView search(
+            @RequestParam(value="startDate", defaultValue="") String startDate,
+            @RequestParam(value="endDate", defaultValue="") String endDate,
+            @RequestParam(value="invType", defaultValue="-1") Integer invType,
+            @RequestParam(value="conName", defaultValue="") String conName,
             @RequestParam(value="currentPage", defaultValue="1") Integer currentPage,
             @RequestParam(value="numPerPage", defaultValue="20") Integer numPerPage
             ) {
         ModelAndView modelView = new ModelAndView("/invoiceinc/view");
-        logger.info("brId:" + lrId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
+        logger.info(" currentPage:"+currentPage+" numPerPage:"+numPerPage);
         
-        System.out.println("brId:" + lrId + " currentPage:"+currentPage+" numPerPage:"+numPerPage);
+        if (startDate == null || "".equals(startDate)) {
+            startDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtils.addDays(new Date(), -30));
+        }
         
-        Pagination<InvoiceIncome> pagination = invoiceIncomeDao.findPagination(lrId, currentPage, numPerPage);
+        if (endDate == null || "".equals(endDate)) {
+            endDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        }
+        
+        String conIds = null;
+        if (conName == null || "".equals(conName)) {
+            conIds = "";
+        } else {
+            Map<Long, String> consumerMapFilter = consumerDao.findAllMapIdAndName(conName);
+            if (consumerMapFilter.size()>=1) {
+                conIds = consumerMapFilter.keySet().toString().replace("[", "(").replace("]", ")");
+            }else {
+                conIds = "(-1)";
+            }
+        }
+                
+        Pagination<InvoiceIncome> pagination = invoiceIncomeDao.findPagination(startDate, endDate, invType, conIds, currentPage, numPerPage);
         Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
         Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("consumerMap", consumerMap);
         modelView.addObject("producerMap", producerMap);
-        modelView.addObject("lrId", lrId);
+        modelView.addObject("invTypesMap", invTypesMap);
+        modelView.addObject("startDate", startDate);
+        modelView.addObject("endDate", endDate);
+        modelView.addObject("invType", invType);
+        modelView.addObject("conName", conName);
+
         
         return modelView;
     }
@@ -132,5 +173,21 @@ public class InvoiceIncomeController {
         
         return jsonTuple;
     }
+    
+    @RequestMapping(value="get")
+    @ResponseBody
+    public JSONObject getInvJsonObject(HttpServletRequest request, 
+            @ModelAttribute("invId") Long invId) {
+        JSONObject jsonTuple = new JSONObject();
+        
+        logger.info("invId :" + invId);
+        
+        InvoiceIncome invoice = invoiceIncomeDao.get(invId);
+        jsonTuple = JSONObject.fromObject(invoice);
+        logger.info(jsonTuple.toString());
+        
+        return jsonTuple;
+    }
+
 
 }

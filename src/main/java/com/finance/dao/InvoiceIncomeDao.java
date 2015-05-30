@@ -103,7 +103,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
     @Override
     public Boolean update(InvoiceIncome obj) {
         // TODO Auto-generated method stub
-    	try {
+        try {
             String sql = "update " + TABLE_NAME + " set  pro_id=?, valorem_tax=?, amount=?, amount_tax=?, rate_tax=?,"
             + "inv_date=?, inv_type=?, con_id=?, remark=?, rate_rebate=?, is_deleted=? "
             + "where inv_id=?" ;
@@ -167,16 +167,31 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
         }
     };
 
-	@SuppressWarnings("deprecation")
-	public Pagination<InvoiceIncome> findPagination(Long lrId,
-			Integer currentPage, Integer numPerPage) {
-		// TODO Auto-generated method stub
-		String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME ;
+    @SuppressWarnings("deprecation")
+    public Pagination<InvoiceIncome> findPagination(String startDate, String endDate, Integer invType, String conIds, 
+            Integer currentPage, Integer numPerPage) {
+        // TODO Auto-generated method stub
+        StringBuilder sqlBd = new StringBuilder("select " + SELECT_FIELDS + " from " + TABLE_NAME);
+        sqlBd.append(" where inv_date between '")
+           .append(startDate)
+           .append("' and '")
+           .append(endDate)
+           .append("' ");
+        
+        if (invType >= 0) {
+            sqlBd.append(" and inv_type=").append(invType);
+        }
+        
+        if (! "".equals(conIds)) {
+            sqlBd.append(" and con_id in ").append(conIds);
+        }
+        
+        String sql = sqlBd.toString();
         
         String sqlCount = sql.replace(SELECT_FIELDS, "COUNT(1)");
-        
         int totalRows = 0;
         Pagination<InvoiceIncome> pagination = null;
+        
         try {
             totalRows = jdbcTemplateFinance.queryForInt(sqlCount);
             pagination = new Pagination<InvoiceIncome>(totalRows, currentPage, numPerPage);
@@ -191,11 +206,11 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
         }
         
         return pagination;
-	}
+    }
 
-	public boolean saveBatch(final List<InvoiceIncome> invoiceIncomes) {
-		// TODO Auto-generated method stub
-		try {
+    public boolean saveBatch(final List<InvoiceIncome> invoiceIncomes) {
+        // TODO Auto-generated method stub
+        try {
             String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
                     + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
             jdbcTemplateFinance.batchUpdate(sql, new BatchPreparedStatementSetter(){
@@ -204,7 +219,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                 public void setValues(PreparedStatement ps, int i)
                         throws SQLException {
                     // TODO Auto-generated method stub
-                	InvoiceIncome obj = invoiceIncomes.get(i);
+                    InvoiceIncome obj = invoiceIncomes.get(i);
                     ps.setObject(1, obj.getInvId());
                     ps.setObject(2, obj.getProId());
                     ps.setObject(3, obj.getValoremTax());
@@ -228,11 +243,11 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                 }});
             
            return true;
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
     
     
 }

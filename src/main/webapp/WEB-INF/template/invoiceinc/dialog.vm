@@ -15,7 +15,7 @@
                     <label style="padding-left:20px;">抬头:</label>
                     <select id="proId" class="easyui-combobox" panelHeight="150px"  name="proId" style="width:351px;" required="true">
                       #foreach( $key in $producerMap.keySet().toArray())
-					  <option value="$key">${producerMap.get($key)}</option>
+                      <option value="$key">${producerMap.get($key)}</option>
                       #end
                     </select>
                 </div>
@@ -31,7 +31,12 @@
                     <label style="padding-left:20px;">税 额:</label>
                     <input name="amountTax" id="amountTax" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
                     <label style="padding-left:60px;padding-right:10px;width:125px">税率(%):</label>
-                    <input name="rateTax" id="rateTax" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
+                    <select id="rateTax" value="30" class="easyui-combobox" panelHeight="auto"  name="rateTax" style="width:110px;" required="true">
+                      <option value="3">3%</option>
+                      <option value="6">6%</option>
+                      <option value="11">11%</option>
+                      <option value="17">17%</option>
+                    </select>
                 </div>
                 
                 <div class="fitem">
@@ -52,19 +57,19 @@
                     <label style="padding-left:0px;">开票公司:</label>
                     <select id="conId" class="easyui-combobox" panelHeight="150px"  name="conId" style="width:351px;" required="true">
                       #foreach( $key in $consumerMap.keySet().toArray())
-					  <option value="$key">${consumerMap.get($key)}</option>
+                      <option value="$key">${consumerMap.get($key)}</option>
                       #end
                     </select>
                 </div>
                 <div class="fitem">
                     <label>发票所属:</label>
                     <select id="invType" value="0" class="easyui-combobox" panelHeight="auto"  name="invType" style="width:110px;">
-                      <option value="0">公司</option>
-                      <option value="1">个人</option>
-					  <option value="2">其它</option>
+                      #foreach( $key in $invTypesMap.keySet().toArray())
+                      <option value="$key"> ${invTypesMap.get($key)} </option>
+                      #end
                     </select>
-					<label style="padding-left:80px;padding-right:10px;width:125px">状 态:</label>
-					<select id="isDeleted" value="0" class="easyui-combobox" panelHeight="auto"  name="isDeleted" style="width:110px;">
+                    <label style="padding-left:80px;padding-right:10px;width:125px">状 态:</label>
+                    <select id="isDeleted" value="0" class="easyui-combobox" panelHeight="auto"  name="isDeleted" style="width:110px;">
                       <option value="0">有效</option>
                       <option value="1">无效</option>
                     </select>

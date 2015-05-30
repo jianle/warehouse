@@ -253,13 +253,14 @@ CREATE TABLE `invoice_income` (
 `amount_tax` DOUBLE(20,4) NOT NULL default 0.0 comment '税额',
 `rate_tax` DOUBLE(4,2) NOT NULL default 0.0 comment '税率',
 `inv_date` DATE NOT NULL default '1900-01-01' comment '开票日期',
-`inv_type` smallint(2) not null default 0 comment '0-公司、1-个人、2-其它',
+`inv_type` smallint(2) not null default 0 comment '0-公司、3-张峰、4-吕峰、5-陈浩、2-其它',
 `con_id` bigint(20) NOT NULL default 0 comment '开票对应公司ID',
 `remark` VARCHAR(640) NOT NULL default '' comment '备注',
 `rate_rebate` DOUBLE(5,2) NOT NULL default 0.0 comment '返点比例',
 `is_deleted` smallint(2) not null default 0 comment '0-有效、1-被删除的',
 `update_time` timestamp null on update current_timestamp comment '最近一次更新',
 PRIMARY KEY (`inv_id`),
+index `inv_date_index`(`inv_date`),
 index `con_id_index` (`con_id`),
 index `pro_id_index` (`pro_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '进项增票登记表'
