@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.util.UtilsDes;
 import com.wms.dao.UserDao;
 import com.wms.model.User;
 
@@ -72,13 +73,17 @@ public class LoginController {
         
         String username = null;
         String password = null;
+        String passwordTmp = null;
         
         try {
-            username = request.getParameter("username").trim();
-            password = request.getParameter("password").trim();
+            username = request.getParameter("username");
+            passwordTmp = request.getParameter("password");
+            password = UtilsDes.encrypt(passwordTmp);
+            logger.info(passwordTmp);
         } catch (Exception e) {
             // TODO: handle exception
-            logger.debug("request null faield .");
+        	e.printStackTrace();
+            logger.debug("request null faield ." + e);
             modelView.setViewName("/login");
             return modelView;
         }
@@ -104,7 +109,7 @@ public class LoginController {
         }
         
         modelView.addObject("username", username);
-        modelView.addObject("password", password);
+        modelView.addObject("password", passwordTmp);
         modelView.setViewName("/login");
         return modelView;
     }

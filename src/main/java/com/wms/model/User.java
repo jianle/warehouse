@@ -23,6 +23,7 @@ public class User implements Serializable {
 
     @Id @GeneratedValue
     private Long id;
+    private Long parentId;
     private String username;
     @Column(updatable = false)
     private String password;
@@ -38,7 +39,13 @@ public class User implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getUsername() {
+    public Long getParentId() {
+		return parentId;
+	}
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+	public String getUsername() {
         return username;
     }
     public void setUsername(String username) {

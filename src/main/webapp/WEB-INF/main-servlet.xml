@@ -55,6 +55,9 @@
             <mvc:mapping path="/**" />
             <mvc:exclude-mapping path="/login" />
             <mvc:exclude-mapping path="/static/css/**" />
+            <mvc:exclude-mapping path="/static/js/jquery-2.1.3.min.js" />
+            <mvc:exclude-mapping path="/static/js/jquery.validate.js" />
+            <mvc:exclude-mapping path="/static/js/login.js" />
             <bean class="com.wms.interceptor.AuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>

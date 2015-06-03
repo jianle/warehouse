@@ -61,13 +61,15 @@
                 <li #if($title == '应收账款') class='active' #end>
                   <a href="#springUrl('/debtor')">应收账款</a>
                 </li>
+                <!--
                 <li #if($title == '收款信息') class='active' #end>
                   <a href="#springUrl('/')">收款信息</a>
                 </li>
-
+                -->
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">其它 <span class="caret"></span></a>
                   <ul class="dropdown-menu">
+                    <!--
                     <li>
                       <a href="#" target="">采购入库 <i class="glyphicon glyphicon-shopping-cart"></i></a>
                     </li>
@@ -80,6 +82,7 @@
                     <li>
                       <a href="#" target="">销售出货 <i class="glyphicon glyphicon-send"></i></a>
                     </li>
+                    -->
                   </ul>
                 </li>
               </ul>

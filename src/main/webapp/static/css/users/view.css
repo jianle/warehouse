@@ -1,0 +1,30 @@
+.footerModal {
+	background: #efefef;
+	padding: 1rem 2rem;
+	border-top: 1px solid rgba(39,41,43,.15);
+	text-align: right;
+}
+
+
+#fm{
+    margin:0;
+    padding:30px 10px;
+}
+
+.ftitle{
+    font-size:14px;
+    font-weight:bold;
+    padding:10px 0;
+    margin-bottom:10px;
+    border-bottom:1px solid #ccc;
+}
+.fitem{
+    margin-bottom:10px;
+}
+.fitem label{
+    display:inline-block;
+    width:70px;
+}
+.fitem input{
+    width:150px;
+}

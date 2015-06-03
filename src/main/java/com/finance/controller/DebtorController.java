@@ -22,7 +22,7 @@ import com.finance.dao.ConsumerDao;
 import com.finance.dao.LedgerReceivableDao;
 import com.finance.dao.ProducerDao;
 import com.finance.model.LedgerReceivable;
-import com.finance.util.Utils;
+import com.util.Utils;
 
 @Controller
 @RequestMapping("/debtor")

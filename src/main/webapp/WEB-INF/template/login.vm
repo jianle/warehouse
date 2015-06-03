@@ -1,14 +1,10 @@
 #set($title='Login')
 #set($layout="layout-login.vm")
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<title>Login</title>
+
 <link href="#springUrl('/static/css/bootstrap.min.css')" rel="stylesheet">
 <link href="#springUrl('/static/css/login.css')" rel="stylesheet">
 <script src="#springUrl('/static/js/login.js')"></script>
-</head>
-<body>
+
 	<div class="container">
 		<div class="loginbox">
 			<div class="loginlay">
@@ -65,5 +61,3 @@
 			</div>
 		</div>
 	</div>
-</body>
-</html>

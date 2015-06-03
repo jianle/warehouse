@@ -13,6 +13,9 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 ;
 
+ALTER TABLE `warehouse_db`.`user` CHANGE COLUMN `password` `password` varchar(100) NOT NULL;
+ALTER TABLE `warehouse_db`.`user` ADD COLUMN `parent_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '上级ID' AFTER `id`;
+
 insert into `user`(username,password,truename,email,role,created) values('admin','admin123','管理员','admin@xxx.com',1,current_time());
 
 CREATE TABLE `goods` (

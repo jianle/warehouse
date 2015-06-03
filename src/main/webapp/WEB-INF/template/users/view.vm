@@ -1,0 +1,61 @@
+#set($title='用户管理')
+#set($layout = "layout-finance.vm")
+#set($role=$session.getAttribute('user').role)
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+<link href="#springUrl('/static/css/users/view.css')" rel="stylesheet" />
+<script type="text/javascript" src="#springUrl('/static/js/users/view.js')"></script>
+
+<h2 style="margin-top:4px"><code>用户管理</code></h2>
+<hr/>
+<form id="firstFromId" action="#springUrl('/users/search')">
+  <div class="filter-content-right" style="margin-top:0px;margin-right:0px">
+    <div class="ui action left icon input">
+      <i class="search icon"></i>
+      <input type="text" name="truename" value="$truename" placeholder="用户名称">
+      <div id="btnSearch" class="ui teal submit button">Search</div>
+    </div>
+  </div>
+</form>
+
+<div class="ui primary button" id="addButton">
+    <i class="plus icon"></i> 新增
+</div>
+
+<table class="ui blue striped table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>账户名</th>
+      <th>中文名称</th>
+      <th>创建时间</th>
+      <th width="85px">编辑</th>
+    </tr>
+  </thead>
+  <tbody>
+    #foreach( $user in $users )
+      <tr id="${user.id}_tr">
+        <td><b>${user.id}</b></td>
+        <td>
+          <a onclick="edit(${user.id})" data-toggle="modal" style="cursor:pointer;">${user.username}</a>
+        </td>
+        <td>${user.truename}</td>
+        <td>${user.created}</td>
+        <td>
+          <a onclick="edit(${user.id})" data-toggle="modal"
+          class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
+          <a href="javascript:deleteInfo(${user.id})" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"> </a>
+      </td>
+      </tr>
+    #end
+  </tbody>
+</table>
+
+
+#parse("/users/dialog.vm")
+
+<script>
+</script>
+

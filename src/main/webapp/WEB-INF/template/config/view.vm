@@ -27,6 +27,15 @@
       <div class="description">维护一个三级菜单，包括收入类型、支出类型</div>
     </div>
   </div>
+  
+  <div class="item" style="margin-top:8px;padding:8px">
+    <i class="big teal settings icon"></i>
+    <div class="content">
+      <h2><a class="header" href="#springUrl('/users')">用户管理</a></h2>
+      <div class="description">新增用户、更新用户、等维护用户信息</div>
+    </div>
+  </div>
+  
 </div>
 
 <script>
