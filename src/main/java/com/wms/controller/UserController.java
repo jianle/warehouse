@@ -2,11 +2,13 @@ package com.wms.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
@@ -31,19 +33,26 @@ public class UserController {
     
     private Logger logger = LoggerFactory.getLogger(UserController.class);
     
+    public static Map<Integer, String> roleMaps = new HashMap<Integer, String>() ;
+    static {
+        roleMaps.put(User.ROLE_ADMIN, "管理员");
+        roleMaps.put(User.ROLE_BOSS, "老 板");
+        roleMaps.put(User.ROLE_DIRECTOR, "主 管");
+        roleMaps.put(User.ROLE_NORMAL, "员 工");
+        roleMaps.put(User.ROLE_GUEST, "访 客");
+    }
+    
     @Autowired
     private UserDao userDao;
 
     @RequestMapping(value = { "", "search" })
     public ModelAndView search(
-    		HttpServletRequest request,
+            HttpServletRequest request,
             @RequestParam(value = "truename", defaultValue = "") String truename) {
         
         ModelAndView modelAndView = new ModelAndView("/users/view");
         List<User> users = new ArrayList<User>();
         
-        User currentUser = (User) request.getSession().getAttribute("user");
-
         logger.info("@RequestMapping: /users");
         if (truename == null || "".equals(truename)) {
             users = userDao.findAll();
@@ -51,12 +60,10 @@ public class UserController {
             users = userDao.findByTruename(truename.trim());
         }
         
-        Map<Long, String> userMap = userDao.findAllMapIdAndName(currentUser.getId());
-        
         modelAndView.addObject("users", users);
         modelAndView.addObject("truename", truename);
-        modelAndView.addObject("userMap", userMap);
-
+        modelAndView.addObject("roleMaps", roleMaps);
+        
         return modelAndView;
     }
     
@@ -69,7 +76,6 @@ public class UserController {
         
         String pwd;
         try {
-        	logger.debug(UtilsDes.encrypt("123456"));
             pwd = UtilsDes.encrypt(user.getPassword());
             
         } catch (Exception e) {
@@ -95,18 +101,21 @@ public class UserController {
     public String update(HttpServletRequest request, 
             @ModelAttribute("user") User user) {
         
-        logger.info(user.toString());
-        
-        String pwd;
+        String pwd = null;
         try {
-            pwd = UtilsDes.decrypt(user.getPassword());
+            pwd = UtilsDes.encrypt(user.getPassword());
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return "false";
         }
         
+        if(user.getId() == user.getParentId()) {
+            return "false";
+        }
+        
         user.setPassword(pwd);
+        logger.info(user.toString());
         
         if (userDao.update(user)) {
             return "true";
@@ -142,6 +151,36 @@ public class UserController {
         jsonTuple = JSONObject.fromObject(userDao.get(id));
         
         return jsonTuple;
+    }
+    
+    @RequestMapping("gettree")
+    @ResponseBody
+    public JSONArray gettree() {
+        List<User> users = userDao.findByParentId((long) 0);
+        JSONArray jsonArray = new JSONArray();
+        
+        jsonArray = toJsonArrayByParentId(users);
+        
+        return jsonArray;
+    }
+    
+    
+    private JSONArray toJsonArrayByParentId(List<User> users) {
+        
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObjectTuple = null;
+        for (User user : users) {
+            
+            jsonObjectTuple = new JSONObject();
+            jsonObjectTuple.put("id", user.getId());
+            jsonObjectTuple.put("text", user.getTruename());
+            List<User> usersTuple = userDao.findByParentId(user.getId());
+            if (usersTuple != null && usersTuple.size() > 0) {
+                jsonObjectTuple.put("children", toJsonArrayByParentId(usersTuple));
+            }
+            jsonArray.add(jsonObjectTuple);
+        }
+        return jsonArray;
     }
 
 }

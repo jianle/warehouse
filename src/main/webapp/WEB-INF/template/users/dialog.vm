@@ -6,17 +6,17 @@
                 <div class="fitem">
                     <label style="padding-left:12px;">用户名:</label>
                     <input name="username" id="username" class="easyui-textbox" style="width:150px"
-						data-options="iconCls:'icon-man'" required="true" />
+                        data-options="iconCls:'icon-man'" required="true" />
                 </div>
                 
                 <div class="fitem">
                     <label>用户密码:</label>
                     <input type="password" id="password" name="password" class="easyui-textbox" style="width:150px"
-						data-options="iconCls:'icon-lock'" required="true" />
-					<input type="checkbox" checked="checked" id="checkID" onclick="showpwd()" style="padding-left:0px;width:20px" />
-					<!--
-					<label style="padding-left:10px;padding-right:1px;width:70px" >显示:</label>
-					-->
+                        data-options="iconCls:'icon-lock'" required="true" />
+                    <input type="checkbox" id="checkID" onclick="showpwd()" style="padding-left:0px;width:20px" />
+                    <!--
+                    <label style="padding-left:10px;padding-right:1px;width:70px" >显示:</label>
+                    -->
                 </div>
                 
                 <div class="fitem">
@@ -28,11 +28,11 @@
                     <label style="padding-left:25px;">邮箱:</label>
                     <input name="email" id="email" class="easyui-textbox" required="true" />
                 </div>
-				
-				<div class="fitem">
+                
+                <div class="fitem">
                     <label>所属上级:</label>
                     <select id="parentId" class="easyui-combobox" panelHeight="150px" style="width:150px"   name="parentId" required="true">
-					  <option value="0">无</option>
+                      <option value="0">无</option>
                       #foreach( $user in $users)
                       <option value="$user.id">${user.truename}</option>
                       #end
@@ -41,7 +41,11 @@
                 
                 <div class="fitem">
                     <label style="padding-left:25px;">角色:</label>
-                    <input name="role" id="role" class="easyui-textbox" required="true" />
+                    <select name="role" id="role" class="easyui-combobox" panelHeight="auto" style="width:150px;" required="true">
+                      #foreach( $key in $roleMaps.keySet().toArray())
+                      <option value="$key">${roleMaps.get($key)}</option>
+                      #end
+                    </select>
                 </div>
                 
             </form>

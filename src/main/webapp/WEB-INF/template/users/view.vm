@@ -56,6 +56,19 @@
 
 #parse("/users/dialog.vm")
 
+<hr/>
+<!--
+#if($role==1)
+<div class="ui red button" onclick="getChecked()" style="float:right">
+    <i class="checkmark icon"></i>删除
+</div>
+#end
+-->
+<h2>目录列表</h2>
+<div class="easyui-panel" style="padding:5px">
+    <ul id="tt" class="easyui-tree" data-options="url:'#springUrl('/users/gettree')',method:'get',animate:false,onlyLeafCheck:true,checkbox:true"></ul>
+</div>
+
 <script>
 </script>
 

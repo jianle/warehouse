@@ -17,8 +17,10 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1025380931554330409L;
 
     public static final int ROLE_ADMIN = 1;
-    public static final int ROLE_WH = 2;
-    public static final int ROLE_GUEST = 3;
+    public static final int ROLE_BOSS = 2;
+    public static final int ROLE_DIRECTOR = 3;
+    public static final int ROLE_NORMAL = 4;
+    public static final int ROLE_GUEST = 8;
 
 
     @Id @GeneratedValue

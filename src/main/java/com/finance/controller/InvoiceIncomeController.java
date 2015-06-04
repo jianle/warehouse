@@ -27,7 +27,6 @@ import com.finance.dao.BillReceivableDao;
 import com.finance.dao.ConsumerDao;
 import com.finance.dao.InvoiceIncomeDao;
 import com.finance.dao.ProducerDao;
-import com.finance.model.Invoice;
 import com.finance.model.InvoiceIncome;
 import com.wms.model.Pagination;
 

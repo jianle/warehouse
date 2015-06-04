@@ -220,4 +220,16 @@ public class UserDao implements BaseDao<User, Long> {
         return false;
     }
 
+    public List<User> findByParentId(Long parentId) {
+        
+        try {
+            String sql = "SELECT " + SELECT_FIELDS + " FROM "+ TABLE_NAME + " where parent_id=?";
+            return jdbcTemplate.query(sql, rowMapper, parentId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.error("findAll User failed ." + e);
+            return null;
+        }
+    }
+
 }

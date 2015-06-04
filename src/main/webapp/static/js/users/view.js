@@ -9,9 +9,9 @@ $(document).ready(function(){
 function showpwd(){
     var checkAll = $('#checkID')[0].checked;
     if(checkAll) {
-    	$('#password').textbox({type:'text'});
+        $('#password').textbox({type:'text'});
     }else {
-    	$('#password').textbox({type:'password'});
+        $('#password').textbox({type:'password'});
     }
 }
 
@@ -24,10 +24,14 @@ $(document).ready(function() {
     //初始化 Modal --by 
     $('#addButton').click(function(){
         //$('#modal').modal('show');
+        $("input[id = checkID]:checkbox").prop("checked", false);
+        $('#password').textbox({type:'password'});
         $('#dlg').dialog('open').dialog('setTitle','新增');
         url = contextPath + '/users/save';
         if(flagTitle=="编辑"){
             $('#modalForm').form('clear');
+            $('#parentId').combobox('setValue',0);
+            $('#role').combobox('setValue',4);
         }
         flagTitle="新增";
     });
@@ -38,7 +42,10 @@ function edit(id){
     url = contextPath + '/users/update';
     flagTitle="编辑";
     //初始化 Modal 
-    $('#id').val(id);    
+    $('#id').val(id);
+    $("input[id = checkID]:checkbox").prop("checked", false);
+    $('#password').textbox({type:'password'});
+    
     $.getJSON(contextPath+"/users/getInfo", {id:id}, function(data, status){
         console.log(data);
         $('#modalForm').form('load',data);
