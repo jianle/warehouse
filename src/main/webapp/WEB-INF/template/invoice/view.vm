@@ -61,11 +61,11 @@
   <tbody>
     #foreach( $invoice in $pagination.getResultList() )
       <tr id="${invoice.invId}_tr" class="#if(${invoice.isDeleted}==1)warning
-        #elseif(${invoice.amount}==${invoice.verification})success
-        #elseif(${invoice.amount}>${invoice.verification} && ${invoice.verification}>0)error
+        #elseif(${invoice.valoremTax}==${invoice.verification})success
+        #elseif(${invoice.valoremTax}>${invoice.verification} && ${invoice.verification}>0)error
         #end">
         <td>
-         #if(${invoice.amount}==${invoice.verification})
+         #if(${invoice.valoremTax}==${invoice.verification})
           已核销
          #elseif(${invoice.isDeleted}==1)无效发票
          #else
@@ -111,6 +111,7 @@
 
 #parse("/invoice/dialog.vm")
 #parse("/invoice/dialogVer.vm")
+#parse("/invoice/dialogVerAll.vm")
 
 <script>
 </script>

@@ -1,10 +1,10 @@
-    <div id="dlgVer" class="easyui-dialog" style="width:300px;height:250px;padding:10px 20px"
+    <div id="dlgVer" class="easyui-dialog" style="width:280px;height:280px;padding:10px 20px"
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">核销</div>
             <form id="modalFormVer" method="post" style="margin-top:20px" novalidate>
                 <input type="hidden" name="invId" id="invIdVer" />
                 <div class="fitem">
-                    <label style="padding-left:20px;">金额:</label>
+                    <label>价税合计:</label>
                     <input id="amountVer" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
                 </div>
                 
@@ -17,7 +17,11 @@
                     <label style="padding-left:-5px;">核销金额:</label>
                     <input name="verification" id="verificationVer" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
                 </div>
-
+                
+                <div class="fitem">
+                    <label style="padding-left:-5px;">进账日期:</label>
+                    <input name="incDate" id="incDateVer" style="width:110px"  data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true" />
+                </div>
             </form>
       </div>
       <div id="dlg-buttons">

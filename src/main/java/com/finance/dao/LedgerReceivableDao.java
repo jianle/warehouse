@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -22,12 +23,12 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     
     private Logger logger = LoggerFactory.getLogger(LedgerReceivableDao.class);
     
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    //private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private static final String TABLE_NAME    = "ledger_receivable";
-    private static final String INSERT_FIELDS = "con_id, pro_id, month_id, amount, pay_date, verification, remark, update_time";
-    private static final String SELECT_FIELDS = "lr_id, " + INSERT_FIELDS;
+    private static final String INSERT_FIELDS = "con_id, pro_id, month_id, amount, verification, update_time";
+    private static final String SELECT_FIELDS = INSERT_FIELDS;
     
     @Autowired
     @Qualifier("jdbcTemplateFinance")
@@ -36,13 +37,6 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
     @Override
     public LedgerReceivable get(Long lrId) {
         // TODO Auto-generated method stub
-        try {
-            String sql = "select " + SELECT_FIELDS + " from " + TABLE_NAME + " where lr_id=?";
-            return jdbcTemplateFinance.queryForObject(sql, rowMapper, lrId);
-        } catch (Exception e) {
-            // TODO: handle exception
-            logger.debug("get failed." + e);
-        }
         return null;
     }
 
@@ -55,9 +49,9 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
             jdbcTemplateFinance.update(sql,
                     object.getConId(),
                     object.getAmount(),
-                    object.getPayDate(),
+                    object.getMonthId(),
+                    object.getAmount(),
                     object.getVerification(),
-                    object.getRemark(),
                     new Timestamp(System.currentTimeMillis())
                     );
             return true;
@@ -68,16 +62,22 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         return false;
     }
     
-    public Boolean saveByInvoice(Long conId, Long proId, String monthId) {
+    public Boolean saveByInvoice(LedgerReceivable ledgerReceivable) {
         try {
             
-            String sql = "insert into ledger_receivable(con_id, pro_id, month_id, amount, verification,update_time) "
-                    + "select con_id, pro_id,date_format(inv_date,'%YM%m') month_id,sum(amount) amount "
-                    + ",sum(verification) verification,current_timestamp() from invoice "
-                    + "where con_id=? and pro_id=? and date_format(inv_date,'%YM%m')=? and is_deleted=0 "
-                    + "group by 1,2,3";
-            logger.info(sql);
-            jdbcTemplateFinance.update(sql, conId, proId, monthId);
+            String sqlSave = "INSERT into " + TABLE_NAME + " (`con_id`, `pro_id`, `month_id`, amount, verification, update_time) "
+                    + "values (?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE amount = ?, verification=? ";
+            logger.info(sqlSave);
+            
+            jdbcTemplateFinance.update(sqlSave, 
+                    ledgerReceivable.getConId(),
+                    ledgerReceivable.getProId(),
+                    ledgerReceivable.getMonthId(),
+                    ledgerReceivable.getAmount(),
+                    ledgerReceivable.getVerification(),
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),
+                    ledgerReceivable.getAmount(),
+                    ledgerReceivable.getVerification());
             return true;
         } catch (Exception e) {
             // TODO: handle exception
@@ -163,15 +163,14 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "update " + TABLE_NAME + " set "
-                    + "con_id=?, amount=?, pay_date=?, verification=?, remark=? "
-                    + "where lr_id=?" ;
+                    + "amount=?, verification=? "
+                    + "where con_id=?, pro_id=?, month_id=?," ;
             jdbcTemplateFinance.update(sql,
-                    object.getConId(),
                     object.getAmount(),
-                    object.getPayDate(),
                     object.getVerification(),
-                    object.getRemark(),
-                    object.getLrId()
+                    object.getConId(),
+                    object.getProId(),
+                    object.getMonthId()
                     );
             return true;
         } catch (Exception e) {
@@ -201,32 +200,16 @@ public class LedgerReceivableDao implements BaseDao<LedgerReceivable, Long> {
         public LedgerReceivable mapRow(ResultSet rs, int rowNum)
                 throws SQLException {
             LedgerReceivable ledgerReceivable = new LedgerReceivable();
-            ledgerReceivable.setLrId(rs.getLong("lr_id"));
             ledgerReceivable.setConId(rs.getLong("con_id"));
             ledgerReceivable.setProId(rs.getLong("pro_id"));
             ledgerReceivable.setMonthId(rs.getString("month_id"));
             ledgerReceivable.setAmount(rs.getDouble("amount"));
-            ledgerReceivable.setPayDate(DATE_FORMAT.format(rs.getDate("pay_date")));
             ledgerReceivable.setVerification(rs.getDouble("verification"));
-            ledgerReceivable.setRemark(rs.getString("remark"));
             ledgerReceivable.setUpdateTime(DATET_TIME_FORMAT.format(rs.getTime("update_time")));
             // TODO Auto-generated method stub
             return ledgerReceivable;
         }
     };
-
-    public Boolean updateVerification(Long lrId, Double verifi) {
-        try {
-            String sql = "update " + TABLE_NAME + " set verification=verification + ? "
-                    + "where lr_id=?";
-            jdbcTemplateFinance.update(sql, verifi, lrId);
-            return true;
-        } catch (Exception e) {
-            // TODO: handle exception
-            logger.debug("updateVerification failed." + e);
-        }
-        return false;
-    }
 
     public List<LedgerReceivable> findToDebtor(String startMonth,
             String endMonth, String conIds) {

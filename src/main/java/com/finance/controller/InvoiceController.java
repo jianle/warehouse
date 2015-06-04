@@ -26,6 +26,7 @@ import com.finance.dao.InvoiceDao;
 import com.finance.dao.LedgerReceivableDao;
 import com.finance.dao.ProducerDao;
 import com.finance.model.Invoice;
+import com.finance.model.LedgerReceivable;
 import com.util.Utils;
 import com.wms.model.Pagination;
 
@@ -82,16 +83,16 @@ public class InvoiceController {
         invoices.add(invoice);
         Long top = invoice.getInvId();
         if (invoiceDao.get(top) != null) {
-			return "false";
-		}
+            return "false";
+        }
         for (int i = 1; i < invoice.getNumber(); i++) {
             try {
                 Invoice tmp = (Invoice) invoice.clone();
                 tmp.setInvId(top + i);
                 invoices.add(tmp);
                 if (invoiceDao.get(tmp.getInvId()) != null) {
-					return "false";
-				}
+                    return "false";
+                }
             } catch (CloneNotSupportedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -105,14 +106,15 @@ public class InvoiceController {
             flagBoolean = true;
         }
         
-        if (flagBoolean) {
-            flagBoolean = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
+        LedgerReceivable ledgerReceivable = invoiceDao.getLedgerReceivable(invoice.getConId()
                     , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+        
+        if (ledgerReceivable == null) {
+            flagBoolean = false;
         }
         
         if (flagBoolean) {
-            flagBoolean = ledgerReceivableDao.saveByInvoice(invoice.getConId()
-                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+            flagBoolean = ledgerReceivableDao.saveByInvoice(ledgerReceivable);
         }
         
         return String.valueOf(flagBoolean);

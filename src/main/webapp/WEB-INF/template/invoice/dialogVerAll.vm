@@ -1,0 +1,14 @@
+    <div id="dlgVerAll" class="easyui-dialog" style="width:280px;height:180px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">选择进账日期</div>
+            <form id="modalFormVerAll" method="post" style="margin-top:20px" novalidate>
+                <div class="fitem">
+                    <label style="padding-left:-5px;">进账日期:</label>
+                    <input name="incDate" id="incDateAll" style="width:110px"  data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true" />
+                </div>
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="verAllSubmit()" style="width:90px">核销</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlgVerAll').dialog('close')" style="width:90px">取消</a>
+      </div>

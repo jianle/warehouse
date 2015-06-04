@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.finance.model.Invoice;
+import com.finance.model.LedgerReceivable;
 import com.wms.model.Pagination;
 
 
@@ -177,10 +178,10 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
                     ps.setObject(4,obj.getAmount());
                     ps.setObject(5,obj.getAmountTax());
                     ps.setObject(6,obj.getRateTax());
-                    ps.setString(7,obj.getInvDate());
-                    ps.setString(8,obj.getRemark());
-                    ps.setString(9,obj.getIncDate());
-                    ps.setLong(10,obj.getProId());
+                    ps.setObject(7,obj.getInvDate());
+                    ps.setObject(8,obj.getRemark());
+                    ps.setObject(9,obj.getIncDate());
+                    ps.setObject(10,obj.getProId());
                     ps.setObject(11,obj.getVerification());
                     ps.setObject(12,obj.getIsDeleted());
                     ps.setObject(13,new Timestamp(System.currentTimeMillis()));
@@ -215,6 +216,20 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         }
         return false;
     }
+    
+    public Boolean updateIncDate(String incDate, Long invId) {
+        // TODO Auto-generated method stub
+        try {
+            String sql = "update " + TABLE_NAME + " set inc_date=? "
+                    + "where inv_id=?";
+            jdbcTemplateFinance.update(sql, incDate, invId);
+            return true;
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("updateIncDate failed." + e);
+        }
+        return false;
+    }
 
     @Override
     public Boolean delete(Long invId) {
@@ -245,7 +260,7 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             invoice.setRateTax(rs.getDouble("rate_tax"));
             invoice.setInvDate(DATE_FORMAT.format(rs.getDate("inv_date")));
             invoice.setRemark(rs.getString("remark"));
-            invoice.setIncDate(DATE_FORMAT.format(rs.getDate("inc_date")));
+            invoice.setIncDate(rs.getString("inc_date"));
             invoice.setProId(rs.getLong("pro_id"));
             invoice.setVerification(rs.getDouble("verification"));
             invoice.setIsDeleted(rs.getInt("is_deleted"));
@@ -268,18 +283,18 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
         return null;
     }
 
-    public Boolean updateVerification(Long invId, Double amount) {
+    public Boolean updateVerification(Long invId, String incDate, Double amount) {
         // TODO Auto-generated method stub
         try {
             String sql = null;
             if (amount == null) {
-                sql = "update " + TABLE_NAME + " set verification=amount "
+                sql = "update " + TABLE_NAME + " set verification=valorem_tax, inc_date=? "
                         + "where inv_id=?";
-                jdbcTemplateFinance.update(sql, invId);
+                jdbcTemplateFinance.update(sql, incDate, invId);
             }else {
-                sql = "update " + TABLE_NAME + " set verification=verification + ? "
+                sql = "update " + TABLE_NAME + " set verification=verification + ?, inc_date=? "
                         + "where inv_id=?";
-                jdbcTemplateFinance.update(sql, amount, invId);
+                jdbcTemplateFinance.update(sql, amount, incDate, invId);
             }
             return true;
         } catch (Exception e) {
@@ -287,6 +302,43 @@ public class InvoiceDao implements BaseDao<Invoice, Long> {
             logger.debug("updateVerification failed." + e);
         }
         return false;
+    }
+    
+    public LedgerReceivable getLedgerReceivable(Long conId, Long proId, String monthId) {
+        
+        String sql = "select con_id, pro_id,date_format(inv_date,'%YM%m') month_id,sum(valorem_tax) amount, "
+                   + "sum(verification) verification "
+                   + "from invoice "
+                   + "where con_id=? and pro_id=? and date_format(inv_date,'%YM%m')=? and is_deleted=0 "
+                   + "group by 1,2,3";
+        
+       logger.info(sql);
+        
+        try {
+            
+            return jdbcTemplateFinance.queryForObject(sql, new RowMapper<LedgerReceivable>(){
+                @Override
+                public LedgerReceivable mapRow(ResultSet rs, int rowNum)
+                        throws SQLException {
+                    // TODO Auto-generated method stub
+                    LedgerReceivable ledgerReceivable = new LedgerReceivable();
+                    ledgerReceivable.setConId(rs.getLong("con_id"));
+                    ledgerReceivable.setProId(rs.getLong("pro_id"));
+                    ledgerReceivable.setMonthId(rs.getString("month_id"));
+                    ledgerReceivable.setAmount(rs.getDouble("amount"));
+                    ledgerReceivable.setVerification(rs.getDouble("verification"));
+                    return ledgerReceivable;
+                }
+                
+            }, conId, proId, monthId);
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            logger.debug("getLedgerReceivable failed. " + e);
+        }
+        return null;
+        
     }
 
 }

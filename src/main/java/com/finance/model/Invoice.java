@@ -113,6 +113,9 @@ public class Invoice implements Cloneable {
     }
 
     public String getIncDate() {
+        if (this.incDate != null && this.incDate.equals("")) {
+            return null;
+        }
         return incDate;
     }
 

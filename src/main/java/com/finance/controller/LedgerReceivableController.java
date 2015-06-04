@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +58,7 @@ public class LedgerReceivableController {
         //搜索控制器
         String curDate = SDF.format(new Date());
         if (startDate == null || startDate.equals("")) {
-            startDate = curDate;
+            startDate = SDF.format(DateUtils.addDays(new Date(), -31));
         }
         if (endDate == null || endDate.equals("")) {
             endDate = curDate;
@@ -112,31 +113,34 @@ public class LedgerReceivableController {
     @RequestMapping("verification/confirm")
     @ResponseBody
     public JSONObject verificationConfirm(HttpServletRequest request, 
-            @ModelAttribute("invId") String invIds) {
+            @ModelAttribute("invId") String invIds,
+            @ModelAttribute("incDate") String incDate) {
         
         //Double amountValid = ledgerReceivable.getAmount() - ledgerReceivable.getVerification();
         String[] invIdstemp = invIds.replaceAll("\"", "").split(",");
         Invoice invoice = null;
         Double verifi = (double) 0;
         Boolean result = false;
+        logger.info("invIds:" + invIds + ", incDate:" + incDate);
         
         for (String invId : invIdstemp) {
             logger.info(invId);
             invoice = invoiceDao.get(Long.valueOf(invId));
             verifi = verifi + invoice.getAmount();
-            if (invoiceDao.updateVerification(Long.valueOf(invId), null)) {
+            if (invoiceDao.updateVerification(Long.valueOf(invId), incDate, null)) {
                 result = true;
             }
         }
         
-        if (result) {
-            result = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
-                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+        LedgerReceivable ledgerReceivable = invoiceDao.getLedgerReceivable(invoice.getConId()
+                , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+        
+        if (ledgerReceivable == null) {
+            result = false;
         }
         
         if (result) {
-            result = ledgerReceivableDao.saveByInvoice(invoice.getConId()
-                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+            result = ledgerReceivableDao.saveByInvoice(ledgerReceivable);
         }
         
         JSONObject jsonTuple = new JSONObject();
@@ -148,6 +152,7 @@ public class LedgerReceivableController {
     @ResponseBody
     public JSONObject verificationConfirmone(HttpServletRequest request, 
             @ModelAttribute("invId") Long invId,
+            @ModelAttribute("incDate") String incDate,
             @RequestParam(value="verification", defaultValue="0") Double verification) {
         
         Boolean result = false;
@@ -155,18 +160,19 @@ public class LedgerReceivableController {
         
         logger.info("invId:" + invId + ", verification:" + verification);
         
-        if (invoiceDao.updateVerification(invId, verification)) {
+        if (invoiceDao.updateVerification(invId, incDate, verification)) {
             result = true;
         }
         
-        if (result) {
-            result = ledgerReceivableDao.deleteByInvIdAndMonthId(invoice.getConId()
-                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+        LedgerReceivable ledgerReceivable = invoiceDao.getLedgerReceivable(invoice.getConId()
+                , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+        
+        if (ledgerReceivable == null) {
+            result = false;
         }
         
         if (result) {
-            result = ledgerReceivableDao.saveByInvoice(invoice.getConId()
-                    , invoice.getProId(), Utils.getMonthId(invoice.getInvDate()));
+            result = ledgerReceivableDao.saveByInvoice(ledgerReceivable);
         }
         
         JSONObject jsonTuple = new JSONObject();

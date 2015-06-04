@@ -130,6 +130,33 @@ public class ProducerDao implements BaseDao<Producer, Long> {
         }
         return null;
     }
+    
+    public Map<Long, String> findAllMapIdAndAbbreviate() {
+        try {
+            String sql = "select pro_id, abbreviate from " + TABLE_NAME ;
+            return jdbcTemplateFinance.query(sql, 
+                    new ResultSetExtractor<Map<Long, String>>(){
+                @Override
+                public Map<Long, String> extractData(ResultSet rs) 
+                        throws SQLException, DataAccessException {
+                    
+                    Map<Long, String> map = new HashMap<Long, String>();
+                    while (rs.next()) {
+                        Long proId = rs.getLong("pro_id");
+                        String abbreviate = rs.getString("abbreviate");
+                        map.put(proId, abbreviate);
+                    }
+                    
+                    return map;
+                }
+                
+            });
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findAllMapIdAndAbbreviate failed. " + e);
+        }
+        return null;
+    }
 
 
     @Override

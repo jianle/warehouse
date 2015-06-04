@@ -51,7 +51,7 @@
                 
                 <div class="fitem">
                     <label style="padding-left:0px;">进账日期:</label>
-                    <input name="incDate" id="incDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true"/>
+                    <input name="incDate" id="incDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox"/>
                 </div>
                 <div class="fitem">
                     <label style="padding-left:0px;">开票公司:</label>

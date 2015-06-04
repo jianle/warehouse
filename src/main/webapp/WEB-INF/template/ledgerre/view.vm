@@ -79,7 +79,7 @@
   <thead>
     <tr>
       <th width="200px">发票抬头</th>
-      <th width="70px">金额</th>
+      <th width="70px">价税合计</th>
       <th width="110px">开票公司</th>
       <th width="110px">开票日期</th>
       <th width="100px">已核销金额</th>
@@ -93,7 +93,7 @@
         </td>
         <td>${ledgerReceivable.amount}</td>
         <td>${producerMap.get($ledgerReceivable.proId)}</td>
-        <td>${ledgerReceivable.monthId}</td>
+        <td>${ledgerReceivable.monthId.replace('M','年')}月</td>
         <td>${ledgerReceivable.verification}</td>
       </tr>
     #end

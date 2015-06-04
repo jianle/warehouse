@@ -43,6 +43,7 @@ $(document).ready(function() {
         $("#invId2").remove();
         $('#invId').numberbox('enable','true');
         $('#number').numberbox('enable','true');
+        $('#incDate').datebox({disabled:'true'});
         if(flagTitle=="编辑"){
             $('#modalForm').form('clear');
             $('#brId1').val($('#brId').val())
@@ -55,7 +56,7 @@ $(document).ready(function() {
             $('#rateTax').combobox('setValue', 3);
             $('#remark').textbox('setValue', '');
             $('#invDate').datebox('setValue', curDate);
-            $('#incDate').datebox('setValue', curDate);
+            //$('#incDate').datebox('setValue', curDate);
             $('#verification').numberbox('setValue', 0);
             $('#isDeleted').combobox('setValue', 0);
         }
