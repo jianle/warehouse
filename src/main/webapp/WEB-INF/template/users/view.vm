@@ -64,7 +64,7 @@
 </div>
 #end
 -->
-<h2>目录列表</h2>
+<h2>用户树形列表</h2>
 <div class="easyui-panel" style="padding:5px">
     <ul id="tt" class="easyui-tree" data-options="url:'#springUrl('/users/gettree')',method:'get',animate:false,onlyLeafCheck:true,checkbox:true"></ul>
 </div>

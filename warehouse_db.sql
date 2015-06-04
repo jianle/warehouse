@@ -180,6 +180,8 @@ PRIMARY KEY (`pro_id`)
 )ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=utf8 comment '生产商，供应商'
 ;
 
+ALTER TABLE `finance_db`.`producer` ADD COLUMN `abbreviate` varchar(20) NOT NULL default 'NULL' AFTER `pro_name`;
+
 drop table if exists `consumer`;
 CREATE TABLE `consumer` (
 `con_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
