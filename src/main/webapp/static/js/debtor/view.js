@@ -37,6 +37,38 @@ function monthSub(startDate, endDate){
     
 }
 
+function monthDiff(startDate, months){
+    var sy = startDate.getFullYear();
+    var sm = startDate.getMonth()+1;
+    
+    if(months>11) {
+        return -1;
+    } else if(months == sm) {
+        return new Date(sy-1,11,01);
+    } else if(months >= sm) {
+        sy = sy - 1;
+        var m = 12 - (months-sm);
+        return new Date(sy,m-1,01);
+    } else {
+        return new Date(sy,sm-1-months,01);
+    }
+    
+}
+
+function monthAdd(startDate, months){
+    var sy = startDate.getFullYear();
+    var sm = startDate.getMonth()+1;
+    
+    sm = sm + months;
+    
+    if(sm>12) {
+        return new Date(sy+1,sm-13,01);
+    } else {
+        return new Date(sy,sm-1,01);
+    }
+    
+}
+
 
 $(document).ready(function(){
     
@@ -62,7 +94,7 @@ $(document).ready(function(){
     $('#btnSearch').click(function(){
         document.getElementById('firstFromId').submit();
     });
-    
+    /*
     $('#startDate').datepicker()
     .on("changeDate", function(e, n){
         console.log(myformatter(e.date));
@@ -80,7 +112,29 @@ $(document).ready(function(){
             });
         }
     });
+    */
     
+    $('#upButton').click(function(){
+        
+        var startDate = $('#startDate').datepicker('getDate');
+        var endDate = $('#endDate').datepicker('getDate');
+        
+        $('#startDate').datepicker('setDate', monthDiff(startDate,3));
+        $('#endDate').datepicker('setDate', monthDiff(endDate,3));
+        
+        document.getElementById('firstFromId').submit();
+    });
+    
+    $('#downButton').click(function(){
+        
+        var startDate = $('#startDate').datepicker('getDate');
+        var endDate = $('#endDate').datepicker('getDate');
+        
+        $('#startDate').datepicker('setDate', monthAdd(startDate,3));
+        $('#endDate').datepicker('setDate', monthAdd(endDate,3));
+        
+        document.getElementById('firstFromId').submit();
+    });
     
 });
 

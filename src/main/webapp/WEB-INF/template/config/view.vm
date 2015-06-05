@@ -1,5 +1,6 @@
 #set($title='信息维护')
 #set($layout = "layout-finance.vm")
+#set($role=$session.getAttribute('user').role)
 
 <script>
   var contextPath = '#springUrl('')';
@@ -27,7 +28,7 @@
       <div class="description">维护一个三级菜单，包括收入类型、支出类型</div>
     </div>
   </div>
-  
+  #if($role==1)
   <div class="item" style="margin-top:8px;padding:8px">
     <i class="big teal settings icon"></i>
     <div class="content">
@@ -35,7 +36,7 @@
       <div class="description">新增用户、更新用户、等维护用户信息</div>
     </div>
   </div>
-  
+  #end
 </div>
 
 <script>

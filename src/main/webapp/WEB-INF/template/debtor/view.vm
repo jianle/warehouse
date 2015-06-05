@@ -28,6 +28,19 @@
     </div>
     <input type="hidden" name="currentPage" value="1" />
     <input type="hidden" name="numPerPage" value="20" />
+    
+    <div class="filter-content" style="margin-top:8px">
+      <div class="ui primary button" id="upButton">
+        <i class="reply icon"></i> 上翻
+      </div>
+    </div>
+    
+    <div class="filter-content" style="margin-top:8px">
+      <div class="ui primary button" id="downButton">
+        <i class="share icon"></i> 下翻
+      </div>
+    </div>
+    
     <div class="filter-content-right" style="margin-top:8px">
       <div class="ui action left icon input">
         <i class="search icon"></i>
@@ -47,7 +60,7 @@
       <th min-width="150px">客户公司</th>
       <th min-width="150px">公司名称</th>
       #foreach($monthId in $monthIdList)
-        <th width="90px">$monthId.replace("M","年")月</th>
+        <th width="100px">$monthId.replace("M","年")月</th>
       #end
     </tr>
   </thead>
