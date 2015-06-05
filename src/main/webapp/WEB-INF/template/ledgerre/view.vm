@@ -89,7 +89,7 @@
     #foreach( $ledgerReceivable in $pagination.getResultList() )
       <tr id="${ledgerReceivable.lrId}_tr">
         <td><a href="#springUrl('/invoice?conId=')${ledgerReceivable.conId}&proId=${ledgerReceivable.proId}&monthId=${ledgerReceivable.monthId}"
-            target="_blank">${consumerMap.get($ledgerReceivable.conId)}</a>
+            style="cursor:pointer;" >${consumerMap.get($ledgerReceivable.conId)}</a>
         </td>
         <td>${ledgerReceivable.amount}</td>
         <td>${producerMap.get($ledgerReceivable.proId)}</td>

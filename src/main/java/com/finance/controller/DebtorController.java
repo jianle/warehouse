@@ -53,7 +53,7 @@ public class DebtorController {
         String endMonth = null;
         
         if ("".equals(startDate) || startDate.compareTo(endDate)>0) {
-            startDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtils.addMonths(cale.getTime(), -3));
+            startDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtils.addMonths(cale.getTime(), -4));
             endDate = new SimpleDateFormat("yyyy-MM-dd").format(DateUtils.addMonths(cale.getTime(), 3));
             startMonth = Utils.getMonthId(startDate);
             endMonth = Utils.getMonthId(endDate);
@@ -80,12 +80,14 @@ public class DebtorController {
         
         List<LedgerReceivable> ledgerReceivables = ledgerReceivableDao.findToDebtor(startMonth, endMonth, conIds);
         
-        List<Map<String, Object>> tableList =  generateTableList(ledgerReceivables);
+        Map<String, Map<String, Object>> tableList =  generateTableList(ledgerReceivables);
+        
+        logger.info(tableList.toString());
                 
         ModelAndView modelView = new ModelAndView("/debtor/view");
         logger.info("@RequestMapping:/debtor)");
         
-        Map<Long, String> producerMap = producerDao.findAllMapIdAndName(null);
+        Map<Long, String> producerMap = producerDao.findAllMapIdAndAbbreviate();
         Map<Long, String> consumerMap = consumerDao.findAllMapIdAndName(null);
         
         modelView.addObject("monthIdList", monthIdList);
@@ -100,33 +102,40 @@ public class DebtorController {
     }
     
     
-    private List<Map<String, Object>> generateTableList(List<LedgerReceivable> ledgerReceivables) {
-        List<Map<String, Object>> resuList = new ArrayList<Map<String,Object>>();
-        Map<String, Object> monthValueMap = new HashMap<String, Object>();
+    private Map<String, Map<String, Object>> generateTableList(List<LedgerReceivable> ledgerReceivables) {
         
-        String flagMap = null;
-        
-        if (ledgerReceivables == null || ledgerReceivables.size()<=0) {
-            return null;
-        } else {
-            flagMap = ledgerReceivables.get(0).getConcat();
-        }
+        Map<String, Map<String, Object>> mapTuple = new HashMap<String, Map<String,Object>>();
         
         for (LedgerReceivable ledgerReceivable : ledgerReceivables) {
-            String tmpFlag = ledgerReceivable.getConcat();
-            if (!tmpFlag.equals(flagMap)) {
-                resuList.add(monthValueMap);
-                monthValueMap = new HashMap<String, Object>();
+            
+            Map<String, Double> tmpMap = null;
+            
+            //判断conId，proId是否已经存在了，不存在则重新new一个对象写入
+            if (mapTuple.get(ledgerReceivable.getConcat()) == null) {
+                
+                Map<String, Object> mapTmp = new HashMap<String, Object>();
+                mapTmp.put("conId", ledgerReceivable.getConId());
+                mapTmp.put("proId", ledgerReceivable.getProId());
+                
+                tmpMap = new HashMap<String, Double>();
+                tmpMap.put("amount", ledgerReceivable.getAmount());
+                tmpMap.put("verification", ledgerReceivable.getVerification());
+                
+                mapTmp.put(ledgerReceivable.getMonthId(), tmpMap);
+                mapTuple.put(ledgerReceivable.getConcat(), mapTmp);
+                
+            }else {
+                
+                tmpMap = new HashMap<String, Double>();
+                tmpMap.put("amount", ledgerReceivable.getAmount());
+                tmpMap.put("verification", ledgerReceivable.getVerification());
+                mapTuple.get(ledgerReceivable.getConcat()).put(ledgerReceivable.getMonthId(), tmpMap);
+                
             }
             
-            monthValueMap.put(ledgerReceivable.getMonthId(), ledgerReceivable.getAmount());
-            monthValueMap.put("conId", ledgerReceivable.getConId());
-            monthValueMap.put("proId", ledgerReceivable.getProId());
         }
         
-        resuList.add(monthValueMap);
-        
-        return resuList;
+        return mapTuple;
     }
     
     /*

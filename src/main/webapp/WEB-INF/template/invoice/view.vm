@@ -62,7 +62,7 @@
     #foreach( $invoice in $pagination.getResultList() )
       <tr id="${invoice.invId}_tr" class="#if(${invoice.isDeleted}==1)warning
         #elseif(${invoice.valoremTax}==${invoice.verification})success
-        #elseif(${invoice.valoremTax}>${invoice.verification} && ${invoice.verification}>0)error
+        #elseif(${invoice.valoremTax}!=${invoice.verification} && ${invoice.verification}>0)error
         #end">
         <td>
          #if(${invoice.valoremTax}==${invoice.verification})

@@ -37,6 +37,7 @@ function monthSub(startDate, endDate){
     
 }
 
+
 $(document).ready(function(){
     
     $('#startDate').datepicker({
@@ -83,3 +84,9 @@ $(document).ready(function(){
     
 });
 
+
+function detail(amount, verification) {
+	$('#dlg').dialog('open').dialog('setTitle','提示');
+	$('#amountDlg').html(amount);
+	$('#verificationDlg').html(verification);
+}
