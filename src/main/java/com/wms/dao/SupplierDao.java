@@ -32,7 +32,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
     private Logger logger = LoggerFactory.getLogger(SupplierDao.class);
     
     private static final String TABLE_NAME    = "supplier";
-    private static final String INSERT_FIELDS = "name, shortname, address, contact_name, contact_tel, is_disabled, mbcode, insert_dt";
+    private static final String INSERT_FIELDS = "name, shortname, address, contact_name, contact_tel, is_disabled, mbcode, user_id, insert_dt";
     private static final String SELECT_FIELDS = "s_id, " + INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -57,7 +57,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         // 保存Supplier
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             jdbcTemplate.update(sql, supplier.getName(),
                     supplier.getShortname(),
                     supplier.getAddress(),
@@ -65,6 +65,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
                     supplier.getContactTel(),
                     supplier.getIsDisabled(),
                     supplier.getMbcode(),
+                    supplier.getUserId(),
                     supplier.getInsertDt()
                     );
             return true;
@@ -75,11 +76,11 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         return null;
     }
     
-    public List<Supplier> findSuggestAll() {
+    public List<Supplier> findSuggestAll(Long userId) {
         // 通过Id获取Supplier
         try {
-            String sql = "SELECT s_id, name, shortname FROM " + TABLE_NAME ;
-            return jdbcTemplate.query(sql, rowMapperSuggest);
+            String sql = "SELECT s_id, name, shortname FROM " + TABLE_NAME + " where user_id=?";
+            return jdbcTemplate.query(sql, rowMapperSuggest, userId);
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("Supplier get id failed ." + e);
@@ -151,7 +152,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
     
     
     @SuppressWarnings("deprecation")
-    public Pagination<Supplier> findByColumnValue(SupplierSearchForm supplierSearchForm) {
+    public Pagination<Supplier> findByColumnValue(SupplierSearchForm supplierSearchForm, String userIds) {
         /*
          *  通过列的名称和类型查找数据
          *  分页操作也在其中处理，代码开始乱了
@@ -163,10 +164,22 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
         String isWhere = "";
         String column = supplierSearchForm.getColumn().trim();
-        //判断是否有效
-        if (! supplierSearchForm.getIsDisable().equals("A")) {
-            isWhere = " WHERE is_disabled='" + supplierSearchForm.getIsDisable().trim() + "'";
+        
+        //用户限制
+        if (!userIds.equals("")) {
+            isWhere = " where user_id in " + userIds;
         }
+        
+        if (! supplierSearchForm.getIsDisable().equals("A")) {
+            if (! isWhere.isEmpty()) {
+                isWhere = " WHERE is_disabled='" + supplierSearchForm.getIsDisable().trim() + "'";
+            } else {
+                isWhere = isWhere + " and is_disabled='" + supplierSearchForm.getIsDisable().trim() + "'";
+            }
+            
+        }
+        
+        //判断是否有效
         if (supplierSearchForm.getValue() != null && !"".equals(supplierSearchForm.getValue())) {
             String colValue = supplierSearchForm.getValue().trim();
             if (! isWhere.isEmpty()) {
@@ -248,6 +261,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             supplier.setContactTel(rs.getString("contact_tel"));
             supplier.setIsDisabled(rs.getString("is_disabled"));
             supplier.setMbcode(rs.getString("mbcode"));
+            supplier.setUserId(rs.getLong("user_id"));
             
             supplier.setInsertDt(rs.getTimestamp("insert_dt"));
             supplier.setUpdateTime(rs.getTimestamp("update_time"));

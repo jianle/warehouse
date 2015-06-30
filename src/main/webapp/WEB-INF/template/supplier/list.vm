@@ -1,4 +1,4 @@
-#set($title='供应商管理')
+#set($title='客户管理')
 #set($layout = "layout.vm")
 <script src="#springUrl('/static/js/supplier/list.js')"></script>
 <script src="#springUrl('/static/js/supplier/view.js')"></script>
@@ -7,6 +7,17 @@
 </script>
 <form id="supplierSearchId" action="#springUrl('/supplier/search')" method="POST">
   <div class="filter-bar-sm" >
+    <div class="filter-title-sm">
+        <b>创建人:</b>
+    </div>
+    <div class="filter-content">
+        <select class="form-control" name="userId" id="userId">
+            <option value="0">全部</option>
+            #foreach( $key in $users.keySet().toArray())
+            <option #if($key==$userId)selected='selected'#end value="$key">${users.get($key)}</option>
+            #end
+        </select>
+    </div>
     <div class="filter-content">
       <select class="form-control" id="isDisable1" name="isDisable">
         <option #if(${supplierSearchForm.isDisable}=='A') selected="selected" #end value='A'>是否有效</option>
@@ -18,12 +29,13 @@
     <input type="hidden" name="numPerPage" value="10" />
     <div class="filter-content">
       <select class="form-control" name="column">
-        <option #if(${supplierSearchForm.column}=="shortname") selected="selected" #end value="shortname">供应商名称缩写</option>
-        <option #if(${supplierSearchForm.column}=="name") selected="selected" #end value="name">供应商名称</option>
-        <option #if(${supplierSearchForm.column}=="address") selected="selected" #end value="address">供应商地址</option>
+        <option #if(${supplierSearchForm.column}=="shortname") selected="selected" #end value="shortname">客户名称缩写</option>
+        <option #if(${supplierSearchForm.column}=="name") selected="selected" #end value="name">客户名称</option>
+        <option #if(${supplierSearchForm.column}=="address") selected="selected" #end value="address">客户地址</option>
         <option #if(${supplierSearchForm.column}=="contact_name") selected="selected" #end value="contact_name">联系人</option>
       </select>
     </div>
+    
     <div class="filter-content">
       <div class="form-group">
           <input type="text" name="value"  class="form-control"
@@ -78,13 +90,14 @@
     <thead style="table-layout: fixed;">
       <tr>
         <th style="width:50px;">ID</th>
-        <th style="min-width:100px;">供应商名称</th>
+        <th style="min-width:100px;">客户名称</th>
         <th style="width:80px;">名称缩写</th>
-        <th style="min-width:150px;">供应商地址</th>
+        <th style="min-width:150px;">客户地址</th>
         <th style="width:80px;">联系人</th>
         <th style="width:80px;">联系电话</th>
         <th style="width:110px;">月结编号</th>
         <th style="width:60px;">状态</th>
+        <th style="width:90px;">创建人</th>
         <th style="width:90px;">创建时间</th>
         <th style="width:80px;">修改删除</th>
       </tr>
@@ -104,6 +117,7 @@
             #if(${supplier.isDisabled}=='F') 有效 #else 无效 #end
           </span>
         </td>
+        <td>${users.get(${supplier.userId})}</td>
         <td>${supplier.insertDt}</td>
         <td>
           <a href="#supplierModal" id="supplierEdit" onclick="supplierEdit(${supplier.sId},'$supplier.isDisabled')" data-toggle="modal"

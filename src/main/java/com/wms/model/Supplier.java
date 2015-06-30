@@ -27,6 +27,7 @@ public class Supplier implements Serializable {
     private String contactTel;
     private String isDisabled;
     private String mbcode;
+    private Long userId;
     
     @Column(updatable=false)
     private Timestamp insertDt;
@@ -78,6 +79,12 @@ public class Supplier implements Serializable {
     }
     public String getMbcode() {
         return mbcode;
+    }
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    public Long getUserId() {
+        return userId;
     }
     public void setMbcode(String mbcode) {
         this.mbcode = mbcode;

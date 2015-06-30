@@ -57,23 +57,33 @@ public class UserDao implements BaseDao<User, Long> {
             if (id != -1) {
                 sql = sql + " where id<>" + id;
             }
-            return jdbcTemplate.query(sql, new ResultSetExtractor<Map<Long, String>>(){
-                @Override
-                public Map<Long, String> extractData(ResultSet rs) throws SQLException,
-                        DataAccessException {
-                    Map<Long, String> map = new HashMap<Long, String>();
-                    while (rs.next()) {
-                        Long id = rs.getLong("id");
-                        String truename = rs.getString("true");
-                        map.put(id, truename);
-                    }
-                    return map;
-                }
-                
-            });
+            return jdbcTemplate.query(sql, resultSetExtractor);
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("findAllMapIdAndName failed. " + e);
+        }
+        return null;
+    }
+    
+    public Map<Long, String> findDeniedMapIdAndName(User user) {
+        try {
+            String sql = "";
+            if (user.getRole() == User.ROLE_ADMIN || user.getRole() == User.ROLE_BOSS) {
+                sql = "select id, truename from " + TABLE_NAME ;
+            }
+            if (user.getRole() == User.ROLE_DIRECTOR) {
+                sql = "select id, truename from " + TABLE_NAME + " where parent_id=" + user.getId() 
+                        + " or id=" + user.getId();
+            }
+            
+            if (sql.equals("")) {
+                sql = "select id, truename from " + TABLE_NAME + " where id=" + user.getId();
+            }
+            
+            return jdbcTemplate.query(sql, resultSetExtractor);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findDeniedMapIdAndName failed. " + e);
         }
         return null;
     }
@@ -85,7 +95,7 @@ public class UserDao implements BaseDao<User, Long> {
         
         try {
             jdbcTemplate.update(sql, 
-            		user.getParentId(),
+                    user.getParentId(),
                     user.getUsername(),
                     user.getPassword(),
                     user.getTruename(),
@@ -160,11 +170,11 @@ public class UserDao implements BaseDao<User, Long> {
             user.setUsername(rs.getString("username"));
             user.setTruename(rs.getString("truename"));
             try {
-				user.setPassword(UtilsDes.decrypt(rs.getString("password")));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+                user.setPassword(UtilsDes.decrypt(rs.getString("password")));
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             user.setEmail(rs.getString("email"));
             user.setRole(rs.getInt("role"));
             user.setCreated(rs.getTimestamp("created"));
@@ -193,7 +203,7 @@ public class UserDao implements BaseDao<User, Long> {
         
         try {
             jdbcTemplate.update(sql, 
-            		user.getParentId(),
+                    user.getParentId(),
                     user.getUsername(),
                     user.getPassword(),
                     user.getTruename(),
@@ -231,5 +241,19 @@ public class UserDao implements BaseDao<User, Long> {
             return null;
         }
     }
+    
+    private ResultSetExtractor<Map<Long, String>> resultSetExtractor = new ResultSetExtractor<Map<Long, String>>() {
+        public Map<Long, String> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            Map<Long, String> map = new HashMap<Long, String>();
+            while (rs.next()) {
+                Long id = rs.getLong("id");
+                String truename = rs.getString("truename");
+                map.put(id, truename);
+            }
+            return map;
+        }
+        
+    };
 
 }

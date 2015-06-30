@@ -38,6 +38,10 @@ CREATE TABLE `goods` (
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 comment '商品信息表'
 ;
 
+alter table goods ADD COLUMN `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户ID' AFTER `is_disabled`;
+alter table goods add index `user_id_idx` (user_id);
+alter table goods add unique key (s_id,scode);
+
 CREATE TABLE supplier(
   `s_id` bigint(20) not null AUTO_INCREMENT comment '供应商自增id',
   `name` varchar(256) not null default '' comment '供应商名称',
@@ -51,6 +55,9 @@ CREATE TABLE supplier(
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
   PRIMARY KEY (`s_id`)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '供应商信息表';
+
+
+alter table supplier ADD COLUMN `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户ID' AFTER `mbcode`;
 
 
 CREATE TABLE `enter` (

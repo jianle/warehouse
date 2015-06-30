@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import com.wms.model.Goods;
 import com.wms.model.Pagination;
+import com.wms.model.User;
 
 /*
  * 商品操作实体
@@ -29,7 +30,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     
     private static final String TABLE_NAME    = "goods";
     private static final String INSERT_FIELDS = "s_id, name, length, width, height, weight, g_id_supplier"
-                                            + " , scode, boxes, amount, is_disabled, insert_dt";
+                                            + " , scode, boxes, amount, is_disabled, user_id, insert_dt";
     private static final String SELECT_FIELDS = "g_id, " + INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -55,7 +56,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         // 传入对象保存
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, goods.getsId(),
                     goods.getName(),
@@ -68,6 +69,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
                     goods.getBoxes(),
                     goods.getAmount(),
                     goods.getIsDisabled(),
+                    goods.getUserId(),
                     goods.getInsertDt()
                     );
             return true;
@@ -119,15 +121,25 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Goods> findByNameAndIsDisabled(String name, String is_disabled, int currentPage, int numPerPage) {
+    public Pagination<Goods> findByNameAndIsDisabled(String name, String is_disabled, 
+            int currentPage, int numPerPage,String userIds) {
         // 通过商品名称、是否有效搜索并分页
         List<Goods> goods;
         
         StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
         String isWhere = "";
         
+        if (!userIds.equals("")) {
+            isWhere = " where user_id in " + userIds;
+        }
+        
         if (name != null && !"".equals(name) ) {
-            isWhere = " WHERE name like '%" + name + "%' ";
+            if (isWhere.isEmpty()) {
+                isWhere = " WHERE name like '%" + name + "%' ";
+            } else {
+                isWhere = isWhere + " and name like '%" + name + "%' ";
+            }
+            
         }
         
         if (is_disabled != null && ! "A".equals(is_disabled)) {
@@ -189,17 +201,32 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
     }
     
-    public List<Map<String, Object>> findAllIdAndName(Long sId) {
+    public List<Map<String, Object>> findSuggestAll(User user) {
+        // 通过Id获取Supplier
+        try {
+            String sql = "SELECT a.g_id as gid, a.s_id as sid, a.name as gname, b.name as sname"
+                    + " , boxes, amount FROM " + TABLE_NAME 
+                    + " a join supplier b on a.s_id=b.s_id"
+                    + " where a.user_id=?";
+            logger.info(sql);
+            return jdbcTemplate.queryForList(sql, user.getId());
+        } catch (Exception e) {
+            // TODO: handle exception
+            return null;
+        }
+    }
+    
+    public List<Map<String, Object>> findAllIdAndName(Long sId, User user) {
         // 通过Id获取Supplier
         try {
             String sql;
             if (sId>0) {
-                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE s_id=" + sId;
+                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE user_id=? and s_id=" + sId;
             } else {
-                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME ;
+                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE user_id=?";
             }
             logger.info(sql);
-            return jdbcTemplate.queryForList(sql);
+            return jdbcTemplate.queryForList(sql,user.getId());
         } catch (Exception e) {
             // TODO: handle exception
             return null;
@@ -225,6 +252,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             goods.setBoxes(rs.getInt("boxes"));
             goods.setAmount(rs.getInt("amount"));
             goods.setIsDisabled(rs.getString("is_disabled"));
+            goods.setUserId(rs.getLong("user_id"));
             
             goods.setInsertDt(rs.getTimestamp("insert_dt"));
             goods.setUpdateTime(rs.getTimestamp("update_time"));

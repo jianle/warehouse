@@ -42,7 +42,7 @@
     <div class="filter-content-right" style="margin-top:8px">
       <div class="ui action left icon input">
         <i class="search icon"></i>
-        <input type="text" name="conName" value="$conName" placeholder="付款公司">
+        <input type="text" name="conName" value="$conName" placeholder="发票抬头">
         <div id="btnSearch" class="ui teal submit button">Search</div>
       </div>
     </div>

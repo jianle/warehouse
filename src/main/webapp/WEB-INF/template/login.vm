@@ -5,59 +5,59 @@
 <link href="#springUrl('/static/css/login.css')" rel="stylesheet">
 <script src="#springUrl('/static/js/login.js')"></script>
 
-	<div class="container">
-		<div class="loginbox">
-			<div class="loginlay">
-				<form class="form-horizontal" action="#springUrl('/login')" role="form" id="fromLogin"
-					method="post">
-					<table width="100%" border="0" cellspacing="14" cellpadding="0">
-						<tr>
-							<td width="81"></td>
-						</tr>
-						<tr>
-							<div class="form-group">
-								<label style="font-size: 15px;" for="username" class="col-sm-3 control-label">用户:</label>
-								<div class="col-sm-9">
-									<input type="text" class="form-control" name="username"
-									   id="username" #if(${username}) value="${username}" #end />
-								</div>
-							</div>
-						</tr>
+    <div class="container">
+        <div class="loginbox">
+            <div class="loginlay">
+                <form class="form-horizontal" action="#springUrl('/login')" role="form" id="fromLogin"
+                    method="post">
+                    <table width="100%" border="0" cellspacing="14" cellpadding="0">
+                        <tr>
+                            <td width="81"></td>
+                        </tr>
+                        <tr>
+                            <div class="form-group">
+                                <label style="font-size: 15px;" for="username" class="col-sm-3 control-label">用户:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="username"
+                                       id="username" #if(${username}) value="${username}" #end />
+                                </div>
+                            </div>
+                        </tr>
 
-						<tr>
-							<div class="form-group">
-								<label style="font-size: 15px;" for="password" class="col-sm-3 control-label">密码:</label>
-								<div class="col-sm-9">
-									<input type="password" class="form-control" name="password"
-									   id="password" #if(${password}) value="${password}" #end />
-								</div>
-							</div>
-						</tr>
+                        <tr>
+                            <div class="form-group">
+                                <label style="font-size: 15px;" for="password" class="col-sm-3 control-label">密码:</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" name="password"
+                                       id="password" #if(${password}) value="${password}" #end />
+                                </div>
+                            </div>
+                        </tr>
 
-						<tr>
-							<td>&nbsp;</td>
-							#if(${password})
-							<td style="color:#ff0000">用户名密码错误</td>
-							#end
-					  </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            #if(${password})
+                            <td style="color:#ff0000">用户名密码错误</td>
+                            #end
+                      </tr>
 
-						<tr>
-							<td></td>
-							<td width="127">
-								<label>
-									<input class="button1" type="submit" name="button"
-									    id="button" onclick="accountCommit()" value="登 录" />
-							  </label>
-							</td>
-							<td>
-								<label>
-									<input class="button2" type="reset" name="button"
-									    id="button" value="重 置" />
-							  </label>
-								</td>
-						</tr>
-					</table>
-			  </from>
-			</div>
-		</div>
-	</div>
+                        <tr>
+                            <td></td>
+                            <td width="127">
+                                <label>
+                                    <input class="button1" type="submit" name="button"
+                                        id="button" onclick="accountCommit()" value="登 录" />
+                              </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input class="button2" type="reset" name="button"
+                                        id="button" value="重 置" />
+                              </label>
+                                </td>
+                        </tr>
+                    </table>
+              </form>
+            </div>
+        </div>
+    </div>

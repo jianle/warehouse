@@ -13,54 +13,77 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.SupplierDao;
+import com.wms.dao.UserDao;
 import com.wms.form.model.SupplierSearchForm;
 import com.wms.model.Pagination;
 import com.wms.model.Supplier;
+import com.wms.model.User;
 
 @Controller
-@Component
 @RequestMapping("/supplier")
+@SessionAttributes("user")
 public class SupplierController {
     
     private Logger logger = LoggerFactory.getLogger(SupplierController.class);
     
     @Autowired
     private SupplierDao supplierDao;
+    @Autowired
+    private UserDao userDao;
     
     @RequestMapping(value={"","search"},method=RequestMethod.GET)
-    public ModelAndView list() {
+    public ModelAndView list(@ModelAttribute User user, HttpServletRequest request) {
+        
+        logger.info(user.toString());
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        
+        String userIds = "(" + user.getId() + ")";
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/supplier/list");
         SupplierSearchForm supplierSearchForm = new SupplierSearchForm(10, 1, "A", "shortname", "");
-        Pagination<Supplier> pagination = supplierDao.findByColumnValue(supplierSearchForm);
+        Pagination<Supplier> pagination = supplierDao.findByColumnValue(supplierSearchForm, userIds);
         
         logger.info("RequestMapping:/supplier .");
         modelView.addObject("pagination", pagination);
         modelView.addObject("supplierSearchForm", supplierSearchForm);
+        modelView.addObject("users", users);
         
         return modelView;
     }
     
     @RequestMapping(value="search", method=RequestMethod.POST)
-    public ModelAndView search(@ModelAttribute("supplierSearchForm") SupplierSearchForm supplierSearchForm) {
+    public ModelAndView search(HttpServletRequest request,
+            @ModelAttribute User user,
+            @ModelAttribute("supplierSearchForm") SupplierSearchForm supplierSearchForm) {
         //搜索控制器
         
         ModelAndView modelView = new ModelAndView();
         logger.info(supplierSearchForm.toString());
-        Pagination<Supplier> pagination = supplierDao.findByColumnValue(supplierSearchForm);
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String usersIds = null;
+        if (user.getRole() == User.ROLE_ADMIN || user.getRole() == User.ROLE_BOSS ) {
+            usersIds = "";
+        } else {
+            usersIds = users.keySet().toString().replace("[", "(").replace("]", ")");
+        }
+        
+        Pagination<Supplier> pagination = supplierDao.findByColumnValue(supplierSearchForm, usersIds);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("supplierSearchForm", supplierSearchForm);
         modelView.setViewName("/supplier/list");
+        modelView.addObject("users", users);
         
         logger.info(pagination.toString());
         
@@ -70,10 +93,12 @@ public class SupplierController {
     @RequestMapping(value="save", method=RequestMethod.POST)
     @ResponseBody
     public String save(HttpServletRequest request, 
+            @ModelAttribute User user,
             @ModelAttribute("supplier") Supplier supplier) {
         
         supplier.setInsertDt(new Timestamp(System.currentTimeMillis()));
         supplier.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        supplier.setUserId(user.getId());
         
         logger.info(supplier.toString());
         
@@ -114,9 +139,10 @@ public class SupplierController {
     
     @RequestMapping("getSupplierName")
     @ResponseBody
-    public JSONObject getSupplierName() throws JSONException {
+    public JSONObject getSupplierName(@ModelAttribute User user) throws JSONException {
         
-        List<Supplier> suppliers = supplierDao.findSuggestAll();
+        List<Supplier> suppliers = supplierDao.findSuggestAll(user.getId());
+        logger.info(user.toString());
 
         JSONObject jsonObject;
         

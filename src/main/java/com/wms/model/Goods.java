@@ -35,11 +35,18 @@ public class Goods implements Serializable {
     private Integer boxes;
     private Integer amount;
     private String isDisabled;
+    private Long userId;
     
     @Column(updatable=false)
     private Timestamp insertDt;
     private Timestamp updateTime;
     
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    public Long getUserId() {
+        return userId;
+    }
     public Long getgId() {
         return gId;
     }

@@ -53,8 +53,8 @@
             <li><a href="#">收款信息</a></li>
           </ul>
           <ul class="nav nav-sidebar">
-                <li #if($title == '供应商管理') class='active' #end>
-                  <a href="#springUrl('/supplier')">供应商管理</a>
+                <li #if($title == '客户管理') class='active' #end>
+                  <a href="#springUrl('/supplier')">客户管理</a>
                 </li>
                 <li #if($title == '商品管理') class='active' #end>
                   <a href="#springUrl('/goods')">商品管理</a>

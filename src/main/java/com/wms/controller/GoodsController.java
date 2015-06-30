@@ -19,36 +19,42 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.GoodsDao;
 import com.wms.dao.SupplierDao;
+import com.wms.dao.UserDao;
 import com.wms.model.Goods;
 import com.wms.model.Pagination;
+import com.wms.model.User;
 
 
 @Controller
 @RequestMapping("/goods")
+@SessionAttributes("user")
 public class GoodsController {
     
     private Logger logger = LoggerFactory.getLogger(GoodsController.class);
     
     @Autowired
     private GoodsDao goodsDao;
-    
     @Autowired
     private SupplierDao supplierDao;
+    @Autowired
+    private UserDao userDao;
     
     @RequestMapping(value={"","search"}, method = RequestMethod.GET)
-    public ModelAndView list() {
+    public ModelAndView list(@ModelAttribute User user) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         String name="";
         String isDisabled = "A";
         int currentPage = 1;
         int numPerPage = 10;
+        String userIds = "(" + user.getId() + ")";
         // 获取分页数据
-        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage);
+        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage, userIds);
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(paginationGoods.getResultList());   
 
@@ -64,12 +70,22 @@ public class GoodsController {
     public ModelAndView search(@RequestParam(value="sName") String name,
             @RequestParam(value="currentPage") int currentPage,
             @RequestParam(value="numPerPage") int numPerPage,
+            @ModelAttribute User user,
             @RequestParam(value="isDisabled") String isDisabled) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String usersIds = null;
+        if (user.getRole() == User.ROLE_ADMIN || user.getRole() == User.ROLE_BOSS ) {
+            usersIds = "";
+        } else {
+            usersIds = users.keySet().toString().replace("[", "(").replace("]", ")");
+        }
+        
+        logger.info("goods search userids:" + usersIds);
         // 获取分页数据
-        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage);
+        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage, usersIds);
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(paginationGoods.getResultList());
         
@@ -84,12 +100,13 @@ public class GoodsController {
     
     @RequestMapping("save")
     @ResponseBody
-    public JSONObject save(@ModelAttribute Goods goods) {
+    public JSONObject save(@ModelAttribute User user,
+            @ModelAttribute Goods goods) {
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
         goods.setInsertDt(new Timestamp(System.currentTimeMillis()));
         goods.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-        
+        goods.setUserId(user.getId());
         if (goodsDao.save(goods)) {
             logger.info("save goods success return true");
             result = true;
@@ -128,9 +145,9 @@ public class GoodsController {
     
     @RequestMapping("getGoodsName")
     @ResponseBody
-    public JSONObject getGoodsName() throws JSONException {
+    public JSONObject getGoodsName(@ModelAttribute User user) throws JSONException {
         
-        List<Map<String, Object>> goods = goodsDao.findSuggestAll();
+        List<Map<String, Object>> goods = goodsDao.findSuggestAll(user);
 
         JSONObject jsonObject;
         
@@ -159,17 +176,19 @@ public class GoodsController {
     @RequestMapping("getname")
     @ResponseBody
     public List<Map<String, Object>> findAllIdAndName(
+            @ModelAttribute User user,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
-        return goodsDao.findAllIdAndName(sId);
+        return goodsDao.findAllIdAndName(sId, user);
     }
     
     @RequestMapping("getNameJson")
     @ResponseBody
     public JSONObject getNameJson(
+            @ModelAttribute User user,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         
-        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId);
+        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, user);
         jsonObject.put("value", goods);
         return jsonObject;
     }
