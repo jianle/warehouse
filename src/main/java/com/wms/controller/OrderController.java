@@ -3,6 +3,7 @@ package com.wms.controller;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,19 +20,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
 import com.wms.dao.StorageDao;
+import com.wms.dao.SupplierDao;
+import com.wms.dao.UserDao;
 import com.wms.model.OrderDetail;
 import com.wms.model.Orderinfo;
 import com.wms.model.Pagination;
+import com.wms.model.Supplier;
 import com.wms.model.User;
 
 
 @Controller
 @RequestMapping("/order")
+@SessionAttributes("user")
 public class OrderController {
     
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -45,8 +51,15 @@ public class OrderController {
     @Autowired
     private StorageDao storageDao;
     
+    @Autowired
+    private UserDao userDao;
+    @Autowired
+    private SupplierDao supplierDao;
+    
     @RequestMapping(value={"", "list"})
-    public ModelAndView list(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
+    public ModelAndView list(
+            @ModelAttribute User user,
+            @RequestParam(value="currentPage", defaultValue="1") int currentPage,
             @RequestParam(value="numPerPage", defaultValue="15") int numPerPage
             ) {
         ModelAndView modelView = new ModelAndView();
@@ -58,6 +71,13 @@ public class OrderController {
         
         modelView.addObject("paginations", paginations);
         modelView.addObject("ordersJson", JSONArray.fromObject(paginations.getResultList()));
+        String userIds = "(" + user.getId() + ")";
+        Map<Long, String> suppliers = supplierDao.findIdMapName(userIds);
+        logger.info(suppliers.toString());
+        modelView.addObject("suppliers", suppliers);
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        modelView.addObject("users", users);
         
         return modelView;
         
@@ -65,7 +85,9 @@ public class OrderController {
     
     @RequestMapping("search")
     @ResponseBody
-    public JSONArray search(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
+    public JSONArray search(
+            @ModelAttribute User user,
+            @RequestParam(value="currentPage", defaultValue="1") int currentPage,
             @RequestParam(value="numPerPage", defaultValue="15") int numPerPage
             ) {
         
@@ -144,11 +166,25 @@ public class OrderController {
     }
     
     @RequestMapping(value = "detail", method = RequestMethod.GET)
-    public ModelAndView detailView(@RequestParam(value="oId", defaultValue="1") Long oId) {
+    public ModelAndView detailView(
+            @ModelAttribute User user,
+            @RequestParam(value="oId", defaultValue="1") Long oId,
+            @RequestParam(value="sId", defaultValue="0") Long sId) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/order/detail");
         logger.info("RequestMapping :/order/detail");
         modelView.addObject("curoId", oId);
+        
+        Orderinfo orderInfo = orderinfoDao.get(oId);
+        modelView.addObject("orderInfo", orderInfo);
+        logger.info("sId:" + orderInfo.getCustomerCode());
+        Supplier supplier = supplierDao.get(orderInfo.getCustomerCode());
+        modelView.addObject("cursId", supplier.getsId());
+        modelView.addObject("supplier", supplier);
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        modelView.addObject("users", users);
+        
         return modelView;
     }
     
@@ -164,6 +200,16 @@ public class OrderController {
         return jsonObject;
     }
     
+    @RequestMapping("detail/getCurAlloId")
+    @ResponseBody
+    public JSONArray getCurAlloId(@ModelAttribute User user){
+        
+        JSONArray result = new JSONArray();
+        result = JSONArray.fromObject(orderinfoDao.findCurAlloId(user.getId()));
+        logger.info(result.toString());
+        return result;
+    }
+    
     @RequestMapping("detail/get")
     @ResponseBody
     public JSONArray getDetail(@RequestParam(value="o_id", defaultValue="0") Long oId){
@@ -171,6 +217,16 @@ public class OrderController {
         JSONArray result = new JSONArray();
         result = JSONArray.fromObject(orderDetailDao.findByOId(oId));
         logger.info("RequestMapping:order/detail/get?oId=" + oId);
+        return result;
+    }
+    
+    @RequestMapping("getOrderInfo")
+    @ResponseBody
+    public JSONObject getOidDetail(@RequestParam(value="o_id", defaultValue="0") Long oId){
+        
+        JSONObject result = new JSONObject();
+        result = JSONObject.fromObject(orderinfoDao.get(oId));
+        logger.info("RequestMapping:order/getOrderInfo?oId=" + oId);
         return result;
     }
     

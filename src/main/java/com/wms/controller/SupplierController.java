@@ -165,6 +165,16 @@ public class SupplierController {
         return jsonObject;
     }
     
+    @RequestMapping("getIdMapName")
+    @ResponseBody
+    public JSONArray getIdMapName(@ModelAttribute User user) {
+        
+        List<Map<String, Object>> suppliers = supplierDao.findIdMapName(user.getId());
+        logger.info(suppliers.toString());
+        
+        return JSONArray.fromObject(suppliers);
+    }
+    
     @RequestMapping("getname")
     @ResponseBody
     public List<Map<String, Object>> findAllIdAndName() throws JSONException {

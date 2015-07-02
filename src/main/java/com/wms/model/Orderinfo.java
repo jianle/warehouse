@@ -15,32 +15,21 @@ import javax.persistence.Table;
 public class Orderinfo implements Serializable {
     
     private Long oId;
-    private String documentCode;
     private String orderCode;
-    private String orderType;
-    private String customerType;
-    private String customerName;
-    private String customerCode;
+    private Long customerCode;
     private String whAdd;
     private String transpCostType;
     private String receiveTel;
     private String receiveAdd;
     private Long userId;
-    private String userName;
     
     private String documentDate;
-    private String saleDate;
-    
-    private String company;
     private Double amountTotal;
-    private String mtMch;
-    private Double accountBalance;
-    private Double retailPrice;
     private Double amountDiscount;
     private Double amountPayable;
-    private Double amountNet;
 
     private Integer status;
+    private String remark;
     private String insertDt;
     private String updateTime;
     public Long getoId() {
@@ -49,40 +38,16 @@ public class Orderinfo implements Serializable {
     public void setoId(Long oId) {
         this.oId = oId;
     }
-    public String getDocumentCode() {
-        return documentCode;
-    }
-    public void setDocumentCode(String documentCode) {
-        this.documentCode = documentCode;
-    }
     public String getOrderCode() {
         return orderCode;
     }
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
     }
-    public String getOrderType() {
-        return orderType;
-    }
-    public void setOrderType(String orderType) {
-        this.orderType = orderType;
-    }
-    public String getCustomerType() {
-        return customerType;
-    }
-    public void setCustomerType(String customerType) {
-        this.customerType = customerType;
-    }
-    public String getCustomerName() {
-        return customerName;
-    }
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-    public String getCustomerCode() {
+    public Long getCustomerCode() {
         return customerCode;
     }
-    public void setCustomerCode(String customerCode) {
+    public void setCustomerCode(Long customerCode) {
         this.customerCode = customerCode;
     }
     public String getWhAdd() {
@@ -115,29 +80,11 @@ public class Orderinfo implements Serializable {
     public Long getUserId() {
         return userId;
     }
-    public String getUserName() {
-        return userName;
-    }
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
     public String getDocumentDate() {
         return documentDate;
     }
     public void setDocumentDate(String documentDate) {
         this.documentDate = documentDate;
-    }
-    public String getSaleDate() {
-        return saleDate;
-    }
-    public void setSaleDate(String saleDate) {
-        this.saleDate = saleDate;
-    }
-    public String getCompany() {
-        return company;
-    }
-    public void setCompany(String company) {
-        this.company = company;
     }
     public Double getAmountTotal() {
         if (amountTotal == null) {
@@ -147,30 +94,6 @@ public class Orderinfo implements Serializable {
     }
     public void setAmountTotal(Double amountTotal) {
         this.amountTotal = amountTotal;
-    }
-    public String getMtMch() {
-        return mtMch;
-    }
-    public void setMtMch(String mtMch) {
-        this.mtMch = mtMch;
-    }
-    public Double getAccountBalance() {
-        if (accountBalance == null) {
-            return (double) 0;
-        }
-        return accountBalance;
-    }
-    public void setAccountBalance(Double accountBalance) {
-        this.accountBalance = accountBalance;
-    }
-    public Double getRetailPrice() {
-        if (retailPrice == null) {
-            return (double) 0;
-        }
-        return retailPrice;
-    }
-    public void setRetailPrice(Double retailPrice) {
-        this.retailPrice = retailPrice;
     }
     public Double getAmountDiscount() {
         if (amountDiscount == null) {
@@ -190,20 +113,17 @@ public class Orderinfo implements Serializable {
     public void setAmountPayable(Double amountPayable) {
         this.amountPayable = amountPayable;
     }
-    public Double getAmountNet() {
-        if (amountNet == null) {
-            return (double) 0;
-        }
-        return amountNet;
-    }
-    public void setAmountNet(Double amountNet) {
-        this.amountNet = amountNet;
-    }
     public Integer getStatus() {
         return status;
     }
     public void setStatus(Integer status) {
         this.status = status;
+    }
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+    public String getRemark() {
+        return remark;
     }
     public String getInsertDt() {
         return insertDt;
@@ -226,20 +146,15 @@ public class Orderinfo implements Serializable {
     
     @Override
     public String toString() {
-        return "Orderinfo [oId=" + oId + ", documentCode=" + documentCode
-                + ", orderCode=" + orderCode + ", orderType=" + orderType
-                + ", customerType=" + customerType + ", customerName="
-                + customerName + ", customerCode=" + customerCode + ", whAdd="
-                + whAdd + ", transpCostType=" + transpCostType
-                + ", receiveTel=" + receiveTel + ", receiveAdd=" + receiveAdd
-                + ", userId=" + userId + ", userName=" + userName
-                + ", documentDate=" + documentDate + ", saleDate=" + saleDate
-                + ", company=" + company + ", amountTotal=" + amountTotal
-                + ", mtMch=" + mtMch + ", accountBalance=" + accountBalance
-                + ", retailPrice=" + retailPrice + ", amountDiscount="
-                + amountDiscount + ", amountPayable=" + amountPayable
-                + ", amountNet=" + amountNet + ", status=" + status
-                + ", insertDt=" + insertDt + ", updateTime=" + updateTime + "]";
+        return "Orderinfo [oId=" + oId + ", orderCode=" + orderCode
+                + ", customerCode=" + customerCode + ", whAdd=" + whAdd
+                + ", transpCostType=" + transpCostType + ", receiveTel="
+                + receiveTel + ", receiveAdd=" + receiveAdd + ", userId="
+                + userId + ", documentDate=" + documentDate + ", amountTotal="
+                + amountTotal + ", amountDiscount=" + amountDiscount
+                + ", amountPayable=" + amountPayable + ", status=" + status
+                + ", remark=" + remark + ", insertDt=" + insertDt
+                + ", updateTime=" + updateTime + "]";
     }
     
 }

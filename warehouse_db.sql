@@ -123,6 +123,30 @@ CREATE TABLE `orderinfo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
 ;
 
+================================
+CREATE TABLE `orderinfo` (
+  `o_id` bigint(20) NOT NULL AUTO_INCREMENT comment '订单id',
+  `order_code` varchar(20) not null default '' comment '订单编号',
+  `customer_code` varchar(24) not null default '' comment '客户ID',
+  `wh_add` varchar(640) not null default '' comment '出库仓库',
+  `transp_cost_type` varchar(24) not null default '' comment '运费支付类型',
+  `receive_tel` varchar(24) not null default '' comment '收货电话',
+  `receive_add` varchar(256) not null default '' comment '收货地址(货送地址)',
+  `user_id` bigint(20) not null default 0 comment '制单人ID',
+  `document_date`date not null default '1990-01-01'comment '制单日期',
+  `amount_total` double(10,2) not null default 0.0 comment '总金额',
+  `amount_discount` double(10,2) not null default 0.0 comment '折扣金额',
+  `amount_payable` double(10,2) not null default 0.0 comment '应付金额',
+  `status` smallint(3) not null default 0 comment '订单状态 0-新增、1-已配货、2-已验货、3-已出库、4-已完成、',
+  `remark` varchar(1000) default '' comment '备注',
+  `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
+  `update_time` timestamp null on update current_timestamp comment '最近一次更新',
+  PRIMARY KEY (`o_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
+;
+
+alter table `orderinfo` ADD COLUMN `remark` varchar(1000) DEFAULT '' COMMENT '备注' AFTER `status`;
+
 
 CREATE TABLE `order_detail` (
   `od_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',

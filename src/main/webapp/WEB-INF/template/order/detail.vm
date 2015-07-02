@@ -11,7 +11,17 @@
 <div>
 <form class="form-horizontal" id="formoId" action="#springUrl('/order/detail/')" style="padding-top:10px;">
  <div class="row">
-    <label for="oId" class="control-label" style="padding-left:15px;float:left" >订单编号</label>
+    <label for="oId" class="control-label" style="padding-left:15px;float:left" >订单编号：</label>
+    <label for="oId" class="control-label" style="padding-left:0px;float:left" >
+        <input name="oId" value="$curoId" style="width:80px" class="easyui-combobox" data-options="
+                        valueField: 'oId',
+                        textField: 'oId',
+                        url: contextPath+'/order/detail/getCurAlloId',
+                        onSelect: function(rec){
+                            $('#customerCode').numberbox('setValue', rec.sId);
+                        }" />
+    </label>
+    <!--
     <div class="col-lg-2">
        <div class="input-group">
            <input type="text" class="form-control" id="oId" name="oId" value="${curoId}" />
@@ -22,52 +32,21 @@
                <ul class="dropdown-menu dropdown-menu-right" role="menu">
                </ul>
            </div>
-           <!-- /btn-group -->
        </div>
      </div>
+     -->
+     <label for="oId" class="control-label" style="padding-left:30px;float:left" >制单人：</label>
+     <label for="oId" class="control-label" style="float:left" ><code>${users.get($orderInfo.userId)}</code></label>
+     <label for="oId" class="control-label" style="padding-left:30px;float:left" >客户名称：</label>
+     <label for="oId" class="control-label" style="float:left" ><code>${supplier.name}</code></label>
    </div>
  </form>
 </div>
  <hr/>
   <table id="dg" title="订单明细" style="width:auto;height:auto">
         <thead>
-            <tr>
-              <th data-options="field:'sId',width:240,
-                        formatter:function(value,row){
-                            return row.sName;
-                        },
-
-                        editor:{
-                            type:'combobox',
-                            options:{
-                                onChange:function(newValue, oldValue){
-                                  if(newValue==undefined) {
-                                    newValue='';
-                                  }
-                                  var comboboxData;
-                                  var url = contextPath + '/goods/getNameJson?sId=' + newValue;
-                                  var ed = $('#dg').datagrid('getEditor',{index:currentIndex,field: 'gId'});
-                                  $.ajax({
-                                       cache:true,
-                                       url:url,
-                                       dataType : 'json',
-                                       type : 'POST',
-                                       async:true,
-                                       success: function (data){
-                                            comboboxData = eval(data.value);
-                                            $(ed.target).combobox( 'loadData' , comboboxData);
-                                       }
-                                    });
-                                },
-                                valueField:'sId',
-                                textField:'sName',
-                                method:'get',
-                                url:contextPath + '/supplier/getname',
-                                required:true
-                            },
-
-                        }">供应商名称</th>
-                <th data-options="field:'gId',width:150,
+          <tr>
+            <th data-options="field:'gId',width:210,
                         formatter:function(value,row){
                             return row.gName;
                         },
@@ -76,18 +55,19 @@
                             options:{
                                 valueField:'gId',
                                 textField:'gName',
+                                url:contextPath + '/goods/getIdMapName?sId=${cursId}',
                                 required:true
                             }
                         }">产品名称</th>
-            <th data-options="field:'retailPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">零售价</th>
-            <th data-options="field:'unitPrice',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">单价</th>
-            <th data-options="field:'amountNet',width:80,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">净额</th>
-            <th data-options="field:'amount',width:80,align:'right',editor:{type:'numberbox',options:{required:true}}">数量</th>
-            <th data-options="field:'amountAmt',width:80,align:'right',editor:{type:'numberbox',options:{precision:2,required:true}}">金额</th>
-            <th data-options="field:'code',width:92,editor:'textbox'">条码</th>
-            <th data-options="field:'remarks',width:180,editor:'textbox'">备注</th>
+            <th data-options="field:'retailPrice',width:90,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">零售价</th>
+            <th data-options="field:'unitPrice',width:90,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">单价</th>
+            <th data-options="field:'amountNet',width:90,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">净额</th>
+            <th data-options="field:'amount',width:90,align:'right',editor:{type:'numberbox',options:{required:true}}">数量</th>
+            <th data-options="field:'amountAmt',width:90,align:'right',editor:{type:'numberbox',options:{precision:2,required:true}}">金额</th>
+            <th data-options="field:'code',width:100,editor:'textbox'">条码</th>
+            <th data-options="field:'remarks',width:310,editor:'textbox'">备注</th>
             <th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">操作</th>
-            </tr>
+          </tr>
         </thead>
     </table>
 
@@ -148,8 +128,8 @@
                 index : editIndex,
                 field : 'sId'
             });
-            var sName = $(ed2.target).combobox('getText');
-            $('#dg').datagrid('getRows')[editIndex]['sName'] = sName;
+            //var sName = $(ed2.target).combobox('getText');
+            //$('#dg').datagrid('getRows')[editIndex]['sName'] = sName;
 
             $('#dg').datagrid('endEdit', editIndex);
             editIndex = undefined;

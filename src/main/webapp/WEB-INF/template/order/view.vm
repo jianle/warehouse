@@ -1,151 +1,74 @@
 #set($title="订单信息")
 
 
-<label>订单信息详情</label>
-
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/color.css')">
 <link rel="stylesheet" type="text/css" href="#springUrl('/static/css/order/view.css')">
-<script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
-<script type="text/javascript" src="#springUrl('/static/js/order/view.js')"></script>
+
+<script src="#springUrl('/static/js/order/view.js')"></script>
 <script>
   var contextPath = '#springUrl('')';
 </script>
 
-    <table id="dg" title="订单列表" class="easyui-datagrid" style="width:auto;height:auto"
-           data-options=" singleSelect:true,data:data"
-           toolbar="#toolbar" pagination="true">
-        <thead>
-            <tr>
-              <th field="oId" formatter="jumpDetail" width="60px">ID</th>
-              <th field="documentCode"    width="70px">单据编码</th>
-              <th field="orderCode"       width="70px">订单编码</th>
-              <th field="orderType"       width="70px">订单类型</th>
-              <th field="customerType"    width="70px">客户类型</th>
-              <th field="customerCode"    width="70px">客户编码</th>
-              <th field="customerName"    width="80px">客户姓名</th>
-              <th field="whAdd"           width="100px">出库仓库</th>
-              <th field="transpCostType"  width="85px">运费支付类型</th>
-              <th field="receiveTel"      width="70px">收货电话</th>
-              <th field="receiveAdd"      width="100px">货送地址</th>
-              <th field="userName"        width="70px">制单人</th>
-              <th field="documentDate"    width="80px">制单日期</th>
-              <th field="saleDate"        width="80px">销售日期</th>
-              <th field="company"         width="100px">公司名称</th>
-              <th field="amountTotal"     width="45px">总金额</th>
-              <th field="mtMch"           width="57px">销售机构</th>
-              <th field="accountBalance"  width="57px">账户余额</th>
-              <th field="retailPrice"     width="68px">零售价总额</th>
-              <th field="amountDiscount"  width="58px">折扣金额</th>
-              <th field="amountPayable"   width="58px">应付金额</th>
-              <th field="amountNet"       width="50px">净额</th>
-              <th field="status" formatter="formatterStatus" align="center" width="60px">订单状态</th>
-              <th field="updateTime"      width="130px">最新更新</th>
-            </tr>
-        </thead>
-    </table>
-    <div id="toolbar">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">新增</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">编辑</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroy()">删除</a>
-    </div>
+<br/>
 
-    <div id="dlg" class="easyui-dialog" style="width:880px;height:400px;padding:10px 20px"
-                closed="true" buttons="#dlg-buttons">
-        <div class="ftitle">订单信息</div>
-            <form id="fm" method="post" novalidate>
-                <input name="oId" type="hidden" />
-                <div class="fitem">
-                    <label>单据编号:</label>
-                    <input name="documentCode" class="easyui-textbox">
-                    <label style="padding-left:20px;">制单人:</label>
-                    <input name="userName" id="userName" class="easyui-textbox" value="$session.getAttribute('user').truename" />
-                    <label style="padding-left:20px;">制单日期:</label>
-                    <input name="documentDate" id="documentDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox"/>
-                </div>
-                <div class="fitem">
-                    <label>订单编号:</label>
-                    <input name="orderCode" class="easyui-textbox" />
-                    <label style="padding-left:20px;">销售日期:</label>
-                    <input name="saleDate" id="saleDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" />
-                    <label style="padding-left:20px;">账户余额:</label>
-                    <input name="accountBalance" class="easyui-numberbox" data-options="precision:2" />
-                </div>
-                <div class="fitem">
-                    <label>客户类型:</label>
-                    <input name="customerType" class="easyui-textbox" />
-                    <label style="padding-left:20px;">公司名称:</label>
-                    <input style="width:450px" name="company" class="easyui-textbox">
-                </div>
-                <div class="fitem">
-                    <label>客户编码:</label>
-                    <input name="customerCode" class="easyui-textbox" />
-                    <label style="padding-left:20px;">客户姓名:</label>
-                    <input name="customerName" class="easyui-textbox" />
-                    <label style="padding-left:20px;width:90px">零售价总额:</label>
-                    <input style="width:170px" name="retailPrice" class="easyui-numberbox" data-options="precision:2"/>
-                </div>
-                <div class="fitem">
-                    <label>出库地址:</label>
-                    <input name="whAdd" class="easyui-textbox" />
-                    <label style="padding-left:20px;">订单类型:</label>
-                    <input name="orderType" class="easyui-textbox" />
-                    <label style="padding-left:20px;">折扣金额:</label>
-                    <input name="amountDiscount" class="easyui-numberbox" data-options="precision:2"/>
-                </div>
-                <div class="fitem">
-                    <label>运费支付类型:</label>
-                    <input name="transpCostType" class="easyui-textbox">
-                    <label style="padding-left:20px;">总金额:</label>
-                    <input name="amountTotal"T class="easyui-numberbox" data-options="precision:2"/>
-                    <label style="padding-left:20px;">应付金额:</label>
-                    <input name="amountPayable" class="easyui-numberbox" data-options="precision:2" />
-                </div>
-                <div class="fitem">
-                    <label>收货电话:</label>
-                    <input name="receiveTel" class="easyui-textbox" >
-                    <label style="padding-left:20px;">销售机构:</label>
-                    <input name="mtMch" class="easyui-textbox">
-                    <label style="padding-left:20px;">总净额:</label>
-                    <input name="amountNet" class="easyui-numberbox" data-options="precision:2"/>
-                </div>
-                <div class="fitem">
-                    <label>送货地址:</label>
-                    <input style="width:450px" name="receiveAdd" class="easyui-textbox" />
-                </div>
-            </form>
-      </div>
-      <div id="dlg-buttons">
-          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
-          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-      </div>
+<div class="panel panel-default">
+  <div class="panel-heading"><a href="#" onclick="add()" ><i class="glyphicon glyphicon-plus"></i> 新增订单</a></div>
+  <table class="table table-striped" style="vertical-align: middle!important;">
+    <thead style="table-layout: fixed;">
+      <tr>
+        <th width="60px">明细</th>
+        <th width="100px">客户名称</th>
+        <th width="60px">订单状态</th>
+        <th width="58px">应付金额</th>
+        <th width="80px">制单人</th>
+        <th width="80px">制单日期</th>
+        <th width="80px">查看删除</th>
+      </tr>
+    </thead>
+    <tbody>
+      #foreach( $order in $paginations.getResultList() )
+      <tr id="${order.oId}_tr">
+        <th><a href="#springUrl('/order/detail?oId=')${order.oId}&sId=${order.customerCode}" target="_blank">订单明细</a></th>
+        <td>${suppliers.get($order.customerCode)}</td>
+        <td value="${order.status}">
+            <span class="mini-label 
+                #if(${order.status}==0) mini-label-primary
+                #elseif(${order.status}==1) mini-label-warning 
+                #elseif(${order.status}==2) mini-label-info 
+                #elseif(${order.status}==3) mini-label-danger
+                #elseif(${order.status}==4) mini-label-success 
+                #end">
+                
+            #if(${order.status}==0) 新&nbsp;&nbsp;&nbsp增
+            #elseif(${order.status}==1) 已配货 
+            #elseif(${order.status}==2) 已验货 
+            #elseif(${order.status}==3) 已出库
+            #elseif(${order.status}==4) 已完成 
+            #end
+          </span>
+        </td>
+        <td>${order.amountPayable}</td>
+        <td>${users.get($order.userId)}</td>
+        <td>${order.documentDate}</td>
+        <td>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="edit(${order.oId},'${suppliers.get($order.customerCode)}')"></a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-clear" plain="true" onclick="destroy(${order.oId})"></a>
+        </td>
+      </tr>
+      #end
+    </tbody>
+  </table>
+</div>
 
-      <form name="formPagination" id="formPagination" action="#springUrl('/order/list')" method="POST">
-        <input type="hidden" id="currentPage" name="currentPage" value="" />
-        <input type="hidden" id="numPerPage" name="numPerPage" value="" />
-      </form>
+#parse("order/fm.vm")
+
+<form name="formPagination" id="formPagination" action="#springUrl('/order/list')" method="POST">
+    <input type="hidden" id="currentPage" name="currentPage" value="" />
+    <input type="hidden" id="numPerPage" name="numPerPage" value="" />
+</form>
 
 <script type="text/javascript">
     var curuserName='$session.getAttribute("user").truename';
-    var data=$.parseJSON('${ordersJson}');
-    $(function() {
-       $('#dg').datagrid('getPager')
-         .pagination({
-            total: ${paginations.totalRows},
-            pageSize: ${paginations.numPerPage},//每页显示的记录条数，默认为15
-            pageNumber:${paginations.currentPage},
-            pageList: [10, 15, 20, 25], //可以设置每页记录条数的列表
-            beforePageText: '第 ',//页数文本框前显示的汉字
-            afterPageText: '页    共 {pages} 页',
-            displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
-            onSelectPage: function(pageNumber, pageSize) {
-              console.log('pageNumber:'+pageNumber+' pageSize:'+pageSize);
-              $('#currentPage').val(pageNumber);
-              $('#numPerPage').val(pageSize);
-              document.getElementById('formPagination').submit();//每次更换页面时触发更改
-            }
-       });
-    });
-
 </script>

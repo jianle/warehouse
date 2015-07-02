@@ -193,6 +193,18 @@ public class GoodsController {
         return jsonObject;
     }
     
+    @RequestMapping("getIdMapName")
+    @ResponseBody
+    public JSONArray getIdMapName(
+            @ModelAttribute User user,
+            @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
+        JSONArray jsonObject = new JSONArray();
+        
+        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, user);
+        jsonObject = JSONArray.fromObject(goods);
+        return jsonObject;
+    }
+    
     private Map<Long, String> getSupplierMap(List<Goods> goods) {
         try {
             Set<Long> sIds = new HashSet<Long>();

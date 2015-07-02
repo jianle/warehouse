@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -43,7 +45,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
     public Supplier get(Long id) {
         // 通过Id获取Supplier
         try {
-            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE id=? ";
+            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE s_id=? ";
             return jdbcTemplate.queryForObject(sql, rowMapper, id);
         } catch (Exception e) {
             // TODO: handle exception
@@ -88,6 +90,18 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         }
     }
     
+    public List<Map<String, Object>> findIdMapName(Long userId) {
+        // 通过Id获取Supplier
+        try {
+            String sql = "SELECT s_id sId, name FROM " + TABLE_NAME + " where user_id=?";
+            return jdbcTemplate.queryForList(sql, userId);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("Supplier findIdMapName failed ." + e);
+            return null;
+        }
+    }
+    
     public List<Map<String, Object>> findAllName() {
         // 通过Id获取Supplier
         try {
@@ -98,6 +112,22 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             logger.debug("Supplier findAllName failed ." + e);
             return null;
         }
+    }
+    
+    public Map<Long, String> findIdMapName(String userIds) {
+        try {
+            String sql = "SELECT s_id sId, name sName FROM " + TABLE_NAME ;
+            if (!userIds.equals("")) {
+                sql = sql + " where user_id in " + userIds;
+            } 
+            
+            return jdbcTemplate.query(sql, resultSetExtractor);
+            
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findIdMapName faield. " + e);
+        }
+        return null;
     }
 
     @Override
@@ -112,6 +142,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             return null;
         }
     }
+    
     
     // 通过传入List 返回Map<id, name>
     public Map<Long, String> findBySIdList(Set<Long> sIdsSet){
@@ -282,6 +313,20 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
             supplier.setShortname(rs.getString("shortname"));
             return supplier;
         }
+    };
+    
+    private ResultSetExtractor<Map<Long, String>> resultSetExtractor = new ResultSetExtractor<Map<Long, String>>() {
+        public Map<Long, String> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            Map<Long, String> map = new HashMap<Long, String>();
+            while (rs.next()) {
+                Long id = rs.getLong("sId");
+                String truename = rs.getString("sName");
+                map.put(id, truename);
+            }
+            return map;
+        }
+        
     };
     
 }

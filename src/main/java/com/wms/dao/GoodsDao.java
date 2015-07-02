@@ -220,7 +220,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         // 通过Id获取Supplier
         try {
             String sql;
-            if (sId>0) {
+            if (sId>=0) {
                 sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE user_id=? and s_id=" + sId;
             } else {
                 sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE user_id=?";

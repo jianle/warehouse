@@ -23,6 +23,7 @@
     <script src="#springUrl('/static/js/jquery.bootstrap.js')"></script>
     <script src="#springUrl('/static/js/jquery.validate.js')"></script>
     <script src="#springUrl('/static/js/layout.js')"></script>
+    <script src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
 
   </head>
 

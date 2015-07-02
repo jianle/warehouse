@@ -22,9 +22,9 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
     private Logger logger = LoggerFactory.getLogger(OrderinfoDao.class); 
     
     private static final String TABLE_NAME    = "orderinfo";
-    private static final String INSERT_FIELDS = "document_code, order_code, order_type, customer_type, customer_code, customer_name, wh_add"
-            + ", transp_cost_type, receive_tel, receive_add, user_id, user_name, document_date, sale_date, company, amount_total, mt_mch"
-            + ", account_balance, retail_price, amount_discount, amount_payable, amount_net, status, insert_dt, update_time";
+    private static final String INSERT_FIELDS = "order_code, customer_code, wh_add"
+            + ", transp_cost_type, receive_tel, receive_add, user_id, document_date, amount_total"
+            + ", amount_discount, amount_payable, status, remark, insert_dt, update_time";
     private static final String SELECT_FIELDS = "o_id, " + INSERT_FIELDS ;
     
     @Autowired
@@ -61,31 +61,21 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             int flag = jdbcTemplate.update(sql,
-                    object.getDocumentCode(),
                     object.getOrderCode(),
-                    object.getOrderType(),
                     object.getCustomerCode(),
-                    object.getCustomerType(),
-                    object.getCustomerName(),
                     object.getWhAdd(),
                     object.getTranspCostType(),
                     object.getReceiveTel(),
                     object.getReceiveAdd(),
                     object.getUserId(),
-                    object.getUserName(),
                     object.getDocumentDate(),
-                    object.getSaleDate(),
-                    object.getCompany(),
                     object.getAmountTotal(),
-                    object.getMtMch(),
-                    object.getAccountBalance(),
-                    object.getRetailPrice(),
                     object.getAmountDiscount(),
                     object.getAmountPayable(),
-                    object.getAmountNet(),
                     object.getStatus(),
+                    object.getRemark(),
                     object.getInsertDt(),
                     object.getUpdateTime()
                     );
@@ -118,33 +108,23 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "UPDATE " + TABLE_NAME + " SET "
-                    + "document_code=?, order_code=?, order_type=?, customer_type=?, customer_code=?, customer_name=?, wh_add=?"
-                    + ", transp_cost_type=?, receive_tel=?, receive_add=?, user_name=?, document_date=?, sale_date=?, company=?, amount_total=?, mt_mch=?"
-                    + ", account_balance=?, retail_price=?, amount_discount=?, amount_payable=?, amount_net=? "
+                    + " order_code=?, customer_code=?, wh_add=?"
+                    + ", transp_cost_type=?, receive_tel=?, receive_add=?, document_date=?, amount_total=?"
+                    + ", amount_discount=?, amount_payable=?, remark=? "
                     + " WHERE o_id=?";
                     ;
             int flag = jdbcTemplate.update(sql,
-                    object.getDocumentCode(),
                     object.getOrderCode(),
-                    object.getOrderType(),
                     object.getCustomerCode(),
-                    object.getCustomerType(),
-                    object.getCustomerName(),
                     object.getWhAdd(),
                     object.getTranspCostType(),
                     object.getReceiveTel(),
                     object.getReceiveAdd(),
-                    object.getUserName(),
                     object.getDocumentDate(),
-                    object.getSaleDate(),
-                    object.getCompany(),
                     object.getAmountTotal(),
-                    object.getMtMch(),
-                    object.getAccountBalance(),
-                    object.getRetailPrice(),
                     object.getAmountDiscount(),
                     object.getAmountPayable(),
-                    object.getAmountNet(),
+                    object.getRemark(),
                     object.getoId()
                     );
             return flag > 0;
@@ -219,33 +199,35 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
             // TODO Auto-generated method stub
             Orderinfo orderinfo = new Orderinfo();
             orderinfo.setoId(rs.getLong("o_id"));
-            orderinfo.setDocumentCode(rs.getString("document_code"));
             orderinfo.setOrderCode(rs.getString("order_code"));
-            orderinfo.setOrderType(rs.getString("order_type"));
-            orderinfo.setCustomerCode(rs.getString("customer_code"));
-            orderinfo.setCustomerType(rs.getString("customer_type"));
-            orderinfo.setCustomerName(rs.getString("customer_name"));
+            orderinfo.setCustomerCode(rs.getLong("customer_code"));
             orderinfo.setWhAdd(rs.getString("wh_add"));
             orderinfo.setTranspCostType(rs.getString("transp_cost_type"));
             orderinfo.setReceiveTel(rs.getString("receive_tel"));
             orderinfo.setReceiveAdd(rs.getString("receive_add"));
             orderinfo.setUserId(rs.getLong("user_id"));
-            orderinfo.setUserName(rs.getString("user_name"));
             orderinfo.setDocumentDate(rs.getString("document_date"));
-            orderinfo.setSaleDate(rs.getString("sale_date"));
-            orderinfo.setCompany(rs.getString("company"));
             orderinfo.setAmountTotal(rs.getDouble("amount_total"));
-            orderinfo.setMtMch(rs.getString("mt_mch"));
-            orderinfo.setAccountBalance(rs.getDouble("account_balance"));
-            orderinfo.setRetailPrice(rs.getDouble("retail_price"));
             orderinfo.setAmountDiscount(rs.getDouble("amount_discount"));
             orderinfo.setAmountPayable(rs.getDouble("amount_payable"));
-            orderinfo.setAmountNet(rs.getDouble("amount_net"));
             orderinfo.setStatus(rs.getInt("status"));
+            
+            orderinfo.setRemark(rs.getString("remark"));
             orderinfo.setInsertDt(String.valueOf(rs.getTimestamp("insert_dt")));
             orderinfo.setUpdateTime(String.valueOf(rs.getTimestamp("update_time")));
             
             return orderinfo;
         }
     };
+
+    public List<Map<String, Object>> findCurAlloId(Long id) {
+        try {
+            String sql = "SELECT o_id oId FROM " + TABLE_NAME + " where user_id=?";
+            return jdbcTemplate.queryForList(sql, id);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("findCurAlloId failed." + e);
+            return null;
+        }
+    }
 }

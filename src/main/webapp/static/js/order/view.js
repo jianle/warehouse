@@ -18,9 +18,7 @@ function myparser(s){
     }
 }
 
-function jumpDetail(val,row,index){
-    return '<a href="'+contextPath+'/order/detail?oId='+row.oId+'" target="_blank">查看明细</a>';
-  }
+
 
 // 定义默认当前日期
 var curDate = new Date();
@@ -35,66 +33,67 @@ function add(){
 }
 
 function save(){
-	$('#fm').form('submit',{
-		url: url,
-		onSubmit: function(){
+    
+    $('#fm').form('submit',{
+        url: url,
+        onSubmit: function(){
             return $(this).form('validate');
         },
         dataType:'json',
         success: function(data){
-        	var result = eval('('+data+')');
+            var result = eval('('+data+')');
             if (result){
-            	$('#dlg').dialog('close');       // close the dialog
+                $('#dlg').dialog('close');       // close the dialog
                 $('#dg').datagrid('reload');     // reload the user data
                 $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
-					console.log('ok');
-					window.location.href=contextPath + '/order';
+                    console.log('ok');
+                    window.location.href=contextPath + '/order';
                 });
             } else {
-            	$.messager.show({
+                $.messager.show({
                     title: '提示信息',
                     msg: '操作失败'
                 });
             }
         }
-	});
+    });
          
 }
 
-function edit(){
-    var row = $('#dg').datagrid('getSelected');
-    if (row){
-    	console.log(row);
-        $('#dlg').dialog('open').dialog('setTitle','修改订单');
-        $('#fm').form('clear');
-        $('#fm').form('load',row);
+function edit(Id, name){
+    var _formLoadData;
+    
+    $.getJSON(contextPath+"/order/getOrderInfo", {o_id:Id}, function(data, status){
+        _formLoadData = data;
+        console.log(data);
+        $('#fm').form('load',data);
+        $('#customerName').combobox("setValue", name);
         url = contextPath + '/order/update';
-    }
+        $('#dlg').dialog('open').dialog('setTitle','编辑');
+    });
+    
 }
 
-function destroy(){
-    var row = $('#dg').datagrid('getSelected');
-    if (row){
-        $.messager.confirm('提示','确认是否要删除?',function(r){
-            if (r){
-                $.post(contextPath+'/order/delete',{oId:row.oId},function(data){
-                	var result = eval('('+data+')');
-                    if (result){
-                    	$.messager.show({    // show error message
-                            title: '提示',
-                            msg: '删除成功，请刷新查看！'
-                        });
-                        //$('#dg').datagrid('reload');    // reload the user data
-                    } else {
-                        $.messager.show({    // show error message
-                            title: '提示',
-                            msg: '删除失败'
-                        });
-                    }
-                },'json');
-            }
-        });
-    }
+function destroy(Id){
+    $.messager.confirm('提示','确认是否要删除?',function(r){
+        if (r){
+            $.post(contextPath+'/order/delete',{oId:Id},function(data){
+                var result = eval('('+data+')');
+                if (result){
+                    $.messager.show({    // show error message
+                        title: '提示',
+                        msg: '删除成功，请刷新查看！'
+                    });
+                    //$('#dg').datagrid('reload');    // reload the user data
+                } else {
+                    $.messager.show({    // show error message
+                        title: '提示',
+                        msg: '删除失败'
+                    });
+                }
+            },'json');
+        }
+    });
 }
 
 var statusType= new Array();
@@ -115,7 +114,7 @@ statusType[4]="已完成";
 cssType[4]="mini-label-success";
 
 function formatterStatus(val,row,index){
-	return '<font color="red" class="mini-label '+ cssType[val] +'">' + statusType[val] + '</font>';
+    return '<font color="red" class="mini-label '+ cssType[val] +'">' + statusType[val] + '</font>';
 }
 
 
