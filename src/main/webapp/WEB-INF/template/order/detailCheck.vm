@@ -1,0 +1,84 @@
+#set($title="订单验货")
+
+
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/color.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/css/order/view.css')">
+
+<script src="#springUrl('/static/js/order/detailCheck.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<div>
+<form class="form-horizontal" id="formoId" action="#springUrl('/order/detailCheck/')" style="padding-top:10px;">
+ <div class="row">
+    <label class="control-label" style="padding-left:15px;float:left" >订单编号：</label>
+    <label for="oId" class="control-label" style="padding-left:0px;float:left" >
+        <input name="oId" id="oId" value="$curoId" style="width:80px" />
+    </label>
+     <label class="control-label" style="padding-left:30px;float:left" >制单人：</label>
+     <label class="control-label" style="float:left" ><code>${users.get($orderInfo.userId)}</code></label>
+     <label class="control-label" style="padding-left:30px;float:left" >客户名称：</label>
+     <label class="control-label" style="float:left" ><code>${supplier.name}</code></label>
+     
+     <label class="control-label" style="padding-left:30px;float:left" >扫描/输入条形码：</label>
+     <label class="control-label" style="float:left" >
+        <input name="checkCode" id="checkCode" value="" style="width:130px" class="easyui-numberbox" />
+     </label>
+   </div>
+ </form>
+</div>
+ <hr/>
+
+<div class="panel panel-default">
+  <div class="panel-heading">订单验货</div>
+  <table class="table table-striped" style="vertical-align: middle!important;">
+    <thead style="table-layout: fixed;">
+      <tr>
+        <th width="60px">商品名称</th>
+        <th width="100px">商品数量</th>
+        <th width="60px">金额</th>
+        <th width="58px">条码</th>
+        <th width="60px">已验数量</th>
+        <th width="40px">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      #foreach( $orderDetail in $orderDetails )<tr id="${orderDetail.odId}_tr">
+        <td>${orderDetail.gName}</td>
+        <td>${orderDetail.amount}</td>
+        <td>${orderDetail.amountNet}</td>
+        <td id="${goodCodeMap.get($orderDetail.gId)}_scode">${goodCodeMap.get($orderDetail.gId)}</td>
+        <td id="${goodCodeMap.get($orderDetail.gId)}_checked">0</td>
+        <td ><a href="javascript:editChecheds(${goodCodeMap.get($orderDetail.gId)})">修改</a></td>
+      </tr>
+    #end</tbody>
+  </table>
+</div>
+    
+    <div id="editChecheds" class="easyui-dialog" style="width:280px;height:190px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">修改数量</div>
+            <form id="modalFormVer" method="post" style="margin-top:20px" novalidate>
+                <div class="fitem">
+                    <label style="padding-left:-5px;">已验数量:</label>
+                    <input id="tmpCheckeds" style="width:110px" class="easyui-numberbox" required="true" />
+                </div>
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="editSubmit()" style="width:90px">修改</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#editChecheds').dialog('close')" style="width:90px">取消</a>
+      </div>
+<script>
+  $('#oId').combobox({
+      valueField: 'oId',
+      textField: 'oId',
+      url: contextPath+'/order/detail/getCurAlloId',
+      onChange: function(rec){
+          document.getElementById('formoId').submit();
+      }
+  });
+</script>

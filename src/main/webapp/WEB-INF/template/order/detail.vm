@@ -56,9 +56,14 @@
                                 valueField:'gId',
                                 textField:'gName',
                                 url:contextPath + '/goods/getIdMapName?sId=${cursId}',
-                                required:true
-                            }
-                        }">产品名称</th>
+                                required:true,
+                                onSelect: function(row){
+                                    $('#dg').datagrid('getSelected')['code'] = row.scode;
+                                }
+                            },
+                            
+                        },
+                        ">产品名称</th>
             <th data-options="field:'retailPrice',width:90,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">零售价</th>
             <th data-options="field:'unitPrice',width:90,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">单价</th>
             <th data-options="field:'amountNet',width:90,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">净额</th>

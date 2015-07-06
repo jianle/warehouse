@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wms.dao.GoodsDao;
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
 import com.wms.dao.StorageDao;
@@ -55,6 +56,8 @@ public class OrderController {
     private UserDao userDao;
     @Autowired
     private SupplierDao supplierDao;
+    @Autowired
+    private GoodsDao goodDao;
     
     @RequestMapping(value={"", "list"})
     public ModelAndView list(
@@ -302,6 +305,46 @@ public class OrderController {
         }
         jsonTuple.put("value", result);
         return String.valueOf(result);
+    }
+    
+    //验货功能块
+    
+    @RequestMapping(value = "detailCheck", method = RequestMethod.GET)
+    public ModelAndView detailCheck(
+            @ModelAttribute User user,
+            @RequestParam(value="oId", defaultValue="1") Long oId,
+            @RequestParam(value="sId", defaultValue="0") Long sId) {
+        ModelAndView modelView = new ModelAndView();
+        modelView.setViewName("/order/detailCheck");
+        logger.info("RequestMapping :/order/detailCheck");
+        modelView.addObject("curoId", oId);
+        
+        Orderinfo orderInfo = orderinfoDao.get(oId);
+        modelView.addObject("orderInfo", orderInfo);
+        
+        List<Map<String, Object>> orderDetails = orderDetailDao.findByOId(oId);
+        modelView.addObject("orderDetails", orderDetails);
+        
+        if (orderInfo == null) {
+            orderInfo = new Orderinfo();
+        }
+        if (sId == 0) {
+            sId = orderInfo.getCustomerCode();
+        }
+        logger.info("sId:" + orderInfo.getCustomerCode());
+        Supplier supplier = supplierDao.get(orderInfo.getCustomerCode());
+        modelView.addObject("cursId", supplier.getsId());
+        modelView.addObject("supplier", supplier);
+        
+        Map<Long, String> goodCodeMap = goodDao.findAllIdAndCode(orderInfo.getCustomerCode(), user);
+        logger.info(goodCodeMap.toString());
+        
+        modelView.addObject("goodCodeMap", goodCodeMap);
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        modelView.addObject("users", users);
+        
+        return modelView;
     }
 
 }

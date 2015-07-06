@@ -2,6 +2,7 @@ package com.wms.dao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
@@ -221,12 +224,30 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         try {
             String sql;
             if (sId>=0) {
-                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE user_id=? and s_id=" + sId;
+                sql = "SELECT g_id as gId, name as gName, scode FROM " + TABLE_NAME + " WHERE user_id=? and s_id=" + sId;
             } else {
-                sql = "SELECT g_id as gId, name as gName FROM " + TABLE_NAME + " WHERE user_id=?";
+                sql = "SELECT g_id as gId, name as gName, scode FROM " + TABLE_NAME + " WHERE user_id=?";
             }
             logger.info(sql);
             return jdbcTemplate.queryForList(sql,user.getId());
+        } catch (Exception e) {
+            // TODO: handle exception
+            return null;
+        }
+    }
+    
+    
+    public Map<Long, String> findAllIdAndCode(Long sId, User user) {
+        // 通过Id获取Supplier
+        try {
+            String sql;
+            if (sId>=0) {
+                sql = "SELECT g_id as gId, scode FROM " + TABLE_NAME + " WHERE user_id="+ user.getId() +" and s_id=" + sId;
+            } else {
+                sql = "SELECT g_id as gId, scode FROM " + TABLE_NAME + " WHERE user_id=" + user.getId();
+            }
+            logger.info(sql);
+            return jdbcTemplate.query(sql, resultSetExtractor);
         } catch (Exception e) {
             // TODO: handle exception
             return null;
@@ -259,6 +280,20 @@ public class GoodsDao implements BaseDao<Goods, Long> {
 
             return goods;
         }
+    };
+    
+    private ResultSetExtractor<Map<Long, String>> resultSetExtractor = new ResultSetExtractor<Map<Long, String>>() {
+        public Map<Long, String> extractData(ResultSet rs) throws SQLException,
+                DataAccessException {
+            Map<Long, String> map = new HashMap<Long, String>();
+            while (rs.next()) {
+                Long id = rs.getLong("gId");
+                String truename = rs.getString("scode");
+                map.put(id, truename);
+            }
+            return map;
+        }
+        
     };
 
 }

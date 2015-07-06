@@ -24,14 +24,22 @@ public class OrderDetail implements Serializable {
     private Double unitPrice;
     private Double amountNet;
     private Integer amount;
+    private Integer amountChecked;
     private Double amountAmt;
     private String code;
     private String remarks;
+    
     
     @Column(updatable=false)
     private String insertDt;
     private String updateTime;
     
+    public void setAmountChecked(Integer amountChecked) {
+        this.amountChecked = amountChecked;
+    }
+    public Integer getAmountChecked() {
+        return amountChecked;
+    }
     public Long getOdId() {
         return odId;
     }

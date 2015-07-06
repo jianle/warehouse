@@ -167,6 +167,9 @@ CREATE TABLE `order_detail` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表明细'
 ;
 
+alter table `order_detail` ADD COLUMN `amount_checked` int(8) DEFAULT 0 COMMENT '已验货数量' AFTER `amount`;
+
+
 CREATE TABLE `delivery` (
   `d_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
   `o_id` bigint(20) NOT NULL default 0 comment '订单id',

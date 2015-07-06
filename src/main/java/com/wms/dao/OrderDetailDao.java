@@ -114,12 +114,10 @@ public class OrderDetailDao implements BaseDao<OrderDetail, Long> {
     
     public List<Map<String, Object>> findByOId(Long oId){
         try {
-            String sql = "SELECT a.od_id odId, a.o_id oId, a.g_id gId, b.s_id sId, c.name sName, a.g_name gName, retail_price retailPrice"
+            String sql = "SELECT a.od_id odId, a.o_id oId, a.g_id gId, a.g_name gName, retail_price retailPrice"
                     + ", unit_price unitPrice, amount_net amountNet, a.amount amount"
                     + ", amount_amt amountAmt, a.code, a.remarks" 
                     + " FROM " + TABLE_NAME + " a"
-                    + " JOIN goods b on (a.g_id=b.g_id)"
-                    + " JOIN supplier c on (b.s_id=c.s_id)"
                     + " WHERE a.o_id=? ";
             logger.info(sql);
             return jdbcTemplate.queryForList(sql, oId);
