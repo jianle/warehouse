@@ -324,16 +324,15 @@ public class OrderController {
         
         List<Map<String, Object>> orderDetails = orderDetailDao.findByOId(oId);
         modelView.addObject("orderDetails", orderDetails);
-        
+        modelView.addObject("cursId", sId);
         if (orderInfo == null) {
-            orderInfo = new Orderinfo();
+            return modelView;
         }
         if (sId == 0) {
             sId = orderInfo.getCustomerCode();
         }
-        logger.info("sId:" + orderInfo.getCustomerCode());
+        logger.info("orderInfo:" + orderInfo.toString());
         Supplier supplier = supplierDao.get(orderInfo.getCustomerCode());
-        modelView.addObject("cursId", supplier.getsId());
         modelView.addObject("supplier", supplier);
         
         Map<Long, String> goodCodeMap = goodDao.findAllIdAndCode(orderInfo.getCustomerCode(), user);
@@ -345,6 +344,27 @@ public class OrderController {
         modelView.addObject("users", users);
         
         return modelView;
+    }
+    
+    @RequestMapping("updateStatus")
+    @ResponseBody
+    public JSONObject updateStatus(
+            @RequestParam(value="status") Integer status,
+            @RequestParam(value="oId") Long oId) {
+        logger.info("update oId:" + oId + " status to:" + status);
+        JSONObject jsonTuple = new JSONObject();
+        boolean result = false;
+        try {
+            if (orderinfoDao.update(status, oId)) {//Integer.valueOf(status), Long.valueOf(oId)
+                result = true;
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        
+        jsonTuple.put("value", result);
+        return jsonTuple;
     }
 
 }

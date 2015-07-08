@@ -15,19 +15,34 @@
 <form class="form-horizontal" id="formoId" action="#springUrl('/order/detailCheck/')" style="padding-top:10px;">
  <div class="row">
     <label class="control-label" style="padding-left:15px;float:left" >订单编号：</label>
-    <label for="oId" class="control-label" style="padding-left:0px;float:left" >
+    <label for="oId" class="control-label" style="padding-left:0px;padding-right:30px;float:left" >
         <input name="oId" id="oId" value="$curoId" style="width:80px" />
     </label>
-     <label class="control-label" style="padding-left:30px;float:left" >制单人：</label>
-     <label class="control-label" style="float:left" ><code>${users.get($orderInfo.userId)}</code></label>
-     <label class="control-label" style="padding-left:30px;float:left" >客户名称：</label>
-     <label class="control-label" style="float:left" ><code>${supplier.name}</code></label>
-     
-     <label class="control-label" style="padding-left:30px;float:left" >扫描/输入条形码：</label>
-     <label class="control-label" style="float:left" >
+    <div class="control-label" style="float:left">
+        <a id="btnSearch" href="#" style="height:22px;float:left" class="easyui-linkbutton" data-options="iconCls:'icon-search'">查询</a>
+    </div>
+    
+    <label class="control-label" style="padding-left:30px;float:left" >制单人：</label>
+    <label class="control-label" style="float:left" >
+        <code>#if(${users.get($orderInfo.userId)})${users.get($orderInfo.userId)}#else--#end</code>
+    </label>
+    <label class="control-label" style="padding-left:30px;float:left" >客户名称：</label>
+    <label class="control-label" style="float:left" >
+        <code>#if(${supplier.name})${supplier.name}#else--#end</code>
+    </label>
+    
+    <label class="control-label" style="padding-left:30px;float:left" >扫描/输入条形码：</label>
+    <label class="control-label" style="float:left" >
         <input name="checkCode" id="checkCode" value="" style="width:130px" class="easyui-numberbox" />
-     </label>
-   </div>
+    </label>
+    
+    <div class="control-label" style="padding-left:30px;float:left">
+        <a id="confimChecked" href="javascript:confirmChecked($orderInfo.oId)" style="height:22px;width:80px;float:left"
+            #if(${orderInfo.status}==2)disabled="true"#end
+            class="easyui-linkbutton" data-options="iconCls:'icon-search'">确认验货</a>
+    </div>
+    
+  </div>
  </form>
 </div>
  <hr/>
@@ -42,7 +57,7 @@
         <th width="60px">金额</th>
         <th width="58px">条码</th>
         <th width="60px">已验数量</th>
-        <th width="40px">操作</th>
+        <th width="40px">ok</th>
       </tr>
     </thead>
     <tbody>
@@ -51,8 +66,31 @@
         <td>${orderDetail.amount}</td>
         <td>${orderDetail.amountNet}</td>
         <td id="${goodCodeMap.get($orderDetail.gId)}_scode">${goodCodeMap.get($orderDetail.gId)}</td>
-        <td id="${goodCodeMap.get($orderDetail.gId)}_checked">0</td>
-        <td ><a href="javascript:editChecheds(${goodCodeMap.get($orderDetail.gId)})">修改</a></td>
+        <td style="color: #c7254e;">
+            <input id="${goodCodeMap.get($orderDetail.gId)}_checked" value="#if(${orderInfo.status}==2)${orderDetail.amount}#else 0#end" style="width:60px" 
+                #if(${orderInfo.status}==2)disabled="true"#end
+                class="easyui-numberbox"
+                data-options="onChange(n,o){
+                    var flagId = this.id;
+                    var checkBoxId = flagId.replace('checked','checkbox');
+                    var parTh = $(this).parent().parent();
+                    var flag=${orderDetail.amount};
+                    //var flag = parTh.children('td')[1].innerHTML;
+                    if(flag==n){
+                      $('#'+checkBoxId).prop('checked',true);
+                    } else {
+                      $('#'+checkBoxId).prop('checked',false);
+                    }
+                }" />
+        </td>
+        <!-- <td ><a href="javascript:editChecheds(${goodCodeMap.get($orderDetail.gId)})">修改</a></td> -->
+        <td>
+          <div class="checkbox" style="margin-top:0px;margin-bottom:0px">
+           <label>
+             <input type="checkbox" id="${goodCodeMap.get($orderDetail.gId)}_checkbox" name="okchecked" #if(${orderInfo.status}==2)checked="checked"#end>
+           </label>
+          </div>
+        </td>
       </tr>
     #end</tbody>
   </table>
@@ -81,4 +119,11 @@
           document.getElementById('formoId').submit();
       }
   });
+  
+  $(function(){
+    $('#btnSearch').bind('click', function(){
+        document.getElementById('formoId').submit();
+    });
+  });
+  
 </script>
