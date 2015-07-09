@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.EnterDao;
@@ -31,6 +32,7 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/enter")
+@SessionAttributes("user")
 public class EnterController {
     
     private Logger logger = LoggerFactory.getLogger(EnterController.class);
@@ -60,14 +62,15 @@ public class EnterController {
     
     @RequestMapping("list")
     public ModelAndView list(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
-            @RequestParam(value="numPerPage", defaultValue="10") int numPerPage
+            @RequestParam(value="numPerPage", defaultValue="10") int numPerPage,
+            @ModelAttribute User user
             ) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/enter/list");
         
         logger.info("RequestMapping :/enter/list");
         // 获取分页数据
-        Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage, numPerPage);
+        Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage, numPerPage, user.getId());
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(paginationEnters.getResultList());
         
@@ -108,8 +111,10 @@ public class EnterController {
     
     @RequestMapping("save")
     @ResponseBody
-    public JSONObject save(@ModelAttribute Enter enter, HttpServletRequest request) {
-        User user = (User) request.getSession().getAttribute("user");
+    public JSONObject save(@ModelAttribute Enter enter
+            , @ModelAttribute User user
+            , HttpServletRequest request) {
+        
         enter.setInsertDt(new Timestamp(System.currentTimeMillis()));
         enter.setUserId(user.getId());
         enter.setUserName(user.getTruename());

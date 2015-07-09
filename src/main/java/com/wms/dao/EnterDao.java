@@ -116,16 +116,16 @@ public class EnterDao implements BaseDao<Enter, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Enter> findByCurrentPage(int currentPage,int numPerPage) {
+    public Pagination<Enter> findByCurrentPage(int currentPage,int numPerPage, Long userId) {
         //分页显示
         List<Enter> enters;
         
-        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
+        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " where user_id=" + userId);
         sqlBuf.append(" ORDER BY e_id DESC ");
         
         try {
             //定义并执行SQL
-            String sqlTotal = "SELECT count(1) FROM " + TABLE_NAME;
+            String sqlTotal = sqlBuf.toString().replace(SELECT_FIELDS, "count(1)");
             int totalRows = jdbcTemplate.queryForInt(sqlTotal);
             
             Pagination<Enter> entersPagination = new Pagination<Enter>(totalRows, currentPage, numPerPage);

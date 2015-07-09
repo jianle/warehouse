@@ -19,12 +19,19 @@ public class Storage implements Serializable {
     private Long chests;
     private Long boxes;
     private Long amount;
+    private Long userId;
     private String remarks;
     
     @Column(updatable=false)
     private Timestamp insertDt;
     private Timestamp updateTime;
     
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+    public Long getUserId() {
+        return userId;
+    }
     public Long getgId() {
         return gId;
     }

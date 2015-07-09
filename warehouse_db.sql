@@ -58,7 +58,7 @@ CREATE TABLE supplier(
 
 
 alter table supplier ADD COLUMN `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户ID' AFTER `mbcode`;
-
+alter table supplier add index `user_id_idx` (user_id);
 
 CREATE TABLE `enter` (
   `e_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自增id',
@@ -77,6 +77,9 @@ CREATE TABLE `enter` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '商品入库表'
 ;
 
+alter table enter add index `user_id_idx` (user_id);
+
+
 CREATE TABLE `storage` (
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
   `s_id` bigint(20) NOT NULL default 0 comment '供应商id',
@@ -90,6 +93,9 @@ CREATE TABLE `storage` (
   PRIMARY KEY (`g_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '库存表'
 ;
+
+alter table `storage` ADD COLUMN `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户ID' AFTER `amount`;
+alter table storage add index `user_id_idx` (user_id);
 
 
 CREATE TABLE `orderinfo` (
@@ -146,7 +152,7 @@ CREATE TABLE `orderinfo` (
 ;
 
 alter table `orderinfo` ADD COLUMN `remark` varchar(1000) DEFAULT '' COMMENT '备注' AFTER `status`;
-
+alter table orderinfo add index `user_id_idx` (user_id);
 
 CREATE TABLE `order_detail` (
   `od_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',

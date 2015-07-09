@@ -61,5 +61,7 @@ function confirmChecked(oId){
                 $.messager.alert("提示", "验货失败");
             }
         });
+    } else {
+        $.messager.alert("提示", "数量合不上，请仔细检查");
     }
 }

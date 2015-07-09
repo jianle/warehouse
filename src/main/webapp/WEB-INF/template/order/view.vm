@@ -13,6 +13,26 @@
 
 <br/>
 
+<div class="row pull-right" style="padding-right:430px;margin-top: -15px;margin-left:0px">
+  <div class="easyui-pagination"
+  style="border:1px solid #000;background:white;position:fixed;"
+  data-options="
+  total: ${paginations.totalRows},
+  pageSize: ${paginations.numPerPage},
+  pageNumber:${paginations.currentPage},
+  pageList: [15,20,30,50],//可以设置每页记录条数的列表
+  beforePageText: '第 ',//页数文本框前显示的汉字
+  afterPageText: '页    共 {pages} 页',
+  displayMsg: '显示 {from} - {to}   共 {total} 条',
+  onSelectPage: function(pageNumber, pageSize){
+    $('#currentPage').val(pageNumber);
+    $('#numPerPage').val(pageSize);
+    document.getElementById('formPagination').submit();
+  }">
+ </div>
+</div>
+
+
 <div class="panel panel-default">
   <div class="panel-heading"><a href="#" onclick="add()" ><i class="glyphicon glyphicon-plus"></i> 新增订单</a></div>
   <table class="table table-striped" style="vertical-align: middle!important;">
@@ -64,7 +84,7 @@
 
 #parse("order/fm.vm")
 
-<form name="formPagination" id="formPagination" action="#springUrl('/order/list')" method="POST">
+<form name="formPagination" id="formPagination" action="#springUrl('/order/search')" method="GET">
     <input type="hidden" id="currentPage" name="currentPage" value="" />
     <input type="hidden" id="numPerPage" name="numPerPage" value="" />
 </form>

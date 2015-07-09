@@ -25,7 +25,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
     private Logger logger = LoggerFactory.getLogger(StorageDao.class);
     
     private static final String TABLE_NAME    = "storage";
-    private static final String INSERT_FIELDS = "g_id, s_id, g_name, chests, boxes, amount, remarks, insert_dt";
+    private static final String INSERT_FIELDS = "g_id, s_id, g_name, chests, boxes, amount, user_id, remarks, insert_dt";
     private static final String SELECT_FIELDS = INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -50,7 +50,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
         try {
             
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, 
                     object.getgId(),
@@ -59,6 +59,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
                     object.getChests(),
                     object.getBoxes(),
                     object.getAmount(),
+                    object.getUserId(),
                     object.getRemarks(),
                     object.getInsertDt());
             return true;
@@ -73,7 +74,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
         try {
             
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, 
                     object.getgId(),
@@ -82,6 +83,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
                     object.getChests(),
                     object.getBoxes(),
                     object.getAmount(),
+                    object.getUserId(),
                     object.getRemarks(),
                     object.getInsertDt());
             return true;
@@ -234,7 +236,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
     
     
     @SuppressWarnings("deprecation")
-    public Pagination<Storage> findByCurrentPage(String gName, int currentPage,int numPerPage) {
+    public Pagination<Storage> findByCurrentPage(String gName, int currentPage,int numPerPage, String userIds) {
         //分页显示
         List<Storage> storages;
         
@@ -242,6 +244,14 @@ public class StorageDao implements BaseDao<Storage, Long> {
         String isWhere = "";
         if (gName != null && !"".equals(gName.trim())) {
             isWhere = " WHERE g_name LIKE '%" + gName + "%'";
+        }
+        
+        if (userIds != null && !"".equals(userIds.trim())) {
+            if (isWhere.isEmpty()) {
+                isWhere = " where user_id in " + userIds;
+            } else {
+                isWhere = isWhere + " and user_id in " + userIds;
+            }
         }
         
         sqlBuf.append(isWhere);
@@ -282,6 +292,7 @@ public class StorageDao implements BaseDao<Storage, Long> {
             storage.setChests(rs.getLong("chests"));
             storage.setBoxes(rs.getLong("boxes"));
             storage.setAmount(rs.getLong("amount"));
+            storage.setUserId(rs.getLong("user_id"));
             storage.setRemarks(rs.getString("remarks"));
             storage.setInsertDt(rs.getTimestamp("insert_dt"));
             storage.setUpdateTime(rs.getTimestamp("update_time"));

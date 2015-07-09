@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.util.UserDenied;
 import com.wms.dao.GoodsDao;
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
@@ -69,17 +70,19 @@ public class OrderController {
         modelView.setViewName("/order/view");
         
         logger.info("RequestMapping :/order/view");
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String userIds = UserDenied.getUserIds(users, user.getRole());
+        
         // 获取分页数据
-        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage);
+        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage, userIds);
         
         modelView.addObject("paginations", paginations);
         modelView.addObject("ordersJson", JSONArray.fromObject(paginations.getResultList()));
-        String userIds = "(" + user.getId() + ")";
         Map<Long, String> suppliers = supplierDao.findIdMapName(userIds);
         logger.info(suppliers.toString());
         modelView.addObject("suppliers", suppliers);
         
-        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
         modelView.addObject("users", users);
         
         return modelView;
@@ -87,21 +90,30 @@ public class OrderController {
     }
     
     @RequestMapping("search")
-    @ResponseBody
-    public JSONArray search(
+    public ModelAndView search(
             @ModelAttribute User user,
             @RequestParam(value="currentPage", defaultValue="1") int currentPage,
             @RequestParam(value="numPerPage", defaultValue="15") int numPerPage
             ) {
         
-        logger.info("RequestMapping :/order/search");
-        // 获取分页数据
-        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage);
-        List<Orderinfo> orderinfos = paginations.getResultList();
+        ModelAndView modelView = new ModelAndView();
+        modelView.setViewName("/order/view");
         
-        JSONArray result = new JSONArray();
-        result = JSONArray.fromObject(orderinfos);
-        return result;
+        logger.info("RequestMapping :/order/search");
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String userIds = UserDenied.getUserIds(users, user.getRole());
+        // 获取分页数据
+        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage, userIds);
+        
+        modelView.addObject("paginations", paginations);
+        modelView.addObject("ordersJson", JSONArray.fromObject(paginations.getResultList()));
+        Map<Long, String> suppliers = supplierDao.findIdMapName(userIds);
+        logger.info(suppliers.toString());
+        modelView.addObject("suppliers", suppliers);
+        
+        modelView.addObject("users", users);
+        
+        return modelView;
         
     }
     

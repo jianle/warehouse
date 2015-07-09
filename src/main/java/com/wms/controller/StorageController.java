@@ -16,16 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.util.UserDenied;
 import com.wms.dao.EnterDao;
 import com.wms.dao.StorageDao;
 import com.wms.dao.SupplierDao;
+import com.wms.dao.UserDao;
 import com.wms.model.Pagination;
 import com.wms.model.Storage;
+import com.wms.model.User;
 
 @Controller
 @RequestMapping("/storage")
+@SessionAttributes("user")
 public class StorageController {
     
     private Logger logger = LoggerFactory.getLogger(StorageController.class);
@@ -38,17 +43,22 @@ public class StorageController {
     
     @Autowired
     private SupplierDao supplierDao;
+    @Autowired
+    private UserDao userDao;
     
     @RequestMapping(value={"","list"}, method = RequestMethod.GET)
-    public ModelAndView index() {
+    public ModelAndView index(@ModelAttribute User user) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/storage/list");
         String gName = "";
         int currentPage = 1;
         int numPerPage = 10;
         
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String userIds = UserDenied.getUserIds(users, user.getRole());
+        
         // 获取分页数据
-        Pagination<Storage> pagination = storageDao.findByCurrentPage(gName, currentPage, numPerPage);
+        Pagination<Storage> pagination = storageDao.findByCurrentPage(gName, currentPage, numPerPage, userIds);
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(pagination.getResultList());
         
@@ -56,6 +66,7 @@ public class StorageController {
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("gName", gName);
+        modelView.addObject("users", users);
         
         
         logger.info("RequestMapping :/storage/list");
@@ -65,15 +76,19 @@ public class StorageController {
     
     @RequestMapping("list")
     public ModelAndView list(@RequestParam(value="gName", defaultValue="") String gName,
+            @ModelAttribute User user,
             @RequestParam(value="currentPage", defaultValue="1") int currentPage,
             @RequestParam(value="numPerPage", defaultValue="10") int numPerPage
             ) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/storage/list");
         
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String userIds = UserDenied.getUserIds(users, user.getRole());
+        
         logger.info("RequestMapping :/storage/list");
         // 获取分页数据
-        Pagination<Storage> pagination = storageDao.findByCurrentPage(gName, currentPage, numPerPage);
+        Pagination<Storage> pagination = storageDao.findByCurrentPage(gName, currentPage, numPerPage, userIds);
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(pagination.getResultList());
         
@@ -81,6 +96,7 @@ public class StorageController {
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("gName", gName);
+        modelView.addObject("users", users);
         
         return modelView;
         

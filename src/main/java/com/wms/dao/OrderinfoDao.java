@@ -163,16 +163,19 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Orderinfo> findByCurrentPage(int currentPage,int numPerPage) {
+    public Pagination<Orderinfo> findByCurrentPage(int currentPage,int numPerPage, String userIds) {
         //分页显示
         List<Orderinfo> orderinfos;
         
         StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME);
+        if (userIds != null && !"".equals(userIds)) {
+            sqlBuf.append(" where user_id in " + userIds);
+        }
         sqlBuf.append(" ORDER BY o_id DESC ");
         
         try {
             //定义并执行SQL
-            String sqlTotal = "SELECT count(1) FROM " + TABLE_NAME;
+            String sqlTotal = sqlBuf.toString().replace(SELECT_FIELDS, "count(1)");
             int totalRows = jdbcTemplate.queryForInt(sqlTotal);
             
             Pagination<Orderinfo> paginations = new Pagination<Orderinfo>(totalRows, currentPage, numPerPage);
