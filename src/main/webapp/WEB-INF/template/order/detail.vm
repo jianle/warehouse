@@ -10,6 +10,7 @@
 </script>
 <div>
 <form class="form-horizontal" id="formoId" action="#springUrl('/order/detail/')" style="padding-top:10px;">
+ <div class="filter-bar-smll" >
  <div class="row">
     <label class="control-label" style="padding-left:15px;float:left" >订单编号：</label>
     <label for="oId" class="control-label" style="padding-left:0px;float:left" >
@@ -39,7 +40,12 @@
      <label class="control-label" style="float:left" ><code>${users.get($orderInfo.userId)}</code></label>
      <label class="control-label" style="padding-left:30px;float:left" >客户名称：</label>
      <label class="control-label" style="float:left" ><code>${supplier.name}</code></label>
+     <div class="control-label" style="padding-left:30px;float:left">
+        <a id="confimChecked" href="#springUrl('/order/detailCheck?oId=')$orderInfo.oId" style="height:22px;width:80px;float:left"
+            class="easyui-linkbutton" data-options="iconCls:'icon-search'">点击验货</a>
+    </div>
    </div>
+  </div>
  </form>
 </div>
  <hr/>

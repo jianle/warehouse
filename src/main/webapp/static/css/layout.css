@@ -19,6 +19,13 @@
     border-radius: 5px;
 }
 
+.filter-bar-smll {
+    height: 37px;
+    padding: 0 15px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
 .filter-title {
     float: left;
     margin-right: 5px;
