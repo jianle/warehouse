@@ -16,7 +16,7 @@ public class UtilsDes{
     private final static String ALGORITHM = "DES";  
     
     public static void main(String[] args) throws Exception {  
-        String md5Password = "1010311122";  
+        String md5Password = "admin123";  
         String str = UtilsDes.encrypt(md5Password);  
         System.out.println("str: " + str + " len:"+ str.length());  
         str = UtilsDes.decrypt(str);  
