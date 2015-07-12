@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 
 import com.wms.model.Goods;
 import com.wms.model.Pagination;
-import com.wms.model.User;
 
 /*
  * 商品操作实体
@@ -204,48 +203,74 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
     }
     
-    public List<Map<String, Object>> findSuggestAll(User user) {
+    public List<Map<String, Object>> findSuggestAll(String userIds) {
         // 通过Id获取Supplier
         try {
+            String isWhere = "";
+            if (userIds != null && !"".equals(userIds)) {
+                isWhere = " where a.user_id in " + userIds;
+            }
             String sql = "SELECT a.g_id as gid, a.s_id as sid, a.name as gname, b.name as sname"
                     + " , boxes, amount FROM " + TABLE_NAME 
                     + " a join supplier b on a.s_id=b.s_id"
-                    + " where a.user_id=?";
+                    + isWhere;
             logger.info(sql);
-            return jdbcTemplate.queryForList(sql, user.getId());
+            return jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
             // TODO: handle exception
             return null;
         }
     }
     
-    public List<Map<String, Object>> findAllIdAndName(Long sId, User user) {
+    public List<Map<String, Object>> findAllIdAndName(Long sId, String userIds) {
         // 通过Id获取Supplier
         try {
-            String sql;
+            
+            String isWhere = "";
             if (sId>=0) {
-                sql = "SELECT g_id as gId, name as gName, scode FROM " + TABLE_NAME + " WHERE user_id=? and s_id=" + sId;
-            } else {
-                sql = "SELECT g_id as gId, name as gName, scode FROM " + TABLE_NAME + " WHERE user_id=?";
+                isWhere = " WHERE s_id=" + sId;
             }
+            
+            if (userIds != null && !"".equals(userIds)) {
+                if (!"".equals(isWhere)) {
+                    isWhere = " where user_id in " + userIds;
+                } else {
+                    isWhere = isWhere + " and user_id in " + userIds;
+                }
+                
+            }
+            
+            String sql = "SELECT g_id as gId, name as gName, scode FROM " + TABLE_NAME + isWhere;
             logger.info(sql);
-            return jdbcTemplate.queryForList(sql,user.getId());
+            
+            return jdbcTemplate.queryForList(sql);
+            
         } catch (Exception e) {
             // TODO: handle exception
+            logger.info("findAllIdAndName " + e);
             return null;
         }
     }
     
     
-    public Map<Long, String> findAllIdAndCode(Long sId, User user) {
+    public Map<Long, String> findAllIdAndCode(Long sId, String userIds) {
         // 通过Id获取Supplier
         try {
-            String sql;
+            String isWhere = "";
             if (sId>=0) {
-                sql = "SELECT g_id as gId, scode FROM " + TABLE_NAME + " WHERE user_id="+ user.getId() +" and s_id=" + sId;
-            } else {
-                sql = "SELECT g_id as gId, scode FROM " + TABLE_NAME + " WHERE user_id=" + user.getId();
+                isWhere = " WHERE s_id=" + sId;
             }
+            
+            if (userIds != null && !"".equals(userIds)) {
+                if (!"".equals(isWhere)) {
+                    isWhere = " where user_id in " + userIds;
+                } else {
+                    isWhere = isWhere + " and user_id in " + userIds;
+                }
+                
+            }
+            
+            String sql = "SELECT g_id as gId, scode FROM " + TABLE_NAME + isWhere;
             logger.info(sql);
             return jdbcTemplate.query(sql, resultSetExtractor);
         } catch (Exception e) {

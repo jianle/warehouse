@@ -31,7 +31,7 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/supplier")
-@SessionAttributes("user")
+@SessionAttributes({"user", "userIds"})
 public class SupplierController {
     
     private Logger logger = LoggerFactory.getLogger(SupplierController.class);
@@ -135,10 +135,9 @@ public class SupplierController {
     
     @RequestMapping("getSupplierName")
     @ResponseBody
-    public JSONObject getSupplierName(@ModelAttribute User user) throws JSONException {
+    public JSONObject getSupplierName(@ModelAttribute String userIds) throws JSONException {
         
-        List<Supplier> suppliers = supplierDao.findSuggestAll(user.getId());
-        logger.info(user.toString());
+        List<Supplier> suppliers = supplierDao.findSuggestAll(userIds);
 
         JSONObject jsonObject;
         
@@ -163,10 +162,10 @@ public class SupplierController {
     
     @RequestMapping("getIdMapName")
     @ResponseBody
-    public JSONArray getIdMapName(@ModelAttribute User user) {
+    public JSONArray getIdMapName(@ModelAttribute String userIds) {
         
-        List<Map<String, Object>> suppliers = supplierDao.findIdMapName(user.getId());
-        logger.info(suppliers.toString());
+        List<Map<String, Object>> suppliers = supplierDao.findIdListMapName(userIds);
+        logger.info("getIdMapName:" + suppliers.toString());
         
         return JSONArray.fromObject(suppliers);
     }

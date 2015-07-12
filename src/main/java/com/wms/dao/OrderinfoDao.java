@@ -31,6 +31,27 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
     @Qualifier("jdbcTemplate")
     private JdbcTemplate jdbcTemplate;
 
+    
+    @SuppressWarnings("deprecation")
+    public long getMinId(String userIds) {
+        // TODO Auto-generated method stub
+        String sql = "";
+        try {
+            String isWhere = "";
+            if (userIds != null && !"".equals(userIds)) {
+                isWhere = " where user_id in " + userIds;
+            }
+            sql = "SELECT min(o_id) FROM " + TABLE_NAME + isWhere;
+            logger.info("getMinId:" + sql);
+            
+            return jdbcTemplate.queryForLong(sql);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("getMinId:" + e + "\n" + sql);
+        }
+        return 0;
+    }
+    
     @Override
     public Orderinfo get(Long id) {
         // TODO Auto-generated method stub
@@ -227,10 +248,15 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
         }
     };
 
-    public List<Map<String, Object>> findCurAlloId(Long id) {
+    public List<Map<String, Object>> findCurAlloId(String userIds) {
         try {
-            String sql = "SELECT o_id oId FROM " + TABLE_NAME + " where user_id=?";
-            return jdbcTemplate.queryForList(sql, id);
+            String isWhere = "";
+            if (userIds != null && !userIds.equals("")) {
+                isWhere = " where user_id in " + userIds;
+            } 
+            
+            String sql = "SELECT o_id oId FROM " + TABLE_NAME + isWhere;
+            return jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("findCurAlloId failed." + e);

@@ -16,7 +16,7 @@
                     <label>客户名称：</label>
                     <input name="customerName" id="customerName" class="easyui-combobox" data-options="
                         valueField: 'sId',
-                        textField: 'name',
+                        textField: 'sName',
                         url: contextPath+'/supplier/getIdMapName',
                         onSelect: function(rec){
                             $('#customerCode').numberbox('setValue', rec.sId);

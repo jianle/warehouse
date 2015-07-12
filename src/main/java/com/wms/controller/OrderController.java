@@ -39,7 +39,7 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/order")
-@SessionAttributes("user")
+@SessionAttributes({"user", "userIds"})
 public class OrderController {
     
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -220,10 +220,10 @@ public class OrderController {
     
     @RequestMapping("detail/getCurAlloId")
     @ResponseBody
-    public JSONArray getCurAlloId(@ModelAttribute User user){
+    public JSONArray getCurAlloId(@ModelAttribute String userIds){
         
         JSONArray result = new JSONArray();
-        result = JSONArray.fromObject(orderinfoDao.findCurAlloId(user.getId()));
+        result = JSONArray.fromObject(orderinfoDao.findCurAlloId(userIds));
         logger.info(result.toString());
         return result;
     }
@@ -327,14 +327,21 @@ public class OrderController {
     @RequestMapping(value = "detailCheck", method = RequestMethod.GET)
     public ModelAndView detailCheck(
             @ModelAttribute User user,
+            @ModelAttribute String userIds,
             @RequestParam(value="oId", defaultValue="1") Long oId,
             @RequestParam(value="sId", defaultValue="0") Long sId) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/order/detailCheck");
         logger.info("RequestMapping :/order/detailCheck");
-        modelView.addObject("curoId", oId);
         
         Orderinfo orderInfo = orderinfoDao.get(oId);
+        
+        if (orderInfo == null) {
+            oId = orderinfoDao.getMinId(userIds);
+        }
+        orderInfo = orderinfoDao.get(oId);
+        
+        modelView.addObject("curoId", oId);
         modelView.addObject("orderInfo", orderInfo);
         
         List<Map<String, Object>> orderDetails = orderDetailDao.findByOId(oId);
@@ -350,7 +357,7 @@ public class OrderController {
         Supplier supplier = supplierDao.get(orderInfo.getCustomerCode());
         modelView.addObject("supplier", supplier);
         
-        Map<Long, String> goodCodeMap = goodDao.findAllIdAndCode(orderInfo.getCustomerCode(), user);
+        Map<Long, String> goodCodeMap = goodDao.findAllIdAndCode(orderInfo.getCustomerCode(), userIds);
         logger.info(goodCodeMap.toString());
         
         modelView.addObject("goodCodeMap", goodCodeMap);

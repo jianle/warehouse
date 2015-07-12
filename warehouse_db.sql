@@ -56,7 +56,7 @@ CREATE TABLE supplier(
   index `user_id_idx` (user_id)
 )ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '客户信息表';
 
-
+drop table if exists `enter` ;
 CREATE TABLE `enter` (
   `e_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自增id',
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
@@ -75,7 +75,7 @@ CREATE TABLE `enter` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '商品入库表'
 ;
 
-
+drop table if exists `storage`;
 CREATE TABLE `storage` (
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',
   `s_id` bigint(20) NOT NULL default 0 comment '客户id',
@@ -127,6 +127,7 @@ CREATE TABLE `orderinfo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
 ;
 /*confirm*/
+drop table if exists `orderinfo`;
 CREATE TABLE `orderinfo` (
   `o_id` bigint(20) NOT NULL AUTO_INCREMENT comment '订单id',
   `order_code` varchar(20) not null default '' comment '订单编号',
@@ -152,6 +153,7 @@ CREATE TABLE `orderinfo` (
 alter table `orderinfo` ADD COLUMN `remark` varchar(1000) DEFAULT '' COMMENT '备注' AFTER `status`;
 alter table orderinfo add index `user_id_idx` (user_id);
 
+drop table if exists `order_detail`;
 CREATE TABLE `order_detail` (
   `od_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
   `o_id` bigint(20) NOT NULL default 0 comment '订单id',
@@ -172,7 +174,7 @@ CREATE TABLE `order_detail` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表明细'
 ;
 
-
+drop table if exists `delivery`;
 CREATE TABLE `delivery` (
   `d_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
   `o_id` bigint(20) NOT NULL default 0 comment '订单id',
@@ -192,6 +194,7 @@ CREATE TABLE `delivery` (
 ;
 
 
+drop table if exists `delivery_detail`;
 CREATE TABLE `delivery_detail` (
   `dd_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
   `content` varchar(64) not null default '' comment '快递单号',

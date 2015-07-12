@@ -33,7 +33,7 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/goods")
-@SessionAttributes("user")
+@SessionAttributes({"user", "userIds"})
 public class GoodsController {
     
     private Logger logger = LoggerFactory.getLogger(GoodsController.class);
@@ -144,9 +144,9 @@ public class GoodsController {
     
     @RequestMapping("getGoodsName")
     @ResponseBody
-    public JSONObject getGoodsName(@ModelAttribute User user) throws JSONException {
+    public JSONObject getGoodsName(@ModelAttribute String userIds) throws JSONException {
         
-        List<Map<String, Object>> goods = goodsDao.findSuggestAll(user);
+        List<Map<String, Object>> goods = goodsDao.findSuggestAll(userIds);
 
         JSONObject jsonObject;
         
@@ -175,19 +175,19 @@ public class GoodsController {
     @RequestMapping("getname")
     @ResponseBody
     public List<Map<String, Object>> findAllIdAndName(
-            @ModelAttribute User user,
+            @ModelAttribute String userIds,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
-        return goodsDao.findAllIdAndName(sId, user);
+        return goodsDao.findAllIdAndName(sId, userIds);
     }
     
     @RequestMapping("getNameJson")
     @ResponseBody
     public JSONObject getNameJson(
-            @ModelAttribute User user,
+            @ModelAttribute String userIds,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
         
-        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, user);
+        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, userIds);
         jsonObject.put("value", goods);
         return jsonObject;
     }
@@ -195,11 +195,10 @@ public class GoodsController {
     @RequestMapping("getIdMapName")
     @ResponseBody
     public JSONArray getIdMapName(
-            @ModelAttribute User user,
+            @ModelAttribute String userIds,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
         JSONArray jsonObject = new JSONArray();
-        
-        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, user);
+        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, userIds);
         jsonObject = JSONArray.fromObject(goods);
         return jsonObject;
     }

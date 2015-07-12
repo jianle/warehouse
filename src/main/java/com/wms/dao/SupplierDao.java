@@ -78,11 +78,16 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         return null;
     }
     
-    public List<Supplier> findSuggestAll(Long userId) {
+    public List<Supplier> findSuggestAll(String userIds) {
         // 通过Id获取Supplier
         try {
-            String sql = "SELECT s_id, name, shortname FROM " + TABLE_NAME + " where user_id=?";
-            return jdbcTemplate.query(sql, rowMapperSuggest, userId);
+            String isWhere = "";
+            if (userIds != null && !userIds.equals("")) {
+                isWhere = " where user_id in " + userIds;
+            } 
+            
+            String sql = "SELECT s_id, name, shortname FROM " + TABLE_NAME + isWhere;
+            return jdbcTemplate.query(sql, rowMapperSuggest);
         } catch (Exception e) {
             // TODO: handle exception
             logger.debug("Supplier get id failed ." + e);
@@ -90,14 +95,17 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
         }
     }
     
-    public List<Map<String, Object>> findIdMapName(Long userId) {
+    public List<Map<String, Object>> findIdListMapName(String userIds) {
         // 通过Id获取Supplier
         try {
-            String sql = "SELECT s_id sId, name FROM " + TABLE_NAME + " where user_id=?";
-            return jdbcTemplate.queryForList(sql, userId);
+            String sql = "SELECT s_id sId, name sName FROM " + TABLE_NAME ;
+            if (userIds != null && !userIds.equals("")) {
+                sql = sql + " where user_id in " + userIds;
+            } 
+            return jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
             // TODO: handle exception
-            logger.debug("Supplier findIdMapName failed ." + e);
+            logger.debug("Supplier findIdListMapName failed ." + e);
             return null;
         }
     }
@@ -117,7 +125,7 @@ public class SupplierDao implements BaseDao<Supplier, Long> {
     public Map<Long, String> findIdMapName(String userIds) {
         try {
             String sql = "SELECT s_id sId, name sName FROM " + TABLE_NAME ;
-            if (!userIds.equals("")) {
+            if (userIds != null && !userIds.equals("")) {
                 sql = sql + " where user_id in " + userIds;
             } 
             

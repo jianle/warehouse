@@ -1,5 +1,6 @@
 package com.wms.controller;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,12 +23,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.util.UserDenied;
 import com.util.UtilsDes;
 import com.wms.dao.UserDao;
 import com.wms.model.User;
 
 @Controller
-@SessionAttributes("user")
+@SessionAttributes({"user", "userIds"})
 public class LoginController {
     
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -67,6 +69,11 @@ public class LoginController {
                 logger.info("Login by cookie: " + user.getUsername());
                 modelView.setViewName(from);
                 modelView.addObject("user", user);
+                
+                Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+                String userIds = UserDenied.getUserIds(users, user.getRole());
+                modelView.addObject("userIds", userIds);
+                
                 return modelView;
             }
         }
@@ -93,6 +100,11 @@ public class LoginController {
             logger.info("login by password. " + user.getTruename());
             
             modelView.addObject("user", user);
+            
+            Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+            String userIds = UserDenied.getUserIds(users, user.getRole());
+            modelView.addObject("userIds", userIds);
+            
             Cookie cookie = null;
             
             try {
