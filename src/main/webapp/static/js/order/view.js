@@ -40,9 +40,9 @@ function save(){
             return $(this).form('validate');
         },
         dataType:'json',
-        success: function(data){
-            var result = eval('('+data+')');
-            if (result){
+        success: function(result){
+            var hasTrue = result.indexOf("true");
+            if (hasTrue>=0){
                 $('#dlg').dialog('close');       // close the dialog
                 $('#dg').datagrid('reload');     // reload the user data
                 $.messager.confirm('提示', '操作成功，是否刷新页面查看', function(r){
@@ -84,6 +84,7 @@ function destroy(Id){
                         title: '提示',
                         msg: '删除成功，请刷新查看！'
                     });
+                    $('#' + Id + '_tr').remove();
                     //$('#dg').datagrid('reload');    // reload the user data
                 } else {
                     $.messager.show({    // show error message

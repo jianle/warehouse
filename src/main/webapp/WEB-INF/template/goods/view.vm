@@ -21,7 +21,7 @@
 
           <div class="row">
             <input type="hidden" value="" name="sId" id="sId" />
-            <label for="sName" class="col-sm-2 control-label" style="padding-left:4px" >供应商名称</label>
+            <label for="sName" class="col-sm-2 control-label" style="padding-left:4px" >客户名称</label>
             <div class="col-lg-9">
                <div class="input-group">
                    <input type="text" class="form-control" name="sName" id="sName" value="" />
@@ -37,7 +37,7 @@
            </div>
          </div>
          <br/>
-
+         
           <div class="form-group">
             <label for="length" class="col-sm-2 control-label" >长度</label>
             <div class="col-sm-3">
@@ -78,7 +78,7 @@
             <div class="col-sm-3">
               <input type="text" class="form-control" name="scode" id="scode" />
             </div>
-            <label for="gIdSupplier" class="col-sm-2 control-label" >供应商产品编号</label>
+            <label for="gIdSupplier" class="col-sm-2 control-label" >客户产品编号</label>
             <div class="col-sm-4">
               <input type="text" class="form-control" name="gIdSupplier" id="gIdSupplier" />
             </div>

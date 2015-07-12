@@ -18,9 +18,9 @@ public class UtilsDes{
     public static void main(String[] args) throws Exception {  
         String md5Password = "admin123";  
         String str = UtilsDes.encrypt(md5Password);  
-        System.out.println("str: " + str + " len:"+ str.length());  
+        System.out.println("pwd encrypt: " + str + " len:"+ str.length());  
         str = UtilsDes.decrypt(str);  
-        System.out.println("str: " + str + " len:"+ str.length());  
+        System.out.println("pwd decrypt: " + str + " len:"+ str.length());  
     }  
       
     /** 

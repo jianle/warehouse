@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.util.UserDenied;
 import com.wms.dao.SupplierDao;
 import com.wms.dao.UserDao;
 import com.wms.form.model.SupplierSearchForm;
@@ -46,8 +47,8 @@ public class SupplierController {
         logger.info(user.toString());
         
         Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String userIds = UserDenied.getUserIds(users, user.getRole());
         
-        String userIds = "(" + user.getId() + ")";
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/supplier/list");
         SupplierSearchForm supplierSearchForm = new SupplierSearchForm(10, 1, "A", "shortname", "");
@@ -71,14 +72,9 @@ public class SupplierController {
         logger.info(supplierSearchForm.toString());
         
         Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
-        String usersIds = null;
-        if (user.getRole() == User.ROLE_ADMIN || user.getRole() == User.ROLE_BOSS ) {
-            usersIds = "";
-        } else {
-            usersIds = users.keySet().toString().replace("[", "(").replace("]", ")");
-        }
+        String userIds = UserDenied.getUserIds(users, user.getRole());
         
-        Pagination<Supplier> pagination = supplierDao.findByColumnValue(supplierSearchForm, usersIds);
+        Pagination<Supplier> pagination = supplierDao.findByColumnValue(supplierSearchForm, userIds);
         
         modelView.addObject("pagination", pagination);
         modelView.addObject("supplierSearchForm", supplierSearchForm);

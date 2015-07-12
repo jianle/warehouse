@@ -60,7 +60,7 @@
       <tr>
         <th style="min-width:50px">商品ID</th>
         <th style="min-width:100px">商品名称</th>
-        <th style="min-width:120px">供应商名称</th>
+        <th style="min-width:120px">客户名称</th>
         <th style="width:95px;">总库存个数</th>
         <th style="width:80">操作人</th>
         <th style="min-width:90px">备注</th>

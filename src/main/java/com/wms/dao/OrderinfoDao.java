@@ -151,9 +151,13 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
         return null;
     }
     
-    public List<Map<String, Object>> findAlloId(){
+    public List<Map<String, Object>> findAlloId(String userIds){
         try {
-            String sql = "SELECT o_id oId FROM " + TABLE_NAME;
+            String isWhere = "";
+            if (userIds != null && !"".equals(userIds)) {
+                isWhere = " where user_id in " + userIds;
+            }
+            String sql = "SELECT o_id oId FROM " + TABLE_NAME + isWhere;
             return jdbcTemplate.queryForList(sql);
         } catch (Exception e) {
             // TODO: handle exception

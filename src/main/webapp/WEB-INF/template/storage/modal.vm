@@ -20,7 +20,7 @@
 
           <input type="hidden" value="" name="sId" id="sId" />
           <div class="form-group">
-            <label for="sName" class="col-sm-2 control-label" style="padding-left:4px" >供应商名称</label>
+            <label for="sName" class="col-sm-2 control-label" style="padding-left:4px" >客户名称</label>
             <div class="col-sm-7" style="padding-right:4px">
               <input readonly="readonly" type="text" class="form-control" id="sName" />
             </div>

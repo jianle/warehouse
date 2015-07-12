@@ -1,5 +1,8 @@
 
 #set($title="商品管理")
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
+<script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
 <script src="#springUrl('/static/js/goods/list.js')"></script>
 <script src="#springUrl('/static/js/goods/view.js')"></script>
 <script src="#springUrl('/static/js/bootstrap-suggest.js')"></script>
@@ -71,12 +74,12 @@
       <tr>
         <th style="width:50px;">ID</th>
         <th style="min-width:80px">商品名称</th>
-        <th style="min-width:100px">供应商名称</th>
+        <th style="min-width:100px">客户名称</th>
         <th style="width:65px;">长(mm)</th>
         <th style="width:65px;">宽(mm)</th>
         <th style="width:65px;">高(mm)</th>
         <th style="width:65px;">重(g)</th>
-        <th style="width:130px;">供应商产品编号</th>
+        <th style="width:130px;">客户产品编号</th>
         <th style="width:80px;">商品条码</th>
         <th style="width:70px;">盒数/箱</th>
         <th style="width:70px;">个数/盒</th>
@@ -135,7 +138,7 @@
         listAlign: "auto",
         listStyle: {
         "padding-top":0, "max-height": "375px", "max-width": "800px",
-        "overflow": "auto","min-width": "300px", "width": "auto",
+        "overflow": "auto","min-width": "425px", "width": "425px",
         "left": "-393px", "right": "auto", "padding-right": "10px",
         "transition": "0.5s", "-webkit-transition": "0.5s", "-moz-transition": "0.5s", "-o-transition": "0.5s"
         }, //列表的样式控制

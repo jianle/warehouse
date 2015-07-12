@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.util.UserDenied;
 import com.wms.dao.GoodsDao;
 import com.wms.dao.SupplierDao;
 import com.wms.dao.UserDao;
@@ -52,7 +53,10 @@ public class GoodsController {
         String isDisabled = "A";
         int currentPage = 1;
         int numPerPage = 10;
-        String userIds = "(" + user.getId() + ")";
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String userIds = UserDenied.getUserIds(users, user.getRole());
+        
         // 获取分页数据
         Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage, userIds);
         // 获取sid对应的name
@@ -76,16 +80,11 @@ public class GoodsController {
         modelView.setViewName("/goods/list");
         
         Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
-        String usersIds = null;
-        if (user.getRole() == User.ROLE_ADMIN || user.getRole() == User.ROLE_BOSS ) {
-            usersIds = "";
-        } else {
-            usersIds = users.keySet().toString().replace("[", "(").replace("]", ")");
-        }
+        String userIds = UserDenied.getUserIds(users, user.getRole());
         
-        logger.info("goods search userids:" + usersIds);
+        logger.info("goods search userids:" + userIds);
         // 获取分页数据
-        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage, usersIds);
+        Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage, userIds);
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(paginationGoods.getResultList());
         

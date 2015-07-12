@@ -133,7 +133,7 @@ public class OrderController {
         if (orderinfoDao.save(orderinfo)) {
             result = true;
         }
-        jsonTuple.put("value", result);
+        jsonTuple.put("result", result);
         return String.valueOf(result);
     }
     
@@ -205,10 +205,13 @@ public class OrderController {
     
     @RequestMapping("detail/getAlloId")
     @ResponseBody
-    public JSONObject getAlloId(){
+    public JSONObject getAlloId(@ModelAttribute User user){
+        
+        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        String userIds = UserDenied.getUserIds(users, user.getRole());
         
         JSONArray result = new JSONArray();
-        result = JSONArray.fromObject(orderinfoDao.findAlloId());
+        result = JSONArray.fromObject(orderinfoDao.findAlloId(userIds));
         logger.info(result.toString());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("value", result);
