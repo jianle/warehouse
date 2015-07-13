@@ -29,9 +29,16 @@ public class Orderinfo implements Serializable {
     private Double amountPayable;
 
     private Integer status;
+    private Long osId;
     private String remark;
     private String insertDt;
     private String updateTime;
+    public void setOsId(Long osId) {
+        this.osId = osId;
+    }
+    public Long getOsId() {
+        return osId;
+    }
     public Long getoId() {
         return oId;
     }
@@ -153,6 +160,7 @@ public class Orderinfo implements Serializable {
                 + userId + ", documentDate=" + documentDate + ", amountTotal="
                 + amountTotal + ", amountDiscount=" + amountDiscount
                 + ", amountPayable=" + amountPayable + ", status=" + status
+                + ", osId=" + osId
                 + ", remark=" + remark + ", insertDt=" + insertDt
                 + ", updateTime=" + updateTime + "]";
     }

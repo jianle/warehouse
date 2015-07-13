@@ -1,12 +1,12 @@
 
-    <div id="dlg" class="easyui-dialog" style="width:880px;height:380px;padding:10px 20px"
+    <div id="dlg" class="easyui-dialog" style="width:890px;height:375px;padding:10px 20px"
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">订单信息</div>
             <form id="fm" method="post" novalidate>
                 <input name="oId" type="hidden" />
                 <div class="fitem">
                     <label>订单编号:</label>
-                    <input name="orderCode" class="easyui-textbox" required="true" />
+                    <input name="orderCode" class="easyui-textbox" />
                     <label style="padding-left:20px;">制单人:</label>
                     <input name="userName" id="userName" class="easyui-textbox" value="$session.getAttribute('user').truename" />
                     <label style="padding-left:20px;">制单日期:</label>
@@ -14,15 +14,11 @@
                 </div>
                 <div class="fitem">
                     <label>客户名称：</label>
-                    <input name="customerName" id="customerName" class="easyui-combobox" data-options="
-                        valueField: 'sId',
-                        textField: 'sName',
-                        url: contextPath+'/supplier/getIdMapName',
-                        onSelect: function(rec){
-                            $('#customerCode').numberbox('setValue', rec.sId);
-                        }" />
+                    <input name="customerName" id="customerName" value="1" />
                     <label style="padding-left:20px;">客户编码:</label>
                     <input id="customerCode" name="customerCode" class="easyui-numberbox" required="true" />
+                    <label style="padding-left:20px;">订单来源:</label>
+                    <input name="osId" id="osId" />
                 </div>
                 <div class="fitem">
                     <label>运费支付类型:</label>

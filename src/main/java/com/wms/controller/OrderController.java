@@ -27,6 +27,7 @@ import com.util.UserDenied;
 import com.wms.dao.GoodsDao;
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
+import com.wms.dao.OrdersourceDao;
 import com.wms.dao.StorageDao;
 import com.wms.dao.SupplierDao;
 import com.wms.dao.UserDao;
@@ -52,7 +53,8 @@ public class OrderController {
     
     @Autowired
     private StorageDao storageDao;
-    
+    @Autowired
+    private OrdersourceDao ordersourceDao;
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -82,8 +84,10 @@ public class OrderController {
         Map<Long, String> suppliers = supplierDao.findIdMapName(userIds);
         logger.info(suppliers.toString());
         modelView.addObject("suppliers", suppliers);
-        
         modelView.addObject("users", users);
+        
+        Map<Long, String> ordersources = ordersourceDao.findIdMapName();
+        modelView.addObject("ordersources", ordersources);
         
         return modelView;
         
@@ -110,8 +114,10 @@ public class OrderController {
         Map<Long, String> suppliers = supplierDao.findIdMapName(userIds);
         logger.info(suppliers.toString());
         modelView.addObject("suppliers", suppliers);
-        
         modelView.addObject("users", users);
+        
+        Map<Long, String> ordersources = ordersourceDao.findIdMapName();
+        modelView.addObject("ordersources", ordersources);
         
         return modelView;
         
@@ -388,5 +394,13 @@ public class OrderController {
         jsonTuple.put("value", result);
         return jsonTuple;
     }
-
+    
+    @RequestMapping("ordersources")
+    @ResponseBody
+    public JSONArray findIdListMapName() {
+        List<Map<String, Object>> ordersources = ordersourceDao.findIdListMapName();
+        return JSONArray.fromObject(ordersources);
+    }
+    
+    
 }

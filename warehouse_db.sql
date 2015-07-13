@@ -150,8 +150,22 @@ CREATE TABLE `orderinfo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
 ;
 
-alter table `orderinfo` ADD COLUMN `remark` varchar(1000) DEFAULT '' COMMENT '备注' AFTER `status`;
+alter table `orderinfo` ADD COLUMN `os_id` int(5) DEFAULT '0' COMMENT '备注' AFTER `status`;
 alter table orderinfo add index `user_id_idx` (user_id);
+
+CREATE TABLE `ordersource` (
+  `os_id` bigint(20) NOT NULL AUTO_INCREMENT comment '自动增长id',
+  `os_name` varchar(256) not null default '' comment '来源名称',
+  `remarks` varchar(1000) not null default '' comment '备注',
+  `update_time` timestamp null on update current_timestamp comment '最近一次更新',
+  PRIMARY KEY (`os_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单来源表'
+;
+
+insert into ordersource(os_name,update_time) values('天猫',current_timestamp());
+insert into ordersource(os_name,update_time) values('一号店',current_timestamp());
+insert into ordersource(os_name,update_time) values('京东',current_timestamp());
+
 
 drop table if exists `order_detail`;
 CREATE TABLE `order_detail` (

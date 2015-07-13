@@ -96,7 +96,7 @@
     #end</tbody>
   </table>
 </div>
-    
+    <!--
     <div id="editChecheds" class="easyui-dialog" style="width:280px;height:190px;padding:10px 20px"
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">修改数量</div>
@@ -111,6 +111,7 @@
           <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="editSubmit()" style="width:90px">修改</a>
           <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#editChecheds').dialog('close')" style="width:90px">取消</a>
       </div>
+      -->
 <script>
   $('#oId').combobox({
       valueField: 'oId',

@@ -28,6 +28,8 @@ function add(){
     $('#fm').form('clear');
     $('#documentDate').datebox('setValue', myformatter(curDate));
     $('#saleDate').datebox('setValue', myformatter(curDate));
+    //$('#customerName').combobox('setValue', '1');
+    $('#osId').combobox('setValue', '1');
     $('#userName').textbox('setValue', curuserName);
     url = contextPath + '/order/save';
 }
