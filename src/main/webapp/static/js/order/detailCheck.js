@@ -1,13 +1,13 @@
 document.onkeydown = function() {
     if (event.keyCode == 13) {
-        var scode = $('#checkCode').numberbox('getValue');
+        var scode = $('#checkCode').textbox('getValue');
         var checkeds = $('#'+ scode +'_checked').numberbox('getValue');
         if(checkeds == ""){
             checkeds = 0;
         }
         checkeds = parseInt(checkeds) + 1;
         $('#'+ scode +'_checked').numberbox('setValue',checkeds);
-        $('#checkCode').numberbox('setValue','');
+        $('#checkCode').textbox('setValue','');
     }
 }
 var scode;

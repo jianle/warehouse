@@ -34,7 +34,7 @@
     
     <label class="control-label" style="padding-left:30px;float:left" >扫描/输入条形码：</label>
     <label class="control-label" style="float:left" >
-        <input name="checkCode" id="checkCode" value="" style="width:130px" class="easyui-numberbox" />
+        <input name="checkCode" id="checkCode" value="" style="width:130px" class="easyui-textbox" />
     </label>
     
     <div class="control-label" style="padding-left:30px;float:left">
