@@ -1,6 +1,7 @@
 package com.wms.controller;
 
-import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -103,8 +104,8 @@ public class GoodsController {
             @ModelAttribute Goods goods) {
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
-        goods.setInsertDt(new Timestamp(System.currentTimeMillis()));
-        goods.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        goods.setInsertDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        goods.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         goods.setUserId(user.getId());
         if (goodsDao.save(goods)) {
             logger.info("save goods success return true");
@@ -170,6 +171,18 @@ public class GoodsController {
         jsonObject.put("value", jsonArray);
 
         return jsonObject;
+    }
+    
+    @RequestMapping("getGoods")
+    @ResponseBody
+    public JSONObject getGoods(@RequestParam(value="g_id", defaultValue="0") Long gId){
+        
+        JSONObject result = new JSONObject();
+        Goods goods = goodsDao.get(gId);
+        
+        result = JSONObject.fromObject(goods);
+        logger.info("RequestMapping:goods/getGoods?gId=" + gId);
+        return result;
     }
     
     @RequestMapping("getname")

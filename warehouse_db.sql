@@ -26,7 +26,7 @@ CREATE TABLE `goods` (
   `height` int(11) not null default 0 comment '高度(单位:mm)',
   `weight` int(11) not null default 0 comment '重量(单位:g)',
   `g_id_supplier` varchar(64) default '' comment '客户编号',
-  `scode` varchar(128) not null default '' comment '商品条码',
+  `scode` varchar(128) not null default '' comment '商品编码',
   `boxes`  int(8) not null default 1 comment '一箱多少盒',
   `amount` int(8) not null default 1 comment '一盒多少个',
   `is_disabled` char(1) not null DEFAULT 'F' comment 'T-不可用 F-有效',

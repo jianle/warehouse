@@ -75,30 +75,35 @@
         <th style="width:50px;">ID</th>
         <th style="min-width:80px">商品名称</th>
         <th style="min-width:100px">客户名称</th>
+        <!--
         <th style="width:65px;">长(mm)</th>
         <th style="width:65px;">宽(mm)</th>
         <th style="width:65px;">高(mm)</th>
         <th style="width:65px;">重(g)</th>
         <th style="width:130px;">客户产品编号</th>
-        <th style="width:80px;">商品条码</th>
+        -->
+        <th style="width:100px;">商品条码</th>
         <th style="width:70px;">盒数/箱</th>
         <th style="width:70px;">个数/盒</th>
         <th style="width:60px;">状态</th>
-        <th style="width:90px;">创建时间</th>
-        <th style="width:80px;">修改删除</th>
+        <th style="width:180px;">创建时间</th>
+        <th style="width:85px;">修改删除</th>
       </tr>
     </thead>
     <tbody>
       #foreach( $goods in $paginationGoods.getResultList() )
       <tr id="${goods.gId}_tr">
         <th>${goods.gId}</th>
-        <td>${goods.name}</td>
+        <td><a href="#goodsModal" id="goodsEdit" onclick="goodsEdit(${goods.gId},'$goods.isDisabled',${goods.sId})"
+          data-toggle="modal">${goods.name}</a></td>
         <td>#if($supplierMap.get(${goods.sId}))$supplierMap.get(${goods.sId})#end</td>
+        <!--
         <td>${goods.length}</td>
         <td>${goods.width}</td>
         <td>${goods.height}</td>
         <td>${goods.weight}</td>
         <td>${goods.gIdSupplier}</td>
+         -->
         <td>${goods.scode}</td>
         <td>${goods.boxes}</td>
         <td>${goods.amount}</td>
@@ -107,7 +112,7 @@
             #if(${goods.isDisabled}=='F') 有效 #else 无效 #end
           </span>
         </td>
-        <td>${goods.insertDt}</td>
+        <td>${goods.updateTime}</td>
         <td>
           <a href="#goodsModal" id="goodsEdit" onclick="goodsEdit(${goods.gId},'$goods.isDisabled',${goods.sId})" data-toggle="modal"
           class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true"> </a>
@@ -138,18 +143,18 @@
         listAlign: "auto",
         listStyle: {
         "padding-top":0, "max-height": "375px", "max-width": "800px",
-        "overflow": "auto","min-width": "425px", "width": "425px",
-        "left": "-393px", "right": "auto", "padding-right": "10px",
+        "overflow": "auto","min-width": "620px", "width": "620px",
+        "left": "-620px", "right": "auto", "padding-right": "10px",
         "transition": "0.5s", "-webkit-transition": "0.5s", "-moz-transition": "0.5s", "-o-transition": "0.5s"
         }, //列表的样式控制
     }).on('onDataRequestSuccess', function (e, result) {
-    	console.log('onDataRequestSuccess: ', result);
+      //console.log('onDataRequestSuccess: ', result);
     }).on('onSetSelectValue', function (e, keyword) {
-    	console.log('onSetSelectValue: ', keyword);
-      console.log(keyword.id);
+      //console.log('onSetSelectValue: ', keyword);
+      //console.log(keyword.id);
       $('.modal-body #sId').val(keyword.id);
     }).on('onUnsetSelectValue', function (e) {
-    	console.log("onUnsetSelectValue");
+      //console.log("onUnsetSelectValue");
     });
 
 </script>

@@ -9,6 +9,7 @@ $(document).ready(function() {
         $('.form-group span').remove();
         
         if(flagTitle=="编辑"){
+            $('#formGoodsAddUpdate').form('clear');
             $('#goodsModal .modal-title').html("新增");
             $('.modal-body #name').removeAttr("readonly");
             //$('.modal-body #gId').val(Id);
@@ -39,18 +40,26 @@ function goodsEdit(Id, isDisabled, sId){
     $('#goodsModal .modal-title').html("编辑");
     $('.modal-body #gId').val(Id);
     $('.modal-body #sId').val(sId);
-    //$('.modal-body #name').attr('readonly','readonly');
-    $('.modal-body #name').val( $("#"+trId+" td")[0].innerHTML );
+    
     $('.modal-body #sName').val( $("#"+trId+" td")[1].innerHTML );
-    $('.modal-body #length').val( $("#"+trId+" td")[2].innerHTML );
-    $('.modal-body #width').val( $("#"+trId+" td")[3].innerHTML );
-    $('.modal-body #height').val($("#"+trId+" td")[4].innerHTML);
-    $('.modal-body #weight').val($("#"+trId+" td")[5].innerHTML);
-    $('.modal-body #gIdSupplier').val($("#"+trId+" td")[6].innerHTML);
-    $('.modal-body #scode').val($("#"+trId+" td")[7].innerHTML);
-    $('.modal-body #boxes').val($("#"+trId+" td")[8].innerHTML);
-    $('.modal-body #amount').val($("#"+trId+" td")[9].innerHTML);
     $('.modal-body #isDisabled').val(isDisabled);
+//    $('.modal-body #name').attr('readonly','readonly');
+//    $('.modal-body #name').val( $("#"+trId+" td")[0].innerHTML );
+//    $('.modal-body #length').val( $("#"+trId+" td")[2].innerHTML );
+//    $('.modal-body #width').val( $("#"+trId+" td")[3].innerHTML );
+//    $('.modal-body #height').val($("#"+trId+" td")[4].innerHTML);
+//    $('.modal-body #weight').val($("#"+trId+" td")[5].innerHTML);
+//    $('.modal-body #gIdSupplier').val($("#"+trId+" td")[6].innerHTML);
+//    $('.modal-body #scode').val($("#"+trId+" td")[7].innerHTML);
+//    $('.modal-body #boxes').val($("#"+trId+" td")[8].innerHTML);
+//    $('.modal-body #amount').val($("#"+trId+" td")[9].innerHTML);
+    
+    $.getJSON(contextPath+"/goods/getGoods", {g_id:Id}, function(data, status){
+        _formLoadData = data;
+        console.log(data);
+        $('#formGoodsAddUpdate').form('load',data);
+    });
+    
 }
 
 function deleteGoods(gId,content){

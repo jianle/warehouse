@@ -1,7 +1,7 @@
 <!-- goods添加和修改窗口 -->
 <!-- modal -->
 <div class="modal fade" id="goodsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -78,7 +78,7 @@
             <div class="col-sm-3">
               <input type="text" class="form-control" name="scode" id="scode" />
             </div>
-            <label for="gIdSupplier" class="col-sm-2 control-label" >客户产品编号</label>
+            <label for="gIdSupplier" class="col-sm-2 control-label" >商品编码</label>
             <div class="col-sm-4">
               <input type="text" class="form-control" name="gIdSupplier" id="gIdSupplier" />
             </div>
@@ -91,6 +91,10 @@
                 <option value="F" >有效</option>
                 <option value="T" >无效</option>
               </select>
+            </div>
+            <label for="standards" class="col-sm-2 control-label" >规格名称</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" name="standards" id="standards" />
             </div>
           </div>
 

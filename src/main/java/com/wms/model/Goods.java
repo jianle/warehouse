@@ -1,7 +1,6 @@
 package com.wms.model;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,8 +37,8 @@ public class Goods implements Serializable {
     private Long userId;
     
     @Column(updatable=false)
-    private Timestamp insertDt;
-    private Timestamp updateTime;
+    private String insertDt;
+    private String updateTime;
     
     public void setUserId(Long userId) {
         this.userId = userId;
@@ -119,16 +118,16 @@ public class Goods implements Serializable {
     public void setIsDisabled(String isDisabled) {
         this.isDisabled = isDisabled;
     }
-    public Timestamp getInsertDt() {
+    public String getInsertDt() {
         return insertDt;
     }
-    public void setInsertDt(Timestamp insertDt) {
+    public void setInsertDt(String insertDt) {
         this.insertDt = insertDt;
     }
-    public Timestamp getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
-    public void setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
     @Override
