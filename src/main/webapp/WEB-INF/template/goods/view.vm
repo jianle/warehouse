@@ -39,24 +39,24 @@
          <br/>
          
           <div class="form-group">
-            <label for="length" class="col-sm-2 control-label" >长度</label>
+            <label for="length" class="col-sm-2 control-label" >长度(mm)</label>
             <div class="col-sm-3">
               <input type="text" class="form-control" name="length" id="length" placeholder="单位 mm" />
             </div>
 
-            <label for="width" class="col-sm-2 control-label" >宽度</label>
+            <label for="width" class="col-sm-2 control-label" >宽度(mm)</label>
             <div class="col-sm-4">
               <input type="text" class="form-control" name="width" id="width" placeholder="单位 mm"/>
             </div>
           </div>
 
           <div class="form-group">
-            <label for="height" class="col-sm-2 control-label" >高度</label>
+            <label for="height" class="col-sm-2 control-label" >高度(mm)</label>
             <div class="col-sm-3">
               <input type="text" class="form-control" name="height" id="height" placeholder="单位 mm" />
             </div>
 
-            <label for="weight" class="col-sm-2 control-label" >重量</label>
+            <label for="weight" class="col-sm-2 control-label" >重量(g)</label>
             <div class="col-sm-4">
               <input type="text" class="form-control" name="weight" id="weight" placeholder="单位 g"/>
             </div>

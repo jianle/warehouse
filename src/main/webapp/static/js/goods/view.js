@@ -25,6 +25,7 @@ $(document).ready(function() {
             $('.modal-body #scode').val("");
             $('.modal-body #boxes').val(1);
             $('.modal-body #amount').val(1);
+            $('.modal-body #isDisabled').val('F');
         }
         flagTitle="新增";
     });
