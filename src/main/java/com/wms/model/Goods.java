@@ -35,11 +35,18 @@ public class Goods implements Serializable {
     private Integer amount;
     private String isDisabled;
     private Long userId;
+    private String standards;
     
     @Column(updatable=false)
     private String insertDt;
     private String updateTime;
     
+    public void setStandards(String standards) {
+        this.standards = standards;
+    }
+    public String getStandards() {
+        return standards;
+    }
     public void setUserId(Long userId) {
         this.userId = userId;
     }
@@ -137,6 +144,7 @@ public class Goods implements Serializable {
                 + height + ", weight=" + weight + ", gIdSupplier="
                 + gIdSupplier + ", scode=" + scode + ", boxes=" + boxes
                 + ", amount=" + amount + ", isDisabled=" + isDisabled
+                + ", userId=" + userId + ", standards=" + standards
                 + ", insertDt=" + insertDt + ", updateTime=" + updateTime + "]";
     }
 }
