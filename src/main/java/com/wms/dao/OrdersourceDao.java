@@ -53,16 +53,17 @@ public class OrdersourceDao implements BaseDao<Ordersource, Long> {
     public Map<Long, String> findIdMapName() {
         try {
             String sql = "select os_id, os_name from " + TABLE_NAME;
+            logger.info("findIdMapName sql:" + sql);
+            //logger.info(jdbcTemplate.queryForList(sql).toString());
             return jdbcTemplate.query(sql, new ResultSetExtractor<Map<Long, String>>(){
-
                 @Override
                 public Map<Long, String> extractData(ResultSet rs)
                         throws SQLException, DataAccessException {
                     Map<Long, String> map = new HashMap<Long, String>();
                     while (rs.next()) {
-                        Long id = rs.getLong("os_id");
-                        String truename = rs.getString("os_name");
-                        map.put(id, truename);
+                        Long osId = rs.getLong("os_id");
+                        String osName = rs.getString("os_name");
+                        map.put(osId, osName);
                     }
                     return map;
                 }

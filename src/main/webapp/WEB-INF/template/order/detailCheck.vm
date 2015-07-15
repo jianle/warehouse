@@ -50,7 +50,7 @@
 
 <div class="panel panel-default">
   <div class="panel-heading" style="padding-left:8px"><b style="color: #c7254e;"><i class="glyphicon glyphicon-object-align-bottom"></i> 订单验货</b></div>
-  <table class="table table-striped" style="vertical-align: middle!important;">
+  <table class="table table-striped" style="vertical-align: middle!important;" id="checkTable">
     <thead style="table-layout: fixed;">
       <tr>
         <th width="60px">商品名称</th>
@@ -62,27 +62,14 @@
       </tr>
     </thead>
     <tbody>
-      #foreach( $orderDetail in $orderDetails )<tr id="${orderDetail.odId}_tr">
+      #foreach( $orderDetail in $orderDetails )<tr id="${goodCodeMap.get($orderDetail.gId)}_tr">
         <td>${orderDetail.gName}</td>
         <td>${orderDetail.amount}</td>
         <td>${orderDetail.amountNet}</td>
         <td id="${goodCodeMap.get($orderDetail.gId)}_scode">${goodCodeMap.get($orderDetail.gId)}</td>
         <td style="color: #c7254e;">
-            <input id="${goodCodeMap.get($orderDetail.gId)}_checked" value="#if(${orderInfo.status}==2)${orderDetail.amount}#else 0#end" style="width:60px" 
-                #if(${orderInfo.status}==2)disabled="true"#end
-                class="easyui-numberbox"
-                data-options="onChange(n,o){
-                    var flagId = this.id;
-                    var checkBoxId = flagId.replace('checked','checkbox');
-                    var parTh = $(this).parent().parent();
-                    var flag=${orderDetail.amount};
-                    //var flag = parTh.children('td')[1].innerHTML;
-                    if(flag==n){
-                      $('#'+checkBoxId).prop('checked',true);
-                    } else {
-                      $('#'+checkBoxId).prop('checked',false);
-                    }
-                }" />
+            <input id="${goodCodeMap.get($orderDetail.gId)}_checked" type='text' value="#if(${orderInfo.status}==2)${orderDetail.amount}#else 0#end"
+             style="width:70px;padding-left:5px" #if(${orderInfo.status}==2)disabled="true"#end class="textbox textbox-text" />
         </td>
         <!-- <td ><a href="javascript:editChecheds(${goodCodeMap.get($orderDetail.gId)})">修改</a></td> -->
         <td>

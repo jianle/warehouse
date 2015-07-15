@@ -52,7 +52,7 @@
   <table id="dg" title="订单明细" style="width:auto;height:auto">
         <thead>
           <tr>
-            <th data-options="field:'gId',width:210,
+            <th data-options="field:'gId',width:260,
                         formatter:function(value,row){
                             return row.gName;
                         },
@@ -75,7 +75,7 @@
             <th data-options="field:'amountNet',width:90,align:'right',editor:{type:'numberbox',options:{precision:2, required:true}}">净额</th>
             <th data-options="field:'amount',width:90,align:'right',editor:{type:'numberbox',options:{required:true}}">数量</th>
             <th data-options="field:'amountAmt',width:90,align:'right',editor:{type:'numberbox',options:{precision:2,required:true}}">金额</th>
-            <th data-options="field:'code',width:100,editor:'textbox'">条码</th>
+            ## <th data-options="field:'code',width:100,editor:'textbox'">条码</th>
             <th data-options="field:'remarks',width:310,editor:'textbox'">备注</th>
             <th data-options="field:'status',width:60,align:'center',editor:{type:'checkbox',options:{on:'修改',off:'修改'}}">操作</th>
           </tr>
