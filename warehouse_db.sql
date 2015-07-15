@@ -31,6 +31,7 @@ CREATE TABLE `goods` (
   `amount` int(8) not null default 1 comment '一盒多少个',
   `is_disabled` char(1) not null DEFAULT 'F' comment 'T-不可用 F-有效',
   `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户ID',
+  `operator_id` int(11) NOT NULL DEFAULT '0' COMMENT '操作者',
   `standards` varchar(256) NOT NULL DEFAULT '' COMMENT '规格名称',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
@@ -40,7 +41,6 @@ CREATE TABLE `goods` (
 ) ENGINE=InnoDB AUTO_INCREMENT=100000 DEFAULT CHARSET=utf8 comment '商品信息表'
 ;
 
-alter table `goods` ADD COLUMN `standards` varchar(256) NOT NULL DEFAULT '' COMMENT '规格名称' AFTER `user_id`;
 
 
 CREATE TABLE supplier(

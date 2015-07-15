@@ -35,12 +35,19 @@ public class Goods implements Serializable {
     private Integer amount;
     private String isDisabled;
     private Long userId;
+    private Long operatorId;
     private String standards;
     
     @Column(updatable=false)
     private String insertDt;
     private String updateTime;
     
+    public void setOperatorId(Long operatorId) {
+        this.operatorId = operatorId;
+    }
+    public Long getOperatorId() {
+        return operatorId;
+    }
     public void setStandards(String standards) {
         this.standards = standards;
     }

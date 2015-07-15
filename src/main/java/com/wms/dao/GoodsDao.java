@@ -32,7 +32,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     
     private static final String TABLE_NAME    = "goods";
     private static final String INSERT_FIELDS = "s_id, name, length, width, height, weight, g_id_supplier"
-                                            + " , scode, boxes, amount, is_disabled, user_id, standards, insert_dt, update_time";
+                                            + " , scode, boxes, amount, is_disabled, user_id, operator_id, standards, insert_dt, update_time";
     private static final String SELECT_FIELDS = "g_id, " + INSERT_FIELDS;
     
     @Autowired
@@ -58,7 +58,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         // 传入对象保存
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, goods.getsId(),
                     goods.getName(),
@@ -72,6 +72,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
                     goods.getAmount(),
                     goods.getIsDisabled(),
                     goods.getUserId(),
+                    goods.getOperatorId(),
                     goods.getStandards(),
                     goods.getInsertDt(),
                     goods.getUpdateTime()
@@ -302,6 +303,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             goods.setAmount(rs.getInt("amount"));
             goods.setIsDisabled(rs.getString("is_disabled"));
             goods.setUserId(rs.getLong("user_id"));
+            goods.setOperatorId(rs.getLong("operator_id"));
             goods.setStandards(rs.getString("standards"));
             
             goods.setInsertDt(rs.getString("insert_dt"));

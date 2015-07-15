@@ -23,12 +23,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.util.UserDenied;
 import com.wms.dao.GoodsDao;
 import com.wms.dao.SupplierDao;
 import com.wms.dao.UserDao;
 import com.wms.model.Goods;
 import com.wms.model.Pagination;
+import com.wms.model.Supplier;
 import com.wms.model.User;
 
 
@@ -47,7 +47,8 @@ public class GoodsController {
     private UserDao userDao;
     
     @RequestMapping(value={"","search"}, method = RequestMethod.GET)
-    public ModelAndView list(@ModelAttribute User user) {
+    public ModelAndView list(@ModelAttribute User user,
+            @ModelAttribute String userIds) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         String name="";
@@ -55,8 +56,7 @@ public class GoodsController {
         int currentPage = 1;
         int numPerPage = 10;
         
-        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
-        String userIds = UserDenied.getUserIds(users, user.getRole());
+        Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         
         // 获取分页数据
         Pagination<Goods> paginationGoods = goodsDao.findByNameAndIsDisabled(name, isDisabled, currentPage, numPerPage, userIds);
@@ -68,6 +68,7 @@ public class GoodsController {
         modelView.addObject("isDisabled", isDisabled);
         modelView.addObject("currentPage", currentPage);
         modelView.addObject("supplierMap", supplierMap);
+        modelView.addObject("users", users);
         return modelView;
     }
     
@@ -76,12 +77,12 @@ public class GoodsController {
             @RequestParam(value="currentPage") int currentPage,
             @RequestParam(value="numPerPage") int numPerPage,
             @ModelAttribute User user,
+            @ModelAttribute String userIds,
             @RequestParam(value="isDisabled") String isDisabled) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         
-        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
-        String userIds = UserDenied.getUserIds(users, user.getRole());
+        Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         
         logger.info("goods search userids:" + userIds);
         // 获取分页数据
@@ -94,6 +95,7 @@ public class GoodsController {
         modelView.addObject("isDisabled", isDisabled);
         modelView.addObject("currentPage", currentPage);
         modelView.addObject("supplierMap", supplierMap);
+        modelView.addObject("users", users);
         
         return modelView;
     }
@@ -102,11 +104,15 @@ public class GoodsController {
     @ResponseBody
     public JSONObject save(@ModelAttribute User user,
             @ModelAttribute Goods goods) {
+        Supplier supplier = supplierDao.get(goods.getsId());
+        
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
         goods.setInsertDt(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         goods.setUpdateTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        goods.setUserId(user.getId());
+        goods.setUserId(supplier.getUserId());
+        goods.setOperatorId(user.getId());
+        
         if (goodsDao.save(goods)) {
             logger.info("save goods success return true");
             result = true;
