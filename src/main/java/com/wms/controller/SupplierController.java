@@ -135,12 +135,12 @@ public class SupplierController {
     
     @RequestMapping("getSupplierName")
     @ResponseBody
-    public JSONObject getSupplierName(@ModelAttribute String userIds) throws JSONException {
+    public JSONObject getSupplierName(HttpServletRequest request) throws JSONException {
         
+        String userIds = (String) request.getSession().getAttribute("userIds");
         List<Supplier> suppliers = supplierDao.findSuggestAll(userIds);
 
         JSONObject jsonObject;
-        
         JSONArray jsonArray = new JSONArray();
         Supplier supplier;
         for (int i = 0; i < suppliers.size(); i++) {
@@ -162,7 +162,9 @@ public class SupplierController {
     
     @RequestMapping("getIdMapName")
     @ResponseBody
-    public JSONArray getIdMapName(@ModelAttribute String userIds) {
+    public JSONArray getIdMapName(HttpServletRequest request) {
+        
+        String userIds = (String) request.getSession().getAttribute("userIds");
         
         List<Map<String, Object>> suppliers = supplierDao.findIdListMapName(userIds);
         logger.info("getIdMapName:" + suppliers.toString());

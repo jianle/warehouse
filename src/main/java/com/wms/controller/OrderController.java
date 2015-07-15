@@ -226,8 +226,8 @@ public class OrderController {
     
     @RequestMapping("detail/getCurAlloId")
     @ResponseBody
-    public JSONArray getCurAlloId(@ModelAttribute String userIds){
-        
+    public JSONArray getCurAlloId(HttpServletRequest request){
+        String userIds = (String) request.getSession().getAttribute("userIds");
         JSONArray result = new JSONArray();
         result = JSONArray.fromObject(orderinfoDao.findCurAlloId(userIds));
         logger.info(result.toString());
@@ -333,7 +333,7 @@ public class OrderController {
     @RequestMapping(value = "detailCheck", method = RequestMethod.GET)
     public ModelAndView detailCheck(
             @ModelAttribute User user,
-            @ModelAttribute String userIds,
+            HttpServletRequest request,
             @RequestParam(value="oId", defaultValue="1") Long oId,
             @RequestParam(value="sId", defaultValue="0") Long sId) {
         ModelAndView modelView = new ModelAndView();
@@ -341,6 +341,8 @@ public class OrderController {
         logger.info("RequestMapping :/order/detailCheck");
         
         Orderinfo orderInfo = orderinfoDao.get(oId);
+        
+        String userIds = (String) request.getSession().getAttribute("userIds");
         
         if (orderInfo == null) {
             oId = orderinfoDao.getMinId(userIds);
