@@ -48,7 +48,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 //                    .queryParam("from", getUrl(request)).build().toUriString());
 //            
             request.getRequestDispatcher(UriComponentsBuilder
-                    .fromPath(request.getContextPath()).path("/login")
+                    .fromPath("/login")
                     .queryParam("from", getUrl(request)).build().toUriString()).forward(request, response);
             
             return false;
