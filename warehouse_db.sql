@@ -137,7 +137,7 @@ drop table if exists `orderinfo`;
 CREATE TABLE `orderinfo` (
   `o_id` bigint(20) NOT NULL AUTO_INCREMENT comment '订单id',
   `order_code` varchar(20) not null default '' comment '订单编号',
-  `customer_code` varchar(24) not null default '' comment '客户ID',
+  `customer_code` bigint(20) not null default '0' comment '客户ID',
   `wh_add` varchar(640) not null default '' comment '出库仓库',
   `transp_cost_type` varchar(24) not null default '' comment '运费支付类型',
   `receive_tel` varchar(24) not null default '' comment '收货电话',
@@ -148,6 +148,8 @@ CREATE TABLE `orderinfo` (
   `amount_discount` double(10,2) not null default 0.0 comment '折扣金额',
   `amount_payable` double(10,2) not null default 0.0 comment '应付金额',
   `status` smallint(3) not null default 0 comment '订单状态 0-新增、1-已配货、2-已验货、3-已出库、4-已完成、',
+  `os_id` int(5) DEFAULT '0' COMMENT '来源Id',
+  `operator_id` bigint(20) DEFAULT '0' COMMENT '操作人',
   `remark` varchar(1000) default '' comment '备注',
   `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
   `update_time` timestamp null on update current_timestamp comment '最近一次更新',
@@ -156,7 +158,8 @@ CREATE TABLE `orderinfo` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '订单表'
 ;
 
-alter table `orderinfo` ADD COLUMN `os_id` int(5) DEFAULT '0' COMMENT '备注' AFTER `status`;
+alter table `orderinfo` ADD COLUMN `os_id` int(5) DEFAULT '0' COMMENT '订单来源ID' AFTER `status`;
+alter table `orderinfo` ADD COLUMN `operator_id` bigint(20) DEFAULT '0' COMMENT '操作人' AFTER `os_id`;
 alter table orderinfo add index `user_id_idx` (user_id);
 
 CREATE TABLE `ordersource` (

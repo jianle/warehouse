@@ -19,6 +19,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,7 +29,7 @@ import com.wms.dao.UserDao;
 import com.wms.model.User;
 
 @Controller
-//@SessionAttributes({"user", "userIds"})
+@SessionAttributes("user")
 public class LoginController {
     
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -67,11 +68,12 @@ public class LoginController {
             if (user != null) {
                 logger.info("Login by cookie: " + user.getUsername());
                 modelView.setViewName(from);
-                modelView.addObject("user", user);
                 
                 Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
                 String userIds = UserDenied.getUserIds(users, user.getRole());
                 user.setUserIds(userIds);
+                modelView.addObject("user", user);
+                
                 request.getSession().setAttribute("user", user);
                 //request.getSession().setAttribute("userIds", userIds);
                 
@@ -100,13 +102,12 @@ public class LoginController {
         if(user != null) {
             logger.info("login by password. " + user.getTruename());
             
-            modelView.addObject("user", user);
-            
             Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
             String userIds = UserDenied.getUserIds(users, user.getRole());
             modelView.addObject("userIds", userIds);
             user.setUserIds(userIds);
             
+            modelView.addObject("user", user);
             request.getSession().setAttribute("user", user);
             //request.getSession().setAttribute("userIds", userIds);
             

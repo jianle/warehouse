@@ -22,6 +22,8 @@ public class Orderinfo implements Serializable {
     private String receiveTel;
     private String receiveAdd;
     private Long userId;
+    private String userName;
+    private Long operatorId;
     
     private String documentDate;
     private Double amountTotal;
@@ -33,6 +35,19 @@ public class Orderinfo implements Serializable {
     private String remark;
     private String insertDt;
     private String updateTime;
+    
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    public String getUserName() {
+        return userName;
+    }
+    public void setOperatorId(Long operatorId) {
+        this.operatorId = operatorId;
+    }
+    public Long getOperatorId() {
+        return operatorId;
+    }
     public void setOsId(Long osId) {
         this.osId = osId;
     }

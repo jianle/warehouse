@@ -72,7 +72,7 @@
         </td>
         <td>${ordersources.get($order.osId)}</td>
         <td>${order.amountPayable}</td>
-        <td>${users.get($order.userId)}</td>
+        <td>${users.get($order.operatorId)}</td>
         <td>${order.documentDate}</td>
         <td>
           <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="edit(${order.oId},'${suppliers.get($order.customerCode)}')"></a>

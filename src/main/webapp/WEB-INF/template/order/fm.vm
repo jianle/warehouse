@@ -8,7 +8,7 @@
                     <label>订单编号:</label>
                     <input name="orderCode" class="easyui-textbox" />
                     <label style="padding-left:20px;">制单人:</label>
-                    <input name="userName" id="userName" class="easyui-textbox" value="$session.getAttribute('user').truename" />
+                    <input name="userName" id="userName" class="easyui-textbox" disabled="disabled" value="$session.getAttribute('user').truename" />
                     <label style="padding-left:20px;">制单日期:</label>
                     <input name="documentDate" required="true" id="documentDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox"/>
                 </div>

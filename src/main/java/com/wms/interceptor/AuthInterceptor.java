@@ -32,6 +32,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
         HttpSession session = request.getSession();
         if (session.getAttribute("user") instanceof User) {
             User user = (User) session.getAttribute("user");
+            if (user == null) {
+                return false;
+            }
             if (request.getRequestURI().contains("/users") && user.getRole() != User.ROLE_ADMIN) {
                 response.sendRedirect(UriComponentsBuilder
                         .fromPath(request.getContextPath()).path("/info/denied")
@@ -40,11 +43,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             }
             return true;
         }else {
-            response.sendRedirect(UriComponentsBuilder
+//            response.sendRedirect(UriComponentsBuilder
+//                    .fromPath(request.getContextPath()).path("/login")
+//                    .queryParam("from", getUrl(request)).build().toUriString());
+//            
+            request.getRequestDispatcher(UriComponentsBuilder
                     .fromPath(request.getContextPath()).path("/login")
-                    .queryParam("from", getUrl(request)).build().toUriString());
-
-            return super.preHandle(request, response, handler);
+                    .queryParam("from", getUrl(request)).build().toUriString()).forward(request, response);
+            
+            return false;
         }
 
     }

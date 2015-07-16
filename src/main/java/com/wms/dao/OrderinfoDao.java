@@ -24,7 +24,7 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
     private static final String TABLE_NAME    = "orderinfo";
     private static final String INSERT_FIELDS = "order_code, customer_code, wh_add"
             + ", transp_cost_type, receive_tel, receive_add, user_id, document_date, amount_total"
-            + ", amount_discount, amount_payable, status, os_id, remark, insert_dt, update_time";
+            + ", amount_discount, amount_payable, status, os_id, operator_id, remark, insert_dt, update_time";
     private static final String SELECT_FIELDS = "o_id, " + INSERT_FIELDS ;
     
     @Autowired
@@ -82,7 +82,7 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             int flag = jdbcTemplate.update(sql,
                     object.getOrderCode(),
                     object.getCustomerCode(),
@@ -97,6 +97,7 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
                     object.getAmountPayable(),
                     object.getStatus(),
                     object.getOsId(),
+                    object.getOperatorId(),
                     object.getRemark(),
                     object.getInsertDt(),
                     object.getUpdateTime()
@@ -243,6 +244,7 @@ public class OrderinfoDao implements BaseDao<Orderinfo, Long> {
             orderinfo.setStatus(rs.getInt("status"));
             
             orderinfo.setOsId(rs.getLong("os_id"));
+            orderinfo.setOperatorId(rs.getLong("operator_id"));
             orderinfo.setRemark(rs.getString("remark"));
             orderinfo.setInsertDt(String.valueOf(rs.getTimestamp("insert_dt")));
             orderinfo.setUpdateTime(String.valueOf(rs.getTimestamp("update_time")));

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.util.UserDenied;
@@ -39,6 +40,7 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/order")
+@SessionAttributes("user")
 public class OrderController {
     
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -72,15 +74,14 @@ public class OrderController {
         logger.info("RequestMapping :/order/view");
         User user = (User) request.getSession().getAttribute("user");
         
-        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
-        String userIds = UserDenied.getUserIds(users, user.getRole());
+        Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         
         // 获取分页数据
-        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage, userIds);
+        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage, user.getUserIds());
         
         modelView.addObject("paginations", paginations);
         modelView.addObject("ordersJson", JSONArray.fromObject(paginations.getResultList()));
-        Map<Long, String> suppliers = supplierDao.findIdMapName(userIds);
+        Map<Long, String> suppliers = supplierDao.findIdMapName(user.getUserIds());
         logger.info(suppliers.toString());
         modelView.addObject("suppliers", suppliers);
         modelView.addObject("users", users);
@@ -105,14 +106,13 @@ public class OrderController {
         logger.info("RequestMapping :/order/search");
         User user = (User) request.getSession().getAttribute("user");
         
-        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
-        String userIds = UserDenied.getUserIds(users, user.getRole());
+        Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         // 获取分页数据
-        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage, userIds);
+        Pagination<Orderinfo> paginations = orderinfoDao.findByCurrentPage(currentPage, numPerPage, user.getUserIds());
         
         modelView.addObject("paginations", paginations);
         modelView.addObject("ordersJson", JSONArray.fromObject(paginations.getResultList()));
-        Map<Long, String> suppliers = supplierDao.findIdMapName(userIds);
+        Map<Long, String> suppliers = supplierDao.findIdMapName(user.getUserIds());
         logger.info(suppliers.toString());
         modelView.addObject("suppliers", suppliers);
         modelView.addObject("users", users);
@@ -127,13 +127,15 @@ public class OrderController {
     @RequestMapping("save")
     @ResponseBody
     public String save(@ModelAttribute Orderinfo orderinfo, HttpServletRequest request) {
+        Supplier supplier = supplierDao.get(orderinfo.getCustomerCode());
         User user = (User) request.getSession().getAttribute("user");
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
         orderinfo.setUpdateTime(String.valueOf(new Timestamp(System.currentTimeMillis())));
         orderinfo.setInsertDt(String.valueOf(new Timestamp(System.currentTimeMillis())));
-        orderinfo.setUserId(user.getId());
+        orderinfo.setUserId(supplier.getUserId());
         orderinfo.setStatus(0);
+        orderinfo.setOperatorId(user.getId());
         
         logger.info(orderinfo.toString());
         
@@ -255,7 +257,10 @@ public class OrderController {
     public JSONObject getOidDetail(@RequestParam(value="o_id", defaultValue="0") Long oId){
         
         JSONObject result = new JSONObject();
-        result = JSONObject.fromObject(orderinfoDao.get(oId));
+        Orderinfo orderinfo = orderinfoDao.get(oId);
+        User user = userDao.get(orderinfo.getOperatorId());
+        orderinfo.setUserName(user.getTruename());
+        result = JSONObject.fromObject(orderinfo);
         logger.info("RequestMapping:order/getOrderInfo?oId=" + oId);
         return result;
     }
