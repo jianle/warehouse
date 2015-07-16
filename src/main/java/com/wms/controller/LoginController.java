@@ -19,7 +19,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +28,7 @@ import com.wms.dao.UserDao;
 import com.wms.model.User;
 
 @Controller
-@SessionAttributes({"user", "userIds"})
+//@SessionAttributes({"user", "userIds"})
 public class LoginController {
     
     private Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -72,7 +71,9 @@ public class LoginController {
                 
                 Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
                 String userIds = UserDenied.getUserIds(users, user.getRole());
-                modelView.addObject("userIds", userIds);
+                user.setUserIds(userIds);
+                request.getSession().setAttribute("user", user);
+                //request.getSession().setAttribute("userIds", userIds);
                 
                 return modelView;
             }
@@ -89,7 +90,7 @@ public class LoginController {
             logger.info(passwordTmp);
         } catch (Exception e) {
             // TODO: handle exception
-        	e.printStackTrace();
+            //e.printStackTrace();
             logger.debug("request null faield ." + e);
             modelView.setViewName("/login");
             return modelView;
@@ -104,6 +105,10 @@ public class LoginController {
             Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
             String userIds = UserDenied.getUserIds(users, user.getRole());
             modelView.addObject("userIds", userIds);
+            user.setUserIds(userIds);
+            
+            request.getSession().setAttribute("user", user);
+            //request.getSession().setAttribute("userIds", userIds);
             
             Cookie cookie = null;
             

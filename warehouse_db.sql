@@ -78,6 +78,9 @@ CREATE TABLE `enter` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 comment '商品入库表'
 ;
 
+alter table `enter` ADD COLUMN `operator_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '操作者' AFTER `user_id`;
+
+
 drop table if exists `storage`;
 CREATE TABLE `storage` (
   `g_id` bigint(20) NOT NULL default 0 comment '商品id',

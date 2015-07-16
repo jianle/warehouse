@@ -55,7 +55,7 @@
         <td>${enter.chests}</td>
         <td>${enter.boxes}</td>
         <td>${enter.amount}</td>
-        <td>${enter.userName}</td>
+        <td>${users.get($enter.operatorId)}</td>
         <td>${enter.remarks}</td>
         <td>${enter.insertDt}</td>
         <!--

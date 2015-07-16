@@ -33,8 +33,17 @@ public class User implements Serializable {
     private String truename;
     private String email;
     private Integer role;
+    private String userIds;
+    
     @Column(updatable = false)
     private Date created;
+    
+    public void setUserIds(String userIds) {
+        this.userIds = userIds;
+    }
+    public String getUserIds() {
+        return userIds;
+    }
     public Long getId() {
         return id;
     }

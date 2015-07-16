@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.GoodsDao;
@@ -36,7 +35,6 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/goods")
-@SessionAttributes({"user", "userIds"})
 public class GoodsController {
     
     private Logger logger = LoggerFactory.getLogger(GoodsController.class);
@@ -49,8 +47,9 @@ public class GoodsController {
     private UserDao userDao;
     
     @RequestMapping(value={"","search"}, method = RequestMethod.GET)
-    public ModelAndView list(@ModelAttribute User user,
-            HttpServletRequest request) {
+    public ModelAndView list(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         String name="";
@@ -58,7 +57,7 @@ public class GoodsController {
         int currentPage = 1;
         int numPerPage = 10;
         
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        String userIds = user.getUserIds();
         Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         
         // 获取分页数据
@@ -79,13 +78,14 @@ public class GoodsController {
     public ModelAndView search(@RequestParam(value="sName") String name,
             @RequestParam(value="currentPage") int currentPage,
             @RequestParam(value="numPerPage") int numPerPage,
-            @ModelAttribute User user,
             HttpServletRequest request,
             @RequestParam(value="isDisabled") String isDisabled) {
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/goods/list");
         
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        
+        String userIds = user.getUserIds();
         Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         
         logger.info("goods search userids:" + userIds);
@@ -106,8 +106,9 @@ public class GoodsController {
     
     @RequestMapping("save")
     @ResponseBody
-    public JSONObject save(@ModelAttribute User user,
+    public JSONObject save(HttpServletRequest request,
             @ModelAttribute Goods goods) {
+        User user = (User) request.getSession().getAttribute("user");
         Supplier supplier = supplierDao.get(goods.getsId());
         
         JSONObject jsonTuple = new JSONObject();
@@ -156,8 +157,8 @@ public class GoodsController {
     @RequestMapping("getGoodsName")
     @ResponseBody
     public JSONObject getGoodsName(HttpServletRequest request) throws JSONException {
-        
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        String userIds = user.getUserIds();
         List<Map<String, Object>> goods = goodsDao.findSuggestAll(userIds);
 
         JSONObject jsonObject;
@@ -201,7 +202,8 @@ public class GoodsController {
     public List<Map<String, Object>> findAllIdAndName(
             HttpServletRequest request,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        String userIds = user.getUserIds();
         return goodsDao.findAllIdAndName(sId, userIds);
     }
     
@@ -211,7 +213,8 @@ public class GoodsController {
             HttpServletRequest request,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        String userIds = user.getUserIds();
         
         List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, userIds);
         jsonObject.put("value", goods);
@@ -223,7 +226,8 @@ public class GoodsController {
     public JSONArray getIdMapName(
             HttpServletRequest request,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        String userIds = user.getUserIds();
         
         JSONArray jsonObject = new JSONArray();
         List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, userIds);

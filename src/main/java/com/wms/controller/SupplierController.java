@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.util.UserDenied;
@@ -31,7 +30,6 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/supplier")
-@SessionAttributes({"user", "userIds"})
 public class SupplierController {
     
     private Logger logger = LoggerFactory.getLogger(SupplierController.class);
@@ -42,8 +40,8 @@ public class SupplierController {
     private UserDao userDao;
     
     @RequestMapping(value={"","search"},method=RequestMethod.GET)
-    public ModelAndView list(@ModelAttribute User user, HttpServletRequest request) {
-        
+    public ModelAndView list(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
         logger.info(user.toString());
         
         Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
@@ -64,10 +62,10 @@ public class SupplierController {
     
     @RequestMapping(value="search", method=RequestMethod.POST)
     public ModelAndView search(HttpServletRequest request,
-            @ModelAttribute User user,
             @ModelAttribute("supplierSearchForm") SupplierSearchForm supplierSearchForm) {
         //搜索控制器
         
+        User user = (User) request.getSession().getAttribute("user");
         ModelAndView modelView = new ModelAndView();
         logger.info(supplierSearchForm.toString());
         
@@ -89,9 +87,9 @@ public class SupplierController {
     @RequestMapping(value="save", method=RequestMethod.POST)
     @ResponseBody
     public String save(HttpServletRequest request, 
-            @ModelAttribute User user,
             @ModelAttribute("supplier") Supplier supplier) {
         
+        User user = (User) request.getSession().getAttribute("user");
         supplier.setInsertDt(new Timestamp(System.currentTimeMillis()));
         supplier.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         supplier.setUserId(user.getId());
@@ -137,7 +135,8 @@ public class SupplierController {
     @ResponseBody
     public JSONObject getSupplierName(HttpServletRequest request) throws JSONException {
         
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        String userIds = user.getUserIds();
         List<Supplier> suppliers = supplierDao.findSuggestAll(userIds);
 
         JSONObject jsonObject;
@@ -163,8 +162,8 @@ public class SupplierController {
     @RequestMapping("getIdMapName")
     @ResponseBody
     public JSONArray getIdMapName(HttpServletRequest request) {
-        
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        String userIds = user.getUserIds();
         
         List<Map<String, Object>> suppliers = supplierDao.findIdListMapName(userIds);
         logger.info("getIdMapName:" + suppliers.toString());

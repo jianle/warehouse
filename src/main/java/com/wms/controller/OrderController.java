@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.util.UserDenied;
@@ -40,7 +39,6 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/order")
-@SessionAttributes({"user", "userIds"})
 public class OrderController {
     
     private Logger logger = LoggerFactory.getLogger(OrderController.class);
@@ -64,7 +62,7 @@ public class OrderController {
     
     @RequestMapping(value={"", "list"})
     public ModelAndView list(
-            @ModelAttribute User user,
+            HttpServletRequest request,
             @RequestParam(value="currentPage", defaultValue="1") int currentPage,
             @RequestParam(value="numPerPage", defaultValue="15") int numPerPage
             ) {
@@ -72,6 +70,7 @@ public class OrderController {
         modelView.setViewName("/order/view");
         
         logger.info("RequestMapping :/order/view");
+        User user = (User) request.getSession().getAttribute("user");
         
         Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
         String userIds = UserDenied.getUserIds(users, user.getRole());
@@ -95,7 +94,7 @@ public class OrderController {
     
     @RequestMapping("search")
     public ModelAndView search(
-            @ModelAttribute User user,
+            HttpServletRequest request,
             @RequestParam(value="currentPage", defaultValue="1") int currentPage,
             @RequestParam(value="numPerPage", defaultValue="15") int numPerPage
             ) {
@@ -104,6 +103,8 @@ public class OrderController {
         modelView.setViewName("/order/view");
         
         logger.info("RequestMapping :/order/search");
+        User user = (User) request.getSession().getAttribute("user");
+        
         Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
         String userIds = UserDenied.getUserIds(users, user.getRole());
         // 获取分页数据
@@ -188,9 +189,11 @@ public class OrderController {
     
     @RequestMapping(value = "detail", method = RequestMethod.GET)
     public ModelAndView detailView(
-            @ModelAttribute User user,
+            HttpServletRequest request,
             @RequestParam(value="oId", defaultValue="1") Long oId,
             @RequestParam(value="sId", defaultValue="0") Long sId) {
+        
+        User user = (User) request.getSession().getAttribute("user");
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/order/detail");
         logger.info("RequestMapping :/order/detail");
@@ -211,7 +214,8 @@ public class OrderController {
     
     @RequestMapping("detail/getAlloId")
     @ResponseBody
-    public JSONObject getAlloId(@ModelAttribute User user){
+    public JSONObject getAlloId(HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
         
         Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
         String userIds = UserDenied.getUserIds(users, user.getRole());
@@ -227,7 +231,9 @@ public class OrderController {
     @RequestMapping("detail/getCurAlloId")
     @ResponseBody
     public JSONArray getCurAlloId(HttpServletRequest request){
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        
+        String userIds = user.getUserIds();
         JSONArray result = new JSONArray();
         result = JSONArray.fromObject(orderinfoDao.findCurAlloId(userIds));
         logger.info(result.toString());
@@ -332,7 +338,6 @@ public class OrderController {
     
     @RequestMapping(value = "detailCheck", method = RequestMethod.GET)
     public ModelAndView detailCheck(
-            @ModelAttribute User user,
             HttpServletRequest request,
             @RequestParam(value="oId", defaultValue="1") Long oId,
             @RequestParam(value="sId", defaultValue="0") Long sId) {
@@ -341,8 +346,8 @@ public class OrderController {
         logger.info("RequestMapping :/order/detailCheck");
         
         Orderinfo orderInfo = orderinfoDao.get(oId);
-        
-        String userIds = (String) request.getSession().getAttribute("userIds");
+        User user = (User) request.getSession().getAttribute("user");
+        String userIds = user.getUserIds();
         
         if (orderInfo == null) {
             oId = orderinfoDao.getMinId(userIds);

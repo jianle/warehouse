@@ -21,7 +21,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
     private Logger logger = LoggerFactory.getLogger(EnterDao.class);
     
     private static final String TABLE_NAME    = "enter";
-    private static final String INSERT_FIELDS = "g_id, s_id, g_name, chests, boxes, amount, user_id, user_name, remarks, insert_dt";
+    private static final String INSERT_FIELDS = "g_id, s_id, g_name, chests, boxes, amount, user_id, operator_id, user_name, remarks, insert_dt";
     private static final String SELECT_FIELDS = "e_id, " + INSERT_FIELDS + ", update_time";
     
     @Autowired
@@ -57,7 +57,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
         try {
             
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             jdbcTemplate.update(sql, 
                     object.getgId(),
@@ -67,6 +67,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
                     object.getBoxes(),
                     object.getAmount(),
                     object.getUserId(),
+                    object.getOperatorId(),
                     object.getUserName(),
                     object.getRemarks(),
                     object.getInsertDt());
@@ -116,11 +117,15 @@ public class EnterDao implements BaseDao<Enter, Long> {
     }
     
     @SuppressWarnings("deprecation")
-    public Pagination<Enter> findByCurrentPage(int currentPage,int numPerPage, Long userId) {
+    public Pagination<Enter> findByCurrentPage(int currentPage,int numPerPage, String userIds) {
         //分页显示
         List<Enter> enters;
+        String isWhere = "";
+        if (userIds != null && !"".equals(userIds)) {
+            isWhere = " where user_id in " + userIds;
+        }
         
-        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " where user_id=" + userId);
+        StringBuffer sqlBuf = new StringBuffer("SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + isWhere);
         sqlBuf.append(" ORDER BY e_id DESC ");
         
         try {
@@ -159,6 +164,7 @@ public class EnterDao implements BaseDao<Enter, Long> {
             enter.setAmount(rs.getInt("amount"));
             
             enter.setUserId(rs.getLong("user_id"));
+            enter.setOperatorId(rs.getLong("operator_id"));
             enter.setUserName(rs.getString("user_name"));
             enter.setRemarks(rs.getString("remarks"));
             enter.setInsertDt(rs.getTimestamp("insert_dt"));

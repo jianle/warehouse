@@ -62,7 +62,6 @@
         <th style="min-width:100px">商品名称</th>
         <th style="min-width:120px">客户名称</th>
         <th style="width:95px;">总库存个数</th>
-        <th style="width:80">操作人</th>
         <th style="min-width:90px">备注</th>
         <th style="width:175px;">最新更新时间</th>
       </tr>
@@ -74,7 +73,6 @@
         <td>${storage.gName}</td>
         <td>#if($supplierMap.get(${storage.sId}))$supplierMap.get(${storage.sId})#end</td>
         <td>${storage.amount}</td>
-        <td>${users.get($storage.userId)}</td>
         <td>${storage.remarks}</td>
         <td>#if(${storage.updateTime})${storage.updateTime}#else${storage.insertDt}#end</td>
       </tr>

@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.EnterDao;
 import com.wms.dao.GoodsDao;
 import com.wms.dao.StorageDao;
 import com.wms.dao.SupplierDao;
+import com.wms.dao.UserDao;
 import com.wms.model.Enter;
 import com.wms.model.Goods;
 import com.wms.model.Pagination;
@@ -32,7 +32,6 @@ import com.wms.model.User;
 
 @Controller
 @RequestMapping("/enter")
-@SessionAttributes("user")
 public class EnterController {
     
     private Logger logger = LoggerFactory.getLogger(EnterController.class);
@@ -45,7 +44,8 @@ public class EnterController {
     
     @Autowired
     private SupplierDao supplierDao;
-    
+    @Autowired
+    private UserDao userDao;
     @Autowired
     private GoodsDao goodsDao;
     
@@ -63,20 +63,23 @@ public class EnterController {
     @RequestMapping("list")
     public ModelAndView list(@RequestParam(value="currentPage", defaultValue="1") int currentPage,
             @RequestParam(value="numPerPage", defaultValue="10") int numPerPage,
-            @ModelAttribute User user
+            HttpServletRequest request
             ) {
+        User user = (User) request.getSession().getAttribute("user");
         ModelAndView modelView = new ModelAndView();
         modelView.setViewName("/enter/list");
+        Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         
         logger.info("RequestMapping :/enter/list");
         // 获取分页数据
-        Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage, numPerPage, user.getId());
+        Pagination<Enter> paginationEnters = enterDao.findByCurrentPage(currentPage, numPerPage, user.getUserIds());
         // 获取sid对应的name
         Map<Long, String> supplierMap = getSupplierMap(paginationEnters.getResultList());
         
         modelView.addObject("supplierMap", supplierMap);
         modelView.addObject("paginationEnters", paginationEnters);
         modelView.addObject("currentPage", currentPage);
+        modelView.addObject("users", users);
         
         return modelView;
         
@@ -112,11 +115,14 @@ public class EnterController {
     @RequestMapping("save")
     @ResponseBody
     public JSONObject save(@ModelAttribute Enter enter
-            , @ModelAttribute User user
             , HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("user");
+        
+        Goods goods = goodsDao.get(enter.getgId());
         
         enter.setInsertDt(new Timestamp(System.currentTimeMillis()));
-        enter.setUserId(user.getId());
+        enter.setUserId(goods.getUserId());
+        enter.setOperatorId(user.getId());
         enter.setUserName(user.getTruename());
         logger.info(user.toString());
         logger.info(enter.toString());
@@ -130,8 +136,6 @@ public class EnterController {
             jsonTuple.put("value", false);
             return jsonTuple;
         }
-        
-        Goods goods = goodsDao.get(enter.getgId());
         
         int amount = enter.getChests() * goods.getBoxes() * goods.getAmount()
                 + enter.getBoxes() * goods.getAmount()

@@ -19,6 +19,7 @@ public class Enter implements Serializable{
     private Integer chests;
     private Integer boxes;
     private Long userId;
+    private Long operatorId;
     private String userName;
     
     private Integer amount;
@@ -26,6 +27,12 @@ public class Enter implements Serializable{
     private Timestamp insertDt;
     private Timestamp updateTime;
     
+    public void setOperatorId(Long operatorId) {
+        this.operatorId = operatorId;
+    }
+    public Long getOperatorId() {
+        return operatorId;
+    }
     public Long geteId() {
         return eId;
     }
