@@ -380,7 +380,7 @@ public class OrderController {
         
         modelView.addObject("goodCodeMap", goodCodeMap);
         
-        Map<Long, String> users = userDao.findDeniedMapIdAndName(user);
+        Map<Long, String> users = userDao.findAllMapIdAndName((long) -1);
         modelView.addObject("users", users);
         
         return modelView;
