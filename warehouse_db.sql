@@ -140,6 +140,7 @@ CREATE TABLE `orderinfo` (
   `customer_code` bigint(20) not null default '0' comment '客户ID',
   `wh_add` varchar(640) not null default '' comment '出库仓库',
   `transp_cost_type` varchar(24) not null default '' comment '运费支付类型',
+  `receive_name` varchar(64) not null default '' comment '收货人',
   `receive_tel` varchar(24) not null default '' comment '收货电话',
   `receive_add` varchar(256) not null default '' comment '收货地址(货送地址)',
   `user_id` bigint(20) not null default 0 comment '制单人ID',
@@ -160,6 +161,7 @@ CREATE TABLE `orderinfo` (
 
 alter table `orderinfo` ADD COLUMN `os_id` int(5) DEFAULT '0' COMMENT '订单来源ID' AFTER `status`;
 alter table `orderinfo` ADD COLUMN `operator_id` bigint(20) DEFAULT '0' COMMENT '操作人' AFTER `os_id`;
+alter table `orderinfo` add column `receive_name` varchar(256) not null default '' comment '收货地址(货送地址)' after `transp_cost_type`;
 alter table orderinfo add index `user_id_idx` (user_id);
 
 CREATE TABLE `ordersource` (

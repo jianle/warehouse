@@ -19,6 +19,7 @@ public class Orderinfo implements Serializable {
     private Long customerCode;
     private String whAdd;
     private String transpCostType;
+    private String receiveName;
     private String receiveTel;
     private String receiveAdd;
     private Long userId;
@@ -36,6 +37,12 @@ public class Orderinfo implements Serializable {
     private String insertDt;
     private String updateTime;
     
+    public void setReceiveName(String receiveName) {
+        this.receiveName = receiveName;
+    }
+    public String getReceiveName() {
+        return receiveName;
+    }
     public void setUserName(String userName) {
         this.userName = userName;
     }

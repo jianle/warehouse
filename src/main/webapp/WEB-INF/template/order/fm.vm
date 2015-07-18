@@ -1,44 +1,55 @@
 
-    <div id="dlg" class="easyui-dialog" style="width:890px;height:375px;padding:10px 20px"
+    <div id="dlg" class="easyui-dialog" style="width:890px;height:360px;padding:10px 20px"
                 closed="true" buttons="#dlg-buttons">
+        <br/>
         <div class="ftitle">订单信息</div>
             <form id="fm" method="post" novalidate>
                 <input name="oId" type="hidden" />
                 <div class="fitem">
-                    <label>订单编号:</label>
-                    <input name="orderCode" class="easyui-textbox" />
-                    <label style="padding-left:20px;">制单人:</label>
+                    <label style="width:100px;">第三方订单编号:</label>
+                    <input name="orderCode" style="width:160px" class="easyui-textbox" />
+                    <label style="padding-left:30px;">制单人:</label>
                     <input name="userName" id="userName" class="easyui-textbox" disabled="disabled" value="$session.getAttribute('user').truename" />
                     <label style="padding-left:20px;">制单日期:</label>
                     <input name="documentDate" required="true" id="documentDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox"/>
                 </div>
                 <div class="fitem">
                     <label>客户名称：</label>
-                    <input name="customerName" id="customerName" value="1" />
+                    <input name="customerCode" id="customerCode" value="1" required="true" />
+                    <!--
                     <label style="padding-left:20px;">客户编码:</label>
                     <input id="customerCode" name="customerCode" class="easyui-numberbox" required="true" />
+                    -->
                     <label style="padding-left:20px;">订单来源:</label>
                     <input name="osId" id="osId" />
+                    <label style="padding-left:30px;">总金额:</label>
+                    <input name="amountTotal" class="easyui-numberbox" data-options="precision:2"/>
                 </div>
+                <!--
                 <div class="fitem">
                     <label>运费支付类型:</label>
                     <input name="transpCostType" class="easyui-textbox">
                     <label style="padding-left:20px;">出库地址:</label>
                     <input name="whAdd" style="width:450px" class="easyui-textbox" />
                 </div>
+                -->
                 <div class="fitem">
-                    <label style="padding-left:20px;">总金额:</label>
-                    <input name="amountTotal"T class="easyui-numberbox" data-options="precision:2"/>
+                    <label style="padding-left:20px;">收货人:</label>
+                    <input name="receiveName" class="easyui-textbox" data-options="precision:2"/>
+                    <label style="padding-left:30px;">备注:</label>
+                    <input style="width:448px" name="remark" class="easyui-textbox" />
+                    <!--
                     <label style="padding-left:20px;">折扣金额:</label>
                     <input name="amountDiscount" class="easyui-numberbox" data-options="precision:2"/>
                     <label style="padding-left:20px;">应付金额:</label>
                     <input name="amountPayable" class="easyui-numberbox" data-options="precision:2" />
+                    -->
                 </div>
                 <div class="fitem">
                     <label>收货电话:</label>
                     <input name="receiveTel" class="easyui-textbox" >
                     <label style="padding-left:20px;">送货地址:</label>
-                    <input style="width:450px" name="receiveAdd" class="easyui-textbox" />
+                    <input style="width:448px" name="receiveAdd" class="easyui-textbox" />
                 </div>
             </form>
       </div>
@@ -46,4 +57,3 @@
           <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Save</a>
           <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
       </div>
-        

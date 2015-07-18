@@ -41,8 +41,10 @@
         <th width="60px">明细</th>
         <th width="100px">客户名称</th>
         <th width="60px">订单状态</th>
+        <th width="60px">订单编号</th>
+        <th width="90px">第三方订单编号</th>
         <th width="80px">订单来源</th>
-        <th width="58px">应付金额</th>
+        <th width="58px">总金额</th>
         <th width="80px">制单人</th>
         <th width="80px">制单日期</th>
         <th width="80px">查看删除</th>
@@ -54,24 +56,26 @@
         <th><a href="#springUrl('/order/detail?oId=')${order.oId}&sId=${order.customerCode}" target="_blank">订单明细</a></th>
         <td>${suppliers.get($order.customerCode)}</td>
         <td value="${order.status}">
-            <span class="mini-label 
+            <span class="mini-label
                 #if(${order.status}==0) mini-label-primary
-                #elseif(${order.status}==1) mini-label-warning 
-                #elseif(${order.status}==2) mini-label-info 
+                #elseif(${order.status}==1) mini-label-warning
+                #elseif(${order.status}==2) mini-label-info
                 #elseif(${order.status}==3) mini-label-danger
-                #elseif(${order.status}==4) mini-label-success 
+                #elseif(${order.status}==4) mini-label-success
                 #end">
-                
+
             #if(${order.status}==0) 新&nbsp;&nbsp;&nbsp增
-            #elseif(${order.status}==1) 已配货 
-            #elseif(${order.status}==2) 已验货 
+            #elseif(${order.status}==1) 已配货
+            #elseif(${order.status}==2) 已验货
             #elseif(${order.status}==3) 已出库
-            #elseif(${order.status}==4) 已完成 
+            #elseif(${order.status}==4) 已完成
             #end
           </span>
         </td>
+        <th>${order.oId}</th>
+        <td>${order.orderCode}</td>
         <td>${ordersources.get($order.osId)}</td>
-        <td>${order.amountPayable}</td>
+        <td>${order.amountTotal}</td>
         <td>${users.get($order.operatorId)}</td>
         <td>${order.documentDate}</td>
         <td>
@@ -93,16 +97,16 @@
 
 <script type="text/javascript">
     var curuserName='$session.getAttribute("user").truename';
-    
-    $('#customerName').combobox({
+
+    $('#customerCode').combobox({
       valueField: 'sId',
       textField: 'sName',
       url: contextPath+'/supplier/getIdMapName',
-      onSelect: function(rec){
-          $('#customerCode').numberbox('setValue', rec.sId);
-      }
+      // onSelect: function(rec){
+      //     $('#customerCode').numberbox('setValue', rec.sId);
+      // }
   });
-  
+
   $('#osId').combobox({
       valueField: 'osId',
       textField: 'osName',
