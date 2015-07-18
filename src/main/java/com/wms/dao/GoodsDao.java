@@ -266,7 +266,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             }
             
             if (userIds != null && !"".equals(userIds)) {
-                if (!"".equals(isWhere)) {
+                if ("".equals(isWhere)) {
                     isWhere = " where user_id in " + userIds;
                 } else {
                     isWhere = isWhere + " and user_id in " + userIds;
