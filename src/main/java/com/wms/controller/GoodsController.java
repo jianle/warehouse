@@ -201,7 +201,7 @@ public class GoodsController {
     @ResponseBody
     public List<Map<String, Object>> findAllIdAndName(
             HttpServletRequest request,
-            @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
+            @RequestParam(value="sId", defaultValue="-1") Long sId) throws JSONException {
         User user = (User) request.getSession().getAttribute("user");
         String userIds = user.getUserIds();
         return goodsDao.findAllIdAndName(sId, userIds);

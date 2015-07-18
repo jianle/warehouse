@@ -9,33 +9,28 @@
 <h4><a href="#springUrl('/enter/list')">查看历史入库</a></h4>
 <hr style="margin-top:0px"/>
 <form class="form-horizontal" id="enterGoods" style="padding-top:30px;">
-  <input type="hidden" class="form-control" name="sId" id="sId" value="" />
   <div class="form-group">
-    <label for="gId" class="control-label" style="padding-left:15px;float:left" >商品编号</label>
-    <div class="col-sm-2">
-      <input type="text" readonly="readonly" class="form-control" name="gId" id="gId" />
+    <label for="sId" class="control-label" style="padding-left:15px;float:left" >客户名称</label>
+    <div class="col-lg-3" style="margin-top: 7px">
+      <input type="text" style="width:270px;hight:50px" name="sId" id="sId" required="true" />
     </div>
     <label for="name" class="control-label" style="padding-left:15px;float:left" ><font style="color:#d9534f">*</font>
-      请确保商品编号正确
+      请搜索点击选择客户名称
     </label>
   </div>
 
-  <div class="row">
-    <label for="gName" class="control-label" style="padding-left:15px;float:left" >商品名称</label>
-    <div class="col-lg-5">
-       <div class="input-group">
-           <input type="text" class="form-control" id="gName" name="gName" value="" />
-           <div class="input-group-btn">
-               <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                   <span class="caret"></span>
-               </button>
-               <ul class="dropdown-menu dropdown-menu-right" role="menu">
-               </ul>
-           </div>
-           <!-- /btn-group -->
-       </div>
-   </div>
+  <div class="form-group">
+    <label for="gId" class="control-label" style="padding-left:15px;float:left" >商品名称</label>
+    <div class="col-lg-3" style="margin-top: 7px">
+      <input type="text" style="width:270px;hight:50px" name="gId" id="gId" required="true" />
+    </div>
+    <label for="name" class="control-label" style="padding-left:15px;float:left" ><font style="color:#d9534f">*</font>
+      请搜索点击选择商品名称
+    </label>
   </div>
+
+  <input type="hidden" name="gName" id="gName" />
+
   <hr/>
   <div class="form-group">
     <label for="chests" class="control-label" style="padding-left:15px;float:left" >共多少箱</label>
@@ -69,32 +64,27 @@
 </form>
 
 <script type="text/javascript">
-    var data;
-    var boxes=0;
-    var amount=0;
-    var sNameSuggest = $("#gName").bsSuggest({
-        url: contextPath + "/goods/getGoodsName?gName=",
-        idField: "gId",
-        keyField: "gname",
-        effectiveFields: ["gId", "gname", "sname"],
-        effectiveFieldsAlias:{gId: "商品ID",gname:"商品名称",sname:"客户名称"}
-    }).on('onDataRequestSuccess', function (e, result) {
-    	//console.log('onDataRequestSuccess: ', result);
-      data = eval(result.value);
-    }).on('onSetSelectValue', function (e, keyword) {
-    	// console.log('onSetSelectValue: ', keyword);
-      // console.log(data.length);
-      for(var i=0; i<data.length; i++){
-        if(keyword.id==data[i].gId){
-          console.log(data[i]);
-          $('#sId').val(data[i].sId);
-          boxes=data[i].boxes;
-          amount=data[i].amount;
-        }
+
+    $('#sId').combobox({
+      valueField: 'sId',
+      textField: 'sName',
+      url: contextPath+'/supplier/getIdMapName',
+      onSelect: function(rec){
+          var url = contextPath + '/goods/getIdMapName?sId=' + rec.sId;
+          //console.log(url);
+          $('#gId').combobox('clear');
+          $('#gId').combobox('reload', url);
       }
-      $('#gId').val(keyword.id);
-    }).on('onUnsetSelectValue', function (e) {
-    	//console.log("onUnsetSelectValue");
     });
+    $('#gId').combobox({
+      valueField: 'gId',
+      textField: 'gName',
+      url: contextPath + '/goods/getIdMapName?sId=-1',
+      onSelect: function(rec){
+        //console.log(rec);
+        $('#sId').combobox('setValue', rec.sId);
+        $('#gName').val(rec.gName);
+      }
+     });
 
 </script>

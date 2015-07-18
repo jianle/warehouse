@@ -236,7 +236,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             }
             
             if (userIds != null && !"".equals(userIds)) {
-                if (!"".equals(isWhere)) {
+                if ("".equals(isWhere)) {
                     isWhere = " where user_id in " + userIds;
                 } else {
                     isWhere = isWhere + " and user_id in " + userIds;
@@ -244,7 +244,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
                 
             }
             
-            String sql = "SELECT g_id as gId, name as gName, scode FROM " + TABLE_NAME + isWhere;
+            String sql = "SELECT g_id as gId, name as gName, s_id sId, scode FROM " + TABLE_NAME + isWhere;
             logger.info(sql);
             
             return jdbcTemplate.queryForList(sql);
