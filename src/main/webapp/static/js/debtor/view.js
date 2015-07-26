@@ -119,8 +119,8 @@ $(document).ready(function(){
         var startDate = $('#startDate').datepicker('getDate');
         var endDate = $('#endDate').datepicker('getDate');
         
-        $('#startDate').datepicker('setDate', monthDiff(startDate,3));
-        $('#endDate').datepicker('setDate', monthDiff(endDate,3));
+        $('#startDate').datepicker('setDate', monthDiff(startDate,1));
+        $('#endDate').datepicker('setDate', monthDiff(endDate,1));
         
         document.getElementById('firstFromId').submit();
     });
@@ -130,8 +130,8 @@ $(document).ready(function(){
         var startDate = $('#startDate').datepicker('getDate');
         var endDate = $('#endDate').datepicker('getDate');
         
-        $('#startDate').datepicker('setDate', monthAdd(startDate,3));
-        $('#endDate').datepicker('setDate', monthAdd(endDate,3));
+        $('#startDate').datepicker('setDate', monthAdd(startDate,1));
+        $('#endDate').datepicker('setDate', monthAdd(endDate,1));
         
         document.getElementById('firstFromId').submit();
     });
