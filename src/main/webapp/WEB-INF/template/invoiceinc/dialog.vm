@@ -2,7 +2,7 @@
                 closed="true" buttons="#dlg-buttons">
         <div class="ftitle">进项增票</div>
             <form id="modalForm" method="post" style="margin-top:20px" novalidate>
-                                
+
                 <div class="fitem">
                     <label style="padding-left:10px;">发票号:</label>
                     <input name="invId" id="invId" class="easyui-numberbox" required="true" />
@@ -10,7 +10,7 @@
                     <input id="number" name="number" value="1" class="easyui-numberspinner" style="width:65px;"
                         required="required" data-options="min:1,max:200,editable:true">
                 </div>
-                
+
                 <div class="fitem">
                     <label style="padding-left:20px;">抬头:</label>
                     <select id="proId" class="easyui-combobox" panelHeight="150px"  name="proId" style="width:351px;" required="true">
@@ -19,14 +19,14 @@
                       #end
                     </select>
                 </div>
-                
+
                 <div class="fitem">
                     <label style="padding-left:0px;">价税合计:</label>
                     <input name="valoremTax" id="valoremTax" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
                     <label style="padding-left:80px;padding-right:10px;width:125px">金额:</label>
                     <input name="amount" id="amount" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
                 </div>
-                
+
                 <div class="fitem">
                     <label style="padding-left:20px;">税 额:</label>
                     <input name="amountTax" id="amountTax" class="easyui-numberbox" style="width:110px" data-options="precision:2" required="true" />
@@ -38,28 +38,31 @@
                       <option value="17">17%</option>
                     </select>
                 </div>
-                
+
                 <div class="fitem">
                     <label style="padding-left:0px;">开票日期:</label>
                     <input name="invDate" id="invDate" data-options="formatter:myformatter,parser:myparser" class="easyui-datebox" required="true"/>
                 </div>
-                
+
                 <div class="fitem">
                     <label>备注信息:</label>
                     <input style="width:300px" name="remark" id="remark" class="easyui-textbox" />
                 </div>
-                
+
                 <div class="fitem">
                     <label style="width:90px">返点比例(%):</label>
                     <input name="rateRebate" id="rateRebate" class="easyui-numberbox" style="width:80px" data-options="precision:2" required="true"/>
                 </div>
                 <div class="fitem">
                     <label style="padding-left:0px;">开票公司:</label>
+                    <input style="width:351px" name="conName" id="conName" class="easyui-textbox" required="true"/>
+                    <!--
                     <select id="conId" class="easyui-combobox" panelHeight="150px"  name="conId" style="width:351px;" required="true">
                       #foreach( $key in $consumerMap.keySet().toArray())
                       <option value="$key">${consumerMap.get($key)}</option>
                       #end
                     </select>
+                    -->
                 </div>
                 <div class="fitem">
                     <label>发票所属:</label>

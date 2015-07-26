@@ -50,7 +50,7 @@
       </div>
     </div>
   </div>
-  
+
 </form>
 
 
@@ -102,7 +102,7 @@
       <tr id="${invoiceIncome.invId}_tr">
         <th>${invoiceIncome.invId}</th>
         <td><a id="edit" onclick="edit(${invoiceIncome.invId},${invoiceIncome.proId},${invoiceIncome.conId},${invoiceIncome.invType},${invoiceIncome.isDeleted})" data-toggle="modal"
-          style="cursor:pointer;" >${consumerMap.get($invoiceIncome.conId)}</a>
+          style="cursor:pointer;" >${invoiceIncome.conName}</a>
         </td>
         <td>${invoiceIncome.valoremTax}</td>
         <td>${invoiceIncome.amount}</td>

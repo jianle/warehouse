@@ -30,7 +30,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
 
     private static final String TABLE_NAME    = "invoice_income";
     private static final String INSERT_FIELDS = "inv_id, pro_id, valorem_tax, amount, amount_tax, rate_tax,"
-            + "inv_date, inv_type, con_id, remark, rate_rebate, is_deleted, update_time";
+            + "inv_date, inv_type, con_id, con_name, remark, rate_rebate, is_deleted, update_time";
     private static final String SELECT_FIELDS = INSERT_FIELDS;
     
     @Autowired
@@ -56,7 +56,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
-                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
+                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
             jdbcTemplateFinance.update(sql,
                     obj.getInvId(),
                     obj.getProId(),
@@ -67,6 +67,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                     obj.getInvDate(),
                     obj.getInvType(),
                     obj.getConId(),
+                    obj.getConName(),
                     obj.getRemark(),
                     obj.getRateRebate(),
                     obj.getIsDeleted(),
@@ -105,7 +106,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "update " + TABLE_NAME + " set  pro_id=?, valorem_tax=?, amount=?, amount_tax=?, rate_tax=?,"
-            + "inv_date=?, inv_type=?, con_id=?, remark=?, rate_rebate=?, is_deleted=? "
+            + "inv_date=?, inv_type=?, con_name=?, remark=?, rate_rebate=?, is_deleted=? "
             + "where inv_id=?" ;
             jdbcTemplateFinance.update(sql,
                     obj.getProId(),
@@ -115,7 +116,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                     obj.getRateTax(),
                     obj.getInvDate(),
                     obj.getInvType(),
-                    obj.getConId(),
+                    obj.getConName(),
                     obj.getRemark(),
                     obj.getRateRebate(),
                     obj.getIsDeleted(),
@@ -159,6 +160,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
             invoiceIncome.setInvDate(DATE_FORMAT.format(rs.getDate("inv_date")));
             invoiceIncome.setInvType(rs.getInt("inv_type"));
             invoiceIncome.setConId(rs.getLong("con_id"));
+            invoiceIncome.setConName(rs.getString("con_name"));
             invoiceIncome.setRemark(rs.getString("remark"));
             invoiceIncome.setRateRebate(rs.getDouble("rate_rebate"));
             invoiceIncome.setIsDeleted(rs.getInt("is_deleted"));
@@ -212,7 +214,7 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
         // TODO Auto-generated method stub
         try {
             String sql = "insert into " + TABLE_NAME + " ( " + INSERT_FIELDS
-                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
+                    + " ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" ;
             jdbcTemplateFinance.batchUpdate(sql, new BatchPreparedStatementSetter(){
 
                 @Override
@@ -229,10 +231,11 @@ public class InvoiceIncomeDao implements BaseDao<InvoiceIncome, Long> {
                     ps.setObject(7, obj.getInvDate());
                     ps.setObject(8, obj.getInvType());
                     ps.setObject(9, obj.getConId());
-                    ps.setObject(10, obj.getRemark());
-                    ps.setObject(11, obj.getRateRebate());
-                    ps.setObject(12, obj.getIsDeleted());
-                    ps.setObject(13, new Timestamp(System.currentTimeMillis()));
+                    ps.setObject(10, obj.getConName());
+                    ps.setObject(11, obj.getRemark());
+                    ps.setObject(12, obj.getRateRebate());
+                    ps.setObject(13, obj.getIsDeleted());
+                    ps.setObject(14, new Timestamp(System.currentTimeMillis()));
                     
                 }
 

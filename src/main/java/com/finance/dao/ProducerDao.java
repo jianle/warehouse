@@ -28,7 +28,7 @@ public class ProducerDao implements BaseDao<Producer, Long> {
     private static final SimpleDateFormat DATET_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     private static final String TABLE_NAME    = "producer";
-    private static final String INSERT_FIELDS = "abbreviate, pro_name, remark, update_time";
+    private static final String INSERT_FIELDS = "pro_name, abbreviate, remark, update_time";
     private static final String SELECT_FIELDS = "pro_id, " + INSERT_FIELDS;
     
     @Autowired

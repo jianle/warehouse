@@ -116,16 +116,16 @@ public class InvoiceIncomeController {
         invoiceIncomes.add(invoiceIncome);
         Long top = invoiceIncome.getInvId();
         if (invoiceIncomeDao.get(top) != null) {
-			return "false";
-		}
+            return "false";
+        }
         for (int i = 1; i < invoiceIncome.getNumber(); i++) {
             try {
-            	InvoiceIncome tmp = (InvoiceIncome) invoiceIncome.clone();
+                InvoiceIncome tmp = (InvoiceIncome) invoiceIncome.clone();
                 tmp.setInvId(top + i);
                 invoiceIncomes.add(tmp);
                 if (invoiceIncomeDao.get(tmp.getInvId()) != null) {
-					return "false";
-				}
+                    return "false";
+                }
             } catch (CloneNotSupportedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

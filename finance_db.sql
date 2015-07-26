@@ -93,6 +93,7 @@ CREATE TABLE `invoice_income` (
 `inv_date` DATE NOT NULL default '1900-01-01' comment '开票日期',
 `inv_type` smallint(2) not null default 0 comment '0-公司、3-张峰、4-吕峰、5-陈浩、2-其它',
 `con_id` bigint(20) NOT NULL default 0 comment '开票对应公司ID',
+`con_name` varchar(256) not null default '' comment '开票公司名称',
 `remark` VARCHAR(640) NOT NULL default '' comment '备注',
 `rate_rebate` DOUBLE(5,2) NOT NULL default 0.0 comment '返点比例',
 `is_deleted` smallint(2) not null default 0 comment '0-有效、1-被删除的',
@@ -103,6 +104,8 @@ index `con_id_index` (`con_id`),
 index `pro_id_index` (`pro_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '进项增票登记表'
 ;
+
+alter table `invoice_income` add column con_name varchar(256) not null default '' comment '开票公司名称' after `con_id`;
 
 
 drop table if exists `debtor`;

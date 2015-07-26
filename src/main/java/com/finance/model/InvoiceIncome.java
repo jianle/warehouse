@@ -18,7 +18,8 @@ public class InvoiceIncome implements Cloneable {
     private Double rateTax;
     private String invDate;
     private Integer invType;
-    private Long conId;
+    private long conId;
+    private String conName;
     private String remark;
     private Double rateRebate;
     private Integer isDeleted;
@@ -31,6 +32,12 @@ public class InvoiceIncome implements Cloneable {
         return df.format(this.amountTax * (this.rateRebate/100));
     }
     
+    public void setConName(String conName) {
+        this.conName = conName;
+    }
+    public String getConName() {
+        return conName;
+    }
     public Integer getNumber() {
         return number;
     }
@@ -85,10 +92,10 @@ public class InvoiceIncome implements Cloneable {
     public void setInvType(Integer invType) {
         this.invType = invType;
     }
-    public void setConId(Long conId) {
+    public void setConId(long conId) {
         this.conId = conId;
     }
-    public Long getConId() {
+    public long getConId() {
         return conId;
     }
     public String getRemark() {
@@ -127,7 +134,7 @@ public class InvoiceIncome implements Cloneable {
                 + ", valoremTax=" + valoremTax + ", amount=" + amount
                 + ", amountTax=" + amountTax + ", rateTax=" + rateTax
                 + ", invDate=" + invDate + ", invType=" + invType
-                + ", conId=" + conId + ", remark=" + remark
+                + ", conId=" + conId + ", conName=" + conName + ", remark=" + remark
                 + ", rateRebate=" + rateRebate + ", isDeleted=" + isDeleted
                 + ", updateTime=" + updateTime + "]";
     }
