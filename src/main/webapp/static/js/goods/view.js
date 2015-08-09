@@ -17,10 +17,14 @@ $(document).ready(function() {
             //$('.modal-body #name').attr('readonly','readonly');
             $('.modal-body #name').val("");
             $('.modal-body #sName').val("");
-            $('.modal-body #length').val(0);
-            $('.modal-body #width').val(0);
-            $('.modal-body #height').val(0);
-            $('.modal-body #weight').val(0);
+            
+            $('.modal-body #lrack1').val("01");
+            $('.modal-body #lrack2').val("A");
+            $('.modal-body #lrack3').val("01");
+            $('.modal-body #mrack1').val("01");
+            $('.modal-body #mrack2').val("A");
+            $('.modal-body #mrack3').val("01");
+            
             $('.modal-body #gIdSupplier').val("");
             $('.modal-body #scode').val("");
             $('.modal-body #boxes').val(1);
@@ -44,17 +48,6 @@ function goodsEdit(Id, isDisabled, sId){
     
     $('.modal-body #sName').val( $("#"+trId+" td")[1].innerHTML );
     $('.modal-body #isDisabled').val(isDisabled);
-//    $('.modal-body #name').attr('readonly','readonly');
-//    $('.modal-body #name').val( $("#"+trId+" td")[0].innerHTML );
-//    $('.modal-body #length').val( $("#"+trId+" td")[2].innerHTML );
-//    $('.modal-body #width').val( $("#"+trId+" td")[3].innerHTML );
-//    $('.modal-body #height').val($("#"+trId+" td")[4].innerHTML);
-//    $('.modal-body #weight').val($("#"+trId+" td")[5].innerHTML);
-//    $('.modal-body #gIdSupplier').val($("#"+trId+" td")[6].innerHTML);
-//    $('.modal-body #scode').val($("#"+trId+" td")[7].innerHTML);
-//    $('.modal-body #boxes').val($("#"+trId+" td")[8].innerHTML);
-//    $('.modal-body #amount').val($("#"+trId+" td")[9].innerHTML);
-    
     $.getJSON(contextPath+"/goods/getGoods", {g_id:Id}, function(data, status){
         _formLoadData = data;
         console.log(data);

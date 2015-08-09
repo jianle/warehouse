@@ -1,6 +1,7 @@
 package com.wms.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -46,6 +47,22 @@ public class GoodsController {
     @Autowired
     private UserDao userDao;
     
+    public static List<String> rack1 = new ArrayList<String>();
+    public static List<String> rack2 = new ArrayList<String>();
+    
+    static {
+        
+        for (int i = 1; i < 99; i++) {
+            String st = String.format("%02d", i);
+            rack1.add(st);
+        }
+        
+        for (int i = 0; i < 26; i++) {
+            rack2.add(String.valueOf((char) (65 + i)));
+        }
+        
+    }
+    
     @RequestMapping(value={"","search"}, method = RequestMethod.GET)
     public ModelAndView list(HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
@@ -71,6 +88,11 @@ public class GoodsController {
         modelView.addObject("currentPage", currentPage);
         modelView.addObject("supplierMap", supplierMap);
         modelView.addObject("users", users);
+        
+        modelView.addObject("rack1", rack1);
+        modelView.addObject("rack2", rack2);
+        modelView.addObject("scodeMax", goodsDao.getMaxScode());
+        
         return modelView;
     }
     
@@ -100,6 +122,10 @@ public class GoodsController {
         modelView.addObject("currentPage", currentPage);
         modelView.addObject("supplierMap", supplierMap);
         modelView.addObject("users", users);
+        
+        modelView.addObject("rack1", rack1);
+        modelView.addObject("rack2", rack2);
+        modelView.addObject("scodeMax", goodsDao.getMaxScode());
         
         return modelView;
     }
@@ -132,6 +158,8 @@ public class GoodsController {
     public JSONObject update(@ModelAttribute Goods goods) {
         JSONObject jsonTuple = new JSONObject();
         boolean result = false;
+        
+        
         
         if (goodsDao.update(goods)) {
             result = true;
@@ -193,6 +221,8 @@ public class GoodsController {
         Goods goods = goodsDao.get(gId);
         
         result = JSONObject.fromObject(goods);
+        
+        logger.info(result.toString());
         logger.info("RequestMapping:goods/getGoods?gId=" + gId);
         return result;
     }

@@ -37,28 +37,56 @@
            </div>
          </div>
          <br/>
-         
+
           <div class="form-group">
-            <label for="length" class="col-sm-2 control-label" >长度(mm)</label>
+            <label for="model" class="col-sm-2 control-label" >型号</label>
             <div class="col-sm-3">
-              <input type="text" class="form-control" name="length" id="length" placeholder="单位 mm" />
+              <input type="text" class="form-control" name="model" id="model" placeholder="型号" />
             </div>
 
-            <label for="width" class="col-sm-2 control-label" >宽度(mm)</label>
+            <label for="standards" class="col-sm-2 control-label" >规格名称</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" name="width" id="width" placeholder="单位 mm"/>
+              <input type="text" class="form-control" name="standards" id="standards" />
             </div>
           </div>
 
           <div class="form-group">
-            <label for="height" class="col-sm-2 control-label" >高度(mm)</label>
+            <label for="lrack" class="col-sm-2 control-label" >大货架</label>
             <div class="col-sm-3">
-              <input type="text" class="form-control" name="height" id="height" placeholder="单位 mm" />
+                <select name="lrack1" id="lrack1" class="from-control input-sm" panelHeight="auto" style="width:65px;" required="true">
+                  #foreach( $key in $rack1)
+                  <option value="$key">$key</option>
+                  #end
+                </select>
+                <select name="lrack2" id="lrack2" class="from-control input-sm" panelHeight="auto" style="width:60px;" required="true">
+                  #foreach( $key in $rack2)
+                  <option value="$key">$key</option>
+                  #end
+                </select>
+                <select name="lrack3" id="lrack3" class="from-control input-sm" panelHeight="auto" style="width:60px;" required="true">
+                  #foreach( $key in $rack1)
+                  <option value="$key">$key</option>
+                  #end
+                </select>
             </div>
 
-            <label for="weight" class="col-sm-2 control-label" >重量(g)</label>
+            <label for="mrack" class="col-sm-2 control-label" >小货架</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" name="weight" id="weight" placeholder="单位 g"/>
+              <select name="mrack1" id="mrack1" class="from-control input-sm" panelHeight="auto" style="width:65px;" required="true">
+                  #foreach( $key in $rack1)
+                  <option value="$key">$key</option>
+                  #end
+                </select>
+                <select name="mrack2" id="mrack2" class="from-control input-sm" panelHeight="auto" style="width:60px;" required="true">
+                  #foreach( $key in $rack2)
+                  <option value="$key">$key</option>
+                  #end
+                </select>
+                <select name="mrack3" id="mrack3" class="from-control input-sm" panelHeight="auto" style="width:60px;" required="true">
+                  #foreach( $key in $rack1)
+                  <option value="$key">$key</option>
+                  #end
+                </select>
             </div>
           </div>
 
@@ -78,9 +106,9 @@
             <div class="col-sm-3">
               <input type="text" class="form-control" name="scode" id="scode" />
             </div>
-            <label for="gIdSupplier" class="col-sm-2 control-label" >商品编码</label>
+            <label class="col-sm-2 control-label" >当前最大条码</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" name="gIdSupplier" id="gIdSupplier" />
+              <label style="padding-top:6px"><code>$scodeMax</code></label>
             </div>
           </div>
 
@@ -92,9 +120,9 @@
                 <option value="T" >无效</option>
               </select>
             </div>
-            <label for="standards" class="col-sm-2 control-label" >规格名称</label>
+            <label for="gIdSupplier" class="col-sm-2 control-label" >客户商品编码</label>
             <div class="col-sm-4">
-              <input type="text" class="form-control" name="standards" id="standards" />
+              <input type="text" class="form-control" name="gIdSupplier" id="gIdSupplier" />
             </div>
           </div>
 

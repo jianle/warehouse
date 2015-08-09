@@ -8,6 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import net.sf.json.JSONObject;
+
+
 
 /**
  * 
@@ -21,9 +24,11 @@ public class Goods implements Serializable {
     
     @Id @GeneratedValue
     private Long gId;
-    
     private Long sId;
     private String name;
+    
+    private String model;
+    
     private Integer length;
     private Integer width;
     private Integer height;
@@ -38,10 +43,88 @@ public class Goods implements Serializable {
     private Long operatorId;
     private String standards;
     
+    private String lrack1;
+    private String lrack2;
+    private String lrack3;
+    
+    private String mrack1;
+    private String mrack2;
+    private String mrack3;
+    
+    
     @Column(updatable=false)
     private String insertDt;
     private String updateTime;
     
+    public String getLrack1() {
+        return lrack1;
+    }
+    public void setLrack1(String lrack1) {
+        this.lrack1 = lrack1;
+    }
+    public String getLrack2() {
+        return lrack2;
+    }
+    public void setLrack2(String lrack2) {
+        this.lrack2 = lrack2;
+    }
+    public String getLrack3() {
+        return lrack3;
+    }
+    public void setLrack3(String lrack3) {
+        this.lrack3 = lrack3;
+    }
+    public String getMrack1() {
+        return mrack1;
+    }
+    public void setMrack1(String mrack1) {
+        this.mrack1 = mrack1;
+    }
+    public String getMrack2() {
+        return mrack2;
+    }
+    public void setMrack2(String mrack2) {
+        this.mrack2 = mrack2;
+    }
+    public String getMrack3() {
+        return mrack3;
+    }
+    public void setMrack3(String mrack3) {
+        this.mrack3 = mrack3;
+    }
+    public String getModel() {
+        return model;
+    }
+    public void setModel(String model) {
+        this.model = model;
+    }
+    public JSONObject getLrack() {
+        JSONObject json = new JSONObject();
+        json.put("lrack1", this.lrack1);
+        json.put("lrack2", this.lrack2);
+        json.put("lrack3", this.lrack3);
+        
+        return json;
+    }
+    public void setLrack(JSONObject lrack) {
+        this.lrack1 = (String) lrack.get("lrack1");
+        this.lrack2 = (String) lrack.get("lrack2");
+        this.lrack3 = (String) lrack.get("lrack3");
+    }
+    public JSONObject getMrack() {
+        
+        JSONObject json = new JSONObject();
+        json.put("mrack1", this.mrack1);
+        json.put("mrack2", this.mrack2);
+        json.put("mrack3", this.mrack3);
+        
+        return json;
+    }
+    public void setMrack(JSONObject mrack) {
+        this.mrack1 = (String) mrack.get("mrack1");
+        this.mrack2 = (String) mrack.get("mrack2");
+        this.mrack3 = (String) mrack.get("mrack3");
+    }
     public void setOperatorId(Long operatorId) {
         this.operatorId = operatorId;
     }

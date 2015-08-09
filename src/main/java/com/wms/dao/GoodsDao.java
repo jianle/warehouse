@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +33,7 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     private Logger logger = LoggerFactory.getLogger(GoodsDao.class);
     
     private static final String TABLE_NAME    = "goods";
-    private static final String INSERT_FIELDS = "s_id, name, length, width, height, weight, g_id_supplier"
+    private static final String INSERT_FIELDS = "s_id, name, model, lrack, mrack, g_id_supplier"
                                             + " , scode, boxes, amount, is_disabled, user_id, operator_id, standards, insert_dt, update_time";
     private static final String SELECT_FIELDS = "g_id, " + INSERT_FIELDS;
     
@@ -52,20 +54,30 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
         
     }
+    
+    public String getMaxScode() {
+        try {
+            String sql = "select max(scode) scode from " + TABLE_NAME ;
+            return jdbcTemplate.queryForObject(sql, rowMapperString);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        return "";
+    }
 
     @Override
     public Boolean save(Goods goods) {
         // 传入对象保存
         try {
             String sql = "INSERT INTO " + TABLE_NAME + " (" + INSERT_FIELDS 
-                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             
             jdbcTemplate.update(sql, goods.getsId(),
                     goods.getName(),
-                    goods.getLength(),
-                    goods.getWidth(),
-                    goods.getHeight(),
-                    goods.getWeight(),
+                    goods.getModel(),
+                    goods.getLrack().toString(),
+                    goods.getMrack().toString(),
                     goods.getgIdSupplier(),
                     goods.getScode(),
                     goods.getBoxes(),
@@ -89,15 +101,14 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         // 通过商品Id修改商品信息
         try {
             String sql = "UPDATE " + TABLE_NAME + " SET "
-                    + " s_id=?, name=?, length=?, width=?, height=?, weight=?, g_id_supplier=?,"
+                    + " s_id=?, name=?, model=?, lrack=?, mrack=?, g_id_supplier=?,"
                     + " scode=?, boxes=?, amount=?, is_disabled=?, `standards`=? "
                     + " WHERE g_id=? ";
             jdbcTemplate.update(sql, goods.getsId(),
                     goods.getName(),
-                    goods.getLength(),
-                    goods.getWidth(),
-                    goods.getHeight(),
-                    goods.getWeight(),
+                    goods.getModel(),
+                    goods.getLrack().toString(),
+                    goods.getMrack().toString(),
                     goods.getgIdSupplier(),
                     goods.getScode(),
                     goods.getBoxes(),
@@ -292,11 +303,11 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             goods.setgId(rs.getLong("g_id"));
             goods.setsId(rs.getLong("s_id"));
             goods.setName(rs.getString("name"));
-            goods.setLength(rs.getInt("length"));
-            goods.setWidth(rs.getInt("width"));
-            goods.setHeight(rs.getInt("height"));
+            goods.setModel(rs.getString("model"));
             
-            goods.setWeight(rs.getInt("weight"));
+            goods.setLrack(JSONObject.fromObject(rs.getString("lrack")));
+            goods.setMrack(JSONObject.fromObject(rs.getString("mrack")));
+            
             goods.setgIdSupplier(rs.getString("g_id_supplier"));
             goods.setScode(rs.getString("scode"));
             goods.setBoxes(rs.getInt("boxes"));
@@ -325,6 +336,15 @@ public class GoodsDao implements BaseDao<Goods, Long> {
             return map;
         }
         
+    };
+    
+    private RowMapper<String> rowMapperString = new RowMapper<String>() {
+
+        @Override
+        public String mapRow(ResultSet rs, int numRow) throws SQLException {
+            String scode = rs.getString("scode");
+            return scode;
+        }
     };
 
 }
