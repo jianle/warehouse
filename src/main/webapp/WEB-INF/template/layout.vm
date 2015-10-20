@@ -62,6 +62,9 @@
                 <li #if($title == '订单验货') class='active' #end>
                   <a href="#springUrl('/order/detailCheck')">订单验货</a>
                 </li>
+                <li #if($title == '直接出库') class='active' #end>
+                  <a href="#springUrl('/delivery/immediate')" >直接出库</a>
+                </li>
                 <li #if($title == '配送出库') class='active' #end>
                   <a href="#springUrl('/delivery')">配送出库</a>
                 </li>

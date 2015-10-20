@@ -1,0 +1,99 @@
+#set($title="直接出库")
+
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/color.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/css/order/view.css')">
+
+<style type='text/css'>
+  .codes {
+    font-weight: 600;
+    color: #c7254e;
+  }
+</style>
+<script src="#springUrl('/static/js/order/detailCheck.js')"></script>
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<div style="margin-top: 10px;">
+ <form class="form-inline">
+  <div class="form-group">
+    <div class="input-group">
+      <label class="input-group-addon codes" id="basic-addon1">扫描/输入条形码 <i class="glyphicon glyphicon-console"></i></label>
+      <input type="text" class="form-control" style="width:340px" placeholder="条形码" aria-describedby="basic-addon1">
+    </div>
+  </div>
+  <button type="submit" style="width:100px" class="btn btn-success pull-right">确定</button>
+ </form>
+</div>
+ <hr style='margin-top: 10px; margin-bottom: 25px;'/>
+
+<div class="panel panel-default">
+  <div class="panel-heading" style="padding-left:8px"><b style="color: #c7254e;"><i class="glyphicon glyphicon-object-align-bottom"></i> 出库</b></div>
+  <table class="table table-striped" style="vertical-align: middle!important;" id="checkTable">
+    <thead style="table-layout: fixed;">
+      <tr>
+        <th width="60px">商品名称</th>
+        <th width="100px">商品数量</th>
+        <th width="60px">金额</th>
+        <th width="58px">条码</th>
+        <th width="60px">出库数量</th>
+        <th width="40px">ok?</th>
+      </tr>
+    </thead>
+    <tbody>
+      #foreach( $orderDetail in $orderDetails )<tr id="${goodCodeMap.get($orderDetail.gId)}_tr">
+        <td>${orderDetail.gName}</td>
+        <td>${orderDetail.amount}</td>
+        <td>${orderDetail.amountNet}</td>
+        <td id="${goodCodeMap.get($orderDetail.gId)}_scode">${goodCodeMap.get($orderDetail.gId)}</td>
+        <td style="color: #c7254e;">
+            <input id="${goodCodeMap.get($orderDetail.gId)}_checked" type='text' value="#if(${orderInfo.status}==2)${orderDetail.amount}#else 0#end"
+             style="width:70px;padding-left:5px" #if(${orderInfo.status}==2)disabled="true"#end class="textbox textbox-text" />
+        </td>
+        <!-- <td ><a href="javascript:editChecheds(${goodCodeMap.get($orderDetail.gId)})">修改</a></td> -->
+        <td>
+          <div class="checkbox" style="margin-top:0px;margin-bottom:0px">
+           <label>
+             <input type="checkbox" id="${goodCodeMap.get($orderDetail.gId)}_checkbox" name="okchecked" #if(${orderInfo.status}==2)checked="checked"#end>
+           </label>
+          </div>
+        </td>
+      </tr>
+    #end</tbody>
+  </table>
+</div>
+    <!--
+    <div id="editChecheds" class="easyui-dialog" style="width:280px;height:190px;padding:10px 20px"
+                closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">修改数量</div>
+            <form id="modalFormVer" method="post" style="margin-top:20px" novalidate>
+                <div class="fitem">
+                    <label style="padding-left:-5px;">已验数量:</label>
+                    <input id="tmpCheckeds" style="width:110px" class="easyui-numberbox" required="true" />
+                </div>
+            </form>
+      </div>
+      <div id="dlg-buttons">
+          <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="editSubmit()" style="width:90px">修改</a>
+          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#editChecheds').dialog('close')" style="width:90px">取消</a>
+      </div>
+      -->
+<script>
+  $('#oId').combobox({
+      valueField: 'oId',
+      textField: 'oId',
+      url: contextPath+'/order/detail/getCurAlloId',
+      onChange: function(rec){
+          document.getElementById('formoId').submit();
+      }
+  });
+
+  $(function(){
+    $('#btnSearch').bind('click', function(){
+        document.getElementById('formoId').submit();
+    });
+  });
+
+</script>

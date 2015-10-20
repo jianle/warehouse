@@ -179,5 +179,19 @@ public class DeliveryController {
         modelView.addObject("content", content);
         return modelView;
     }
+    
+    /*
+     * 直接出库Tab
+     */
+    
+    @RequestMapping(value = "immediate")
+    public ModelAndView immediateView() {
+        ModelAndView modelView = new ModelAndView("/delivery/immediate");
+        
+        logger.info("request ../delivery/immediate.");
+        
+        return modelView;
+    }
+    
 
 }
