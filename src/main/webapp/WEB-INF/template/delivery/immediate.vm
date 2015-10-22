@@ -11,20 +11,23 @@
   }
 </style>
 <script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
+<script type="text/javascript" src="#springUrl('/static/js/underscore-min.js')"></script>
+
 <script>
   var contextPath = '#springUrl('')';
+  var goodsDG = new Array();
 </script>
 
 <div style="margin-top: 10px;">
- <form class="form-inline">
+ <div class="form-inline">
   <div class="form-group">
     <div class="input-group">
       <label class="input-group-addon codes" id="basic-addon1">扫描/输入条形码 <i class="glyphicon glyphicon-console"></i></label>
-      <input type="text" class="form-control" style="width:340px" placeholder="条形码" aria-describedby="basic-addon1">
+      <input type="text" id="checkCode" class="form-control" style="width:340px" placeholder="条形码" aria-describedby="basic-addon1">
     </div>
   </div>
-  <button type="submit" style="width:100px" class="btn btn-success pull-right">确定</button>
- </form>
+  <button type="button" style="width:100px" class="btn btn-success pull-right">确定</button>
+ </div>
 </div>
 
 <hr style='margin-top: 10px; margin-bottom: 25px;'/>
@@ -32,11 +35,13 @@
 <table id="dgTable" class="easyui-datagrid" title="商品列表" style="width:700px;height:250px" >
   <thead>
     <tr>
-      <th data-options="field:'itemid', width:300, align:'center'">商品名称</th>
-      <th data-options="field:'productid', width:100, align:'center'">商品库存</th>
-      <th data-options="field:'listprice', width:100, align:'right'">金额</th>
-      <th data-options="field:'unitcost', width:300, align:'center'">条码</th>
-      <th data-options="field:'attr1', width:100, align:'right', editor:'numberbox'">出库数量</th>
+      <th data-options="field:'name', width:300, align:'center'">商品名称</th>
+      <th data-options="field:'amount', width:100, align:'center'">商品库存</th>
+      <th data-options="field:'price', width:100, align:'right'">金额</th>
+      <th data-options="field:'scode', width:250, align:'center'">条码</th>
+      <th data-options="field:'dmount', width:100, align:'right', editor:'numberbox'">出库数量</th>
+      <th data-options="field:'insertDt', width:140, align:'center'">创建时间</th>
+      <th data-options="field:'updateTime', width:140, align:'center'">最后更新时间</th>
     </tr>
   </thead>
 </table>
@@ -45,23 +50,59 @@
 <script type="text/javascript">
 
   $("#dgTable").datagrid({
-        rownumbers: true,
-        //height: 'auto', 
-        border: false, 
-        collapsible: false,//是否可折叠的 
-        fit: true,//自动大小 
-        //url:'listApp.action', 
-        //sortName: 'code', 
-        //sortOrder: 'desc', 
-        remoteSort: false,
-        singleSelect: false,//是否单选 
-        //pagination: true,//分页控件 
-        //rownumbers: true,//行号 
-        onCheck:function(index,row){
-            //$('#removeBtn,#insertBtn').linkbutton('enable')
-        }
+      rownumbers: true,
+      //height: 'auto',
+      border: false,
+      collapsible: false,//是否可折叠的
+      fit: true,//自动大小
+      //url:'listApp.action',
+      //sortName: 'code',
+      //sortOrder: 'desc',
+      remoteSort: false,
+      singleSelect: false,//是否单选
+      //pagination: true,//分页控件
+      //rownumbers: true,//行号
+      onCheck:function(index,row){
+          //$('#removeBtn,#insertBtn').linkbutton('enable')
+      }
   });
-  
-  
+
+  //监听enter事件
+  document.onkeydown = function() {
+    if (event.keyCode == 13) {
+        var scode = $('#checkCode').val();
+        if (scode == ""){
+            return;
+        }
+
+        getGoods(scode);
+        console.log(goodsDG);
+
+    }
+  }
+
+  function getGoods(scode) {
+    $.ajax({
+      method: 'GET',
+      url: contextPath + '/goods/forImmediate',
+      data: {scode: scode},
+      async: true,
+      cache: true,
+      dataType: 'json',
+      success: function(data) {
+        _.each(data, function(goods){
+          console.log(goods);
+          goodsDG.push(goods);
+        });
+        $("#dgTable").datagrid('loadData', goodsDG);
+      },
+      error: function(error) {
+        return;
+      }
+
+    });
+  }
+
+
 
 </script>

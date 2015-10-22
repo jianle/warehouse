@@ -227,6 +227,25 @@ public class GoodsController {
         return result;
     }
     
+    @RequestMapping("forImmediate")
+    @ResponseBody
+    public JSONArray getGoods(@RequestParam(value="scode", defaultValue="") String scode){
+        
+        JSONArray result = new JSONArray();
+        List<Goods> goods = goodsDao.getGoodsAndStorge(scode);
+        
+        //如果为空直接返回为空
+        if (scode == null || "".equals(scode)) {
+            return null;
+        }
+        
+        result = JSONArray.fromObject(goods);
+        
+        logger.info(result.toString());
+        logger.info("RequestMapping:goods/forImmediate?scode=" + scode);
+        return result;
+    }
+    
     @RequestMapping("getname")
     @ResponseBody
     public List<Map<String, Object>> findAllIdAndName(

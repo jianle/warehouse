@@ -294,6 +294,27 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
     }
     
+    public List<Goods> getGoodsAndStorge(String scode) {
+        
+        StringBuilder sql = new StringBuilder("SELECT ");
+        sql.append("    a.g_id, a.s_id, a.name, a.model, a.lrack, a.mrack, a.g_id_supplier, a.scode, a.boxes")
+           .append("    ,coalesce(b.amount,0) as amount, a.is_disabled, a.user_id, a.operator_id, a.standards, a.insert_dt, a.update_time ")
+           .append("from " + TABLE_NAME + " a ")
+           .append("left outer join storage b on a.g_id=b.g_id ")
+           .append("where a.scode=?") ;
+        
+        logger.info(sql.toString());
+        
+        try {
+            return jdbcTemplate.query(sql.toString(), rowMapper, scode);
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("ERROR ." + e);
+        }
+        return null;
+        
+    }
+    
     
     private RowMapper<Goods> rowMapper = new RowMapper<Goods>() {
 
