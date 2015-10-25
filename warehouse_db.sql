@@ -235,3 +235,24 @@ CREATE TABLE `delivery_detail` (
 ;
 
 
+/*
+ * 
+ */
+
+alter table goods add index scode_idx(scode);
+
+drop table if exists `delivery_immediate` ;
+CREATE TABLE `delivery_immediate` (
+  `g_id` bigint(20) NOT NULL comment '商品id',
+  `name` varchar(256) not null default '' comment '商品名称',
+  `model` varchar(128) default '' comment '型号',
+  `scode` varchar(128) not null default '' comment '商品编码',
+  `amount` int(8) not null default 1 comment '库存',
+  `damount` int(8) not null default 1 comment '出库数量',
+  `operator_id` int(11) NOT NULL DEFAULT '0' COMMENT '操作者',
+  `insert_dt` datetime not null DEFAULT '1900-01-01 00:00:00' comment '插入日期',
+  `update_time` timestamp null on update current_timestamp comment '最近一次更新',
+  index `scode_id_idx` (scode)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment '一键出库信息表'
+;
+

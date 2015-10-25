@@ -22,11 +22,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.wms.dao.DeliveryDao;
 import com.wms.dao.DeliveryDetailDao;
+import com.wms.dao.DeliveryImmediateDao;
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
 import com.wms.dao.StorageDao;
 import com.wms.model.Delivery;
 import com.wms.model.DeliveryDetail;
+import com.wms.model.User;
 import com.wms.task.GrabTask;
 
 @Controller
@@ -49,6 +51,8 @@ public class DeliveryController {
     
     @Autowired
     private StorageDao storageDao;
+    @Autowired
+    private DeliveryImmediateDao dImmediateDao;
     
     @RequestMapping(value="", method=RequestMethod.GET)
     public ModelAndView view(@RequestParam(value="oId",defaultValue="0") Long oId) {
@@ -192,6 +196,32 @@ public class DeliveryController {
         
         return modelView;
     }
+    
+    @RequestMapping(value = "immediate/save", method=RequestMethod.POST)
+    @ResponseBody
+    public JSONObject savedImmediates(HttpServletRequest request) {
+        
+        JSONObject result = new JSONObject();
+        User user = (User) request.getSession().getAttribute("user");
+        String data = request.getParameter("dImmediates");
+        
+        System.out.println("data:" + data);
+        
+        try {
+            JSONArray tuple = JSONArray.fromObject(data);
+            System.out.println("--------------------------->>>>>>>>>>>>>>>>>>>");
+            System.out.println(tuple);
+            dImmediateDao.saveBatch(tuple, user.getId());
+            result.put("status", "ok");
+        } catch (Exception e) {
+            // TODO: handle exception
+            logger.debug("ERROR. " + e);
+            result.put("status", "error");
+        }
+        
+        return result;
+    }
+    
     
 
 }

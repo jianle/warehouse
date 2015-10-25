@@ -12,6 +12,7 @@
 </style>
 <script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
 <script type="text/javascript" src="#springUrl('/static/js/underscore-min.js')"></script>
+<script type="text/javascript" src="#springUrl('/static/js/underscore.string.js')"></script>
 
 <script>
   var contextPath = '#springUrl('')';
@@ -26,7 +27,7 @@
       <input type="text" id="checkCode" class="form-control" style="width:340px" placeholder="条形码" aria-describedby="basic-addon1">
     </div>
   </div>
-  <button type="button" style="width:100px" class="btn btn-success pull-right">确定</button>
+  <button type="button" id="saveBtn" onClick="savedImmediates()" style="width:100px" class="btn btn-success pull-right">确定</button>
  </div>
 </div>
 
@@ -35,13 +36,17 @@
 <table id="dgTable" class="easyui-datagrid" title="商品列表" style="width:700px;height:250px" >
   <thead>
     <tr>
-      <th data-options="field:'name', width:300, align:'center'">商品名称</th>
+      <th data-options="field:'name', width:270, align:'center'">商品名称</th>
+      <th data-options="field:'gId', width:70, align:'center'">商品ID</th>
+      <th data-options="field:'model', width:100, align:'center'">商品型号</th>
       <th data-options="field:'amount', width:100, align:'center'">商品库存</th>
-      <th data-options="field:'price', width:100, align:'right'">金额</th>
-      <th data-options="field:'scode', width:250, align:'center'">条码</th>
-      <th data-options="field:'dmount', width:100, align:'right', editor:'numberbox'">出库数量</th>
+      <th data-options="field:'scode', width:160, align:'center'">条码</th>
+      <th data-options="field:'damount', width:100, align:'right', editor:'numberbox'">出库数量</th>
       <th data-options="field:'insertDt', width:140, align:'center'">创建时间</th>
       <th data-options="field:'updateTime', width:140, align:'center'">最后更新时间</th>
+      <th data-options="field:'remove', width:60, align:'center'
+                        , formatter: formatterFilter
+                        ">操作</th>
     </tr>
   </thead>
 </table>
@@ -59,12 +64,13 @@
       //sortName: 'code',
       //sortOrder: 'desc',
       remoteSort: false,
-      singleSelect: false,//是否单选
+      singleSelect: true,//是否单选
       //pagination: true,//分页控件
       //rownumbers: true,//行号
-      onCheck:function(index,row){
+      onCheck: function(index,row){
           //$('#removeBtn,#insertBtn').linkbutton('enable')
-      }
+      },
+      onClickCell: onClickCell
   });
 
   //监听enter事件
@@ -72,12 +78,28 @@
     if (event.keyCode == 13) {
         var scode = $('#checkCode').val();
         if (scode == ""){
-            return;
+            return ;
+        }
+
+        if(isNotValid(scode)) {
+          return ;
         }
 
         getGoods(scode);
-        console.log(goodsDG);
+    }
+  }
 
+  function isNotValid(scode) {
+    var rs = _.find(goodsDG, function(goods) {
+      if(scode == goods.scode) {
+        return true;
+      }
+    });
+
+    if(rs) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -90,8 +112,10 @@
       cache: true,
       dataType: 'json',
       success: function(data) {
+        if(data.length == 0) {
+          alert("抱歉，未找到该条码产品");
+        }
         _.each(data, function(goods){
-          console.log(goods);
           goodsDG.push(goods);
         });
         $("#dgTable").datagrid('loadData', goodsDG);
@@ -103,6 +127,79 @@
     });
   }
 
+  function savedImmediates() {
+    console.log(goodsDG);
+    $.ajax({
+      method: 'POST',
+      url: contextPath + '/delivery/immediate/save',
+      data: {dImmediates: JSON.stringify(goodsDG)},
+      async: true,
+      cache: true,
+      dataType: 'json',
+      success: function(data) {
+        if(data.status == "ok") {
+          $.messager.confirm('提示', '出库成功，点击OK刷新页面', function(r){
+            window.location.href=contextPath + '/delivery/immediate';
+          });
+        }
+      }
+    });
+  }
 
+  function formatterFilter(value, row) {
+    if(row == null) {
+      return "";
+    }
+    return "<a href='javascript: void(0)' onClick='filterItem(" + row.gId + ")' class='easyui-linkbutton' data-options='plain:true' >移除</a>";
+  }
+
+  function filterItem(id) {
+    goodsDG = _.filter(goodsDG, function(item) {
+      if(item.gId != id) {
+        return true;
+      }
+    });
+    $("#dgTable").datagrid('loadData', goodsDG);
+  }
+
+  $.extend($.fn.datagrid.methods, {
+      editCell: function(jq, param) {
+        return jq.each(function(){
+          var opts = $(this).datagrid('options');
+          var fields = $(this).datagrid('getColumnFields',true).concat($(this).datagrid('getColumnFields'));
+          for(var i=0; i<fields.length; i++){
+            var col = $(this).datagrid('getColumnOption', fields[i]);
+            col.editor1 = col.editor;
+            if (fields[i] != param.field){
+              col.editor = null;
+            }
+          }
+          $(this).datagrid('beginEdit', param.index);
+          for(var i=0; i<fields.length; i++){
+            var col = $(this).datagrid('getColumnOption', fields[i]);
+            col.editor = col.editor1;
+          }
+        });
+      }
+  });
+
+  var editIndex = undefined;
+  function endEditing(){
+      if (editIndex == undefined){return true}
+      if ($('#dgTable').datagrid('validateRow', editIndex)){
+        $('#dgTable').datagrid('endEdit', editIndex);
+        editIndex = undefined;
+        return true;
+      } else {
+        return false;
+      }
+  }
+  function onClickCell(index, field){
+      if (endEditing()){
+        $('#dgTable').datagrid('selectRow', index)
+            .datagrid('editCell', {index:index,field:field});
+        editIndex = index;
+      }
+  }
 
 </script>

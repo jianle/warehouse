@@ -25,9 +25,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.wms.dao.DeliveryImmediateDao;
 import com.wms.dao.GoodsDao;
 import com.wms.dao.SupplierDao;
 import com.wms.dao.UserDao;
+import com.wms.model.DeliveryImmediate;
 import com.wms.model.Goods;
 import com.wms.model.Pagination;
 import com.wms.model.Supplier;
@@ -46,6 +48,8 @@ public class GoodsController {
     private SupplierDao supplierDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private DeliveryImmediateDao dImmediateDao;
     
     public static List<String> rack1 = new ArrayList<String>();
     public static List<String> rack2 = new ArrayList<String>();
@@ -232,7 +236,7 @@ public class GoodsController {
     public JSONArray getGoods(@RequestParam(value="scode", defaultValue="") String scode){
         
         JSONArray result = new JSONArray();
-        List<Goods> goods = goodsDao.getGoodsAndStorge(scode);
+        List<DeliveryImmediate> goods = dImmediateDao.getGoodsAndStorge(scode);
         
         //如果为空直接返回为空
         if (scode == null || "".equals(scode)) {
