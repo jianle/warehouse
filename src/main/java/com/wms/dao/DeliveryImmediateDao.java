@@ -99,7 +99,7 @@ public class DeliveryImmediateDao implements BaseDao<DeliveryImmediate, Long> {
     public List<DeliveryImmediate> findByOperatorId(Long operatorId) {
      // 通过Id获取对象
         try {
-            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE operator_id= ?";
+            String sql = "SELECT " + SELECT_FIELDS + " FROM " + TABLE_NAME + " WHERE operator_id= ? order by insert_dt desc";
             return jdbcTemplate.query(sql, rowMapper, operatorId);
         } catch (Exception e) {
             logger.debug("findByOperatorId failed ." + e);

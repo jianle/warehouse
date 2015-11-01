@@ -26,6 +26,7 @@ import com.wms.dao.DeliveryImmediateDao;
 import com.wms.dao.OrderDetailDao;
 import com.wms.dao.OrderinfoDao;
 import com.wms.dao.StorageDao;
+import com.wms.dao.UserDao;
 import com.wms.model.Delivery;
 import com.wms.model.DeliveryDetail;
 import com.wms.model.User;
@@ -53,6 +54,8 @@ public class DeliveryController {
     private StorageDao storageDao;
     @Autowired
     private DeliveryImmediateDao dImmediateDao;
+    @Autowired
+    private UserDao userDao;
     
     @RequestMapping(value="", method=RequestMethod.GET)
     public ModelAndView view(@RequestParam(value="oId",defaultValue="0") Long oId) {
@@ -220,6 +223,37 @@ public class DeliveryController {
         }
         
         return result;
+    }
+    
+    @RequestMapping(value = "immediate/history")
+    public ModelAndView history(@RequestParam(value="userId",defaultValue="") Long userId
+            , HttpServletRequest request) {
+        ModelAndView modelView = new ModelAndView("/delivery/immediate_history");
+        
+        logger.info("request ../delivery/immediate/history.");
+        
+        User selUser = null;
+        User curUser = (User) request.getSession().getAttribute("user");
+        if (userId == null || userId == 0) {
+            selUser = curUser;
+        } else {
+            selUser = userDao.get(userId);
+        }
+        
+        List<User> users = null;
+        
+        if (curUser.getRole() == User.ROLE_ADMIN) {
+            users = userDao.findAll();
+        } else {
+            users = userDao.findByParentId(curUser.getId());
+            users.add(curUser);
+        }
+        
+        modelView.addObject("historys", dImmediateDao.findByOperatorId(selUser.getId()));
+        modelView.addObject("users", users);
+        modelView.addObject("curUser", selUser);
+        
+        return modelView;
     }
     
     

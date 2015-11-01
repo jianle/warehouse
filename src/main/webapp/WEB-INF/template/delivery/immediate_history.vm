@@ -1,0 +1,72 @@
+#set($title="直接出库")
+
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/default/easyui.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/icon.css')">
+<link rel="stylesheet" type="text/css" href="#springUrl('/static/jquery-easyui-1.4.2/themes/color.css')">
+
+<style type='text/css'>
+  .codes {
+    font-weight: 600;
+    color: #c7254e;
+  }
+</style>
+<script type="text/javascript" src="#springUrl('/static/jquery-easyui-1.4.2/jquery.easyui.min.js')"></script>
+<script type="text/javascript" src="#springUrl('/static/js/underscore-min.js')"></script>
+<script type="text/javascript" src="#springUrl('/static/js/underscore.string.js')"></script>
+
+<script>
+  var contextPath = '#springUrl('')';
+</script>
+
+<div>
+<form class="form-horizontal" id="formoId" action="#springUrl('/delivery/immediate/history')" style="padding-top:10px;">
+ <div class="filter-bar-sm" >
+    <div class="filter-title-sm">
+        <b>出库操作者：</b>
+    </div>
+    <div class="filter-content">
+        <select class="form-control" style="width:100px;" name="userId" value="${curUser.truename}" onChange="submitForm()">
+          #foreach($user in $users)
+          <option value="${user.id}" #if(${curUser.id} == ${user.id})selected='selected'#end>${user.truename}</option>
+          #end
+        </select>
+   </div>
+  </div>
+ </form>
+</div>
+
+<hr style='margin-top: 10px; margin-bottom: 15px;'/>
+
+<table class="table table-striped" style="vertical-align: middle!important;">
+    <thead style="table-layout: fixed;">
+      <tr>
+        <th width="60px">商品ID</th>
+        <th width="60px">商品名称</th>
+        <th width="100px">商品型号</th>
+        <th width="60px">商品库存</th>
+        <th width="58px">条码</th>
+        <th width="60px">出库数量</th>
+        <th width="40px">创建时间</th>
+      </tr>
+    </thead>
+    <tbody>
+      #foreach( $history in $historys )
+      <tr>
+        <td>${history.gId}</td>
+        <td>${history.name}</td>
+        <td>${history.model}</td>
+        <td>${history.amount}</td>
+        <td>${history.scode}</td>
+        <td>${history.damount}</td>
+        <td>${history.insertDt}</td>
+      </tr>
+    #end
+    </tbody>
+  </table>
+
+
+<script type="text/javascript">
+  function submitForm() {
+    $('#formoId').submit();
+  }
+</script>

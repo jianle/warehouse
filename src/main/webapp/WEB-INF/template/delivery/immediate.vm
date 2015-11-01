@@ -26,6 +26,9 @@
       <label class="input-group-addon codes" id="basic-addon1">扫描/输入条形码 <i class="glyphicon glyphicon-console"></i></label>
       <input type="text" id="checkCode" class="form-control" style="width:340px" placeholder="条形码" aria-describedby="basic-addon1">
     </div>
+    <div class="input-group">
+      <label class="codes" id="basic-addon1"><a href="#springUrl('/delivery/immediate/history')">查看历史</a></label>
+    </div>
   </div>
   <button type="button" id="saveBtn" onClick="savedImmediates()" style="width:100px" class="btn btn-success pull-right">确定</button>
  </div>
