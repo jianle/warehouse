@@ -257,7 +257,7 @@ public class GoodsController {
             @RequestParam(value="sId", defaultValue="-1") Long sId) throws JSONException {
         User user = (User) request.getSession().getAttribute("user");
         String userIds = user.getUserIds();
-        return goodsDao.findAllIdAndName(sId, userIds);
+        return goodsDao.findAllIdAndName(null, sId, userIds);
     }
     
     @RequestMapping("getNameJson")
@@ -269,7 +269,7 @@ public class GoodsController {
         User user = (User) request.getSession().getAttribute("user");
         String userIds = user.getUserIds();
         
-        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, userIds);
+        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(null, sId, userIds);
         jsonObject.put("value", goods);
         return jsonObject;
     }
@@ -278,12 +278,13 @@ public class GoodsController {
     @ResponseBody
     public JSONArray getIdMapName(
             HttpServletRequest request,
+            @RequestParam(value="name", defaultValue="") String name,
             @RequestParam(value="sId", defaultValue="0") Long sId) throws JSONException {
         User user = (User) request.getSession().getAttribute("user");
         String userIds = user.getUserIds();
         
         JSONArray jsonObject = new JSONArray();
-        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(sId, userIds);
+        List<Map<String, Object>> goods = goodsDao.findAllIdAndName(name, sId, userIds);
         jsonObject = JSONArray.fromObject(goods);
         return jsonObject;
     }

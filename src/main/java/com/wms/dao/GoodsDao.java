@@ -237,13 +237,17 @@ public class GoodsDao implements BaseDao<Goods, Long> {
         }
     }
     
-    public List<Map<String, Object>> findAllIdAndName(Long sId, String userIds) {
+    public List<Map<String, Object>> findAllIdAndName(String name, Long sId, String userIds) {
         // 通过Id获取Supplier
         try {
             
-            String isWhere = "";
-            if (sId>=0) {
-                isWhere = " WHERE s_id=" + sId;
+            String isWhere = " WHERE 1=1 ";
+            if (sId > 0) {
+                isWhere = isWhere + " AND s_id=" + sId;
+            }
+            
+            if (name != null && !"".equals(name)) {
+                isWhere = isWhere + " AND name like '%" + name.trim().toLowerCase() + "%' ";
             }
             
             if (userIds != null && !"".equals(userIds)) {
