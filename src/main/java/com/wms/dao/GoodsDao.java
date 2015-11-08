@@ -57,7 +57,8 @@ public class GoodsDao implements BaseDao<Goods, Long> {
     
     public String getMaxScode() {
         try {
-            String sql = "select max(scode) scode from " + TABLE_NAME ;
+            String sql = "select max(CONVERT(scode, UNSIGNED)) scode from " + TABLE_NAME 
+                    + " where scode regexp '^[0-9]+$'";
             return jdbcTemplate.queryForObject(sql, rowMapperString);
         } catch (Exception e) {
             // TODO: handle exception

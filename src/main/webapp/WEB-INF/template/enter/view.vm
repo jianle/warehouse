@@ -22,17 +22,7 @@
   <div class="form-group">
     <label for="gId" class="control-label" style="padding-left:15px;float:left" >商品名称</label>
     <div class="col-lg-3" style="margin-top: 7px">
-      <input style="width:270px; hight:50px" name="gId" id="gId" required="true"
-          class="easyui-combobox" data-options="loader: myloader,
-                                                mode: 'remote',
-                                                valueField: 'gId',
-                                                textField: 'gName',
-                                                onSelect: function(rec){
-                                                  //console.log(rec);
-                                                  $('#sId').combobox('setValue', rec.sId);
-                                                  sId = rec.sId;
-                                                  $('#gName').val(rec.gName);
-                                                } "/>
+      <input type="text" style="width:270px;hight:50px" name="gId" id="gId" required="true" />
     </div>
     <label for="name" class="control-label" style="padding-left:15px;float:left" ><font style="color:#d9534f">*</font>
       请搜索点击选择商品名称
@@ -75,54 +65,35 @@
 
 <script type="text/javascript">
 
-    var sId = 0;
     $('#sId').combobox({
       valueField: 'sId',
       textField: 'sName',
       url: contextPath+'/supplier/getIdMapName',
+      filter: function(q,row){
+        var opts=$(this).combobox("options");
+        return row[opts.textField].toLowerCase().indexOf(q.toLowerCase()) > -1;//将从头位置匹配改为任意匹配
+      },
       onSelect: function(rec){
           var url = contextPath + '/goods/getIdMapName?sId=' + rec.sId;
-          sId = rec.sId;
           //console.log(url);
           $('#gId').combobox('clear');
           $('#gId').combobox('reload', url);
       }
     });
 
-    // $('#gId').combobox({
-    //   valueField: 'gId',
-    //   textField: 'gName',
-    //   loader: myloader,
-    //   mode: 'remote', //url: contextPath + '/goods/getIdMapName?sId=-1',
-    //   onSelect: function(rec){
-    //     //console.log(rec);
-    //     $('#sId').combobox('setValue', rec.sId);
-    //     sId = rec.sId;
-    //     $('#gName').val(rec.gName);
-    //   }
-    //  });
-
-    var myloader = function(param, success, error){
-      var q = param.q || '';
-      if (q.length <= 1){return false}
-      var param = '?sId='+ sId + '&name=' + q ;
-      $.ajax({
-        url: contextPath + '/goods/getIdMapName' + param,
-        dataType: 'json',
-        success: function(data){
-          console.log(data);
-          // var items = $.map(data.geonames, function(item){
-          //   return {
-          //     id: item.geonameId,
-          //     name: item.name + (item.adminName1 ? ', ' + item.adminName1 : '') + ', ' + item.countryName
-          //   };
-          // });
-          success(items);
-        },
-        error: function(){
-          error.apply(this, arguments);
-        }
-      });
-    }
+    $('#gId').combobox({
+      valueField: 'gId',
+      textField: 'gName',
+      url: contextPath + '/goods/getIdMapName?sId=-1',
+      filter: function(q,row){
+        var opts=$(this).combobox("options");
+        return row[opts.textField].toLowerCase().indexOf(q.toLowerCase()) > -1;//将从头位置匹配改为任意匹配
+      },
+      onSelect: function(rec){
+        //console.log(rec);
+        $('#sId').combobox('setValue', rec.sId);
+        $('#gName').val(rec.gName);
+      }
+     });
 
 </script>
